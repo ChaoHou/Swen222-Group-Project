@@ -1,12 +1,18 @@
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
-import UI.TestUI;
 import networking.Client;
+import networking.Player;
 import networking.Server;
+import GameWorld.Room;
+import UI.Board;
+import UI.BoardFrame;
 
 
 public class Main {
@@ -16,6 +22,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		String filename="map.txt";
 		boolean server = false;
 		int nplayers = 0;
 		String url = null;
@@ -55,13 +62,33 @@ public class Main {
 		
 		if(server){
 			runServer(port, nplayers, gameClock, broadcastClock);
-		}else{
+		}else if(url!=null){
 			runClient(url,port,gameClock,broadcastClock);
+		}else{
+			try{
+				Board game=createBoardFromFile(filename);
+				singleUserGame(game);
+			}catch(Exception e){
+				
+			}
 		}
 		
 		System.exit(0);
 	}
 
+	
+	public static void singleUserGame(Board game){
+		System.out.println("in single user mode-------------------------");
+
+		int uid=game.registerVamp();
+		System.out.println("done with registering vamp");
+		BoardFrame frame=new BoardFrame("single user mode", game, uid, new Player(uid, game));
+		game.startGame();
+		while(true){
+			//game running
+		}
+	}
+	
 	private static void usage() {
 		String[][] info = {
 				{ "server <n>",
@@ -169,4 +196,42 @@ public class Main {
 		} 
 	}
 	
+	private static Board createBoardFromFile(String filename) throws IOException{
+		FileReader fr = new FileReader(filename);		
+		BufferedReader br = new BufferedReader(fr);
+		ArrayList<String[]> lines = new ArrayList<String[]>();
+		int width = -1;
+		String line;		
+		while((line = br.readLine()) != null) {
+			String[] tokens=line.split(" ");
+			if(width==-1){
+				width=tokens.length;
+			}else if(width!=tokens.length){
+				System.out.println("wrong argument");
+				throw new IllegalArgumentException("Input file \"" + filename + "\" is malformed; line " + lines.size() + " incorrect width.");
+			}
+			lines.add(tokens);		
+		}
+		
+		Room[][] rooms=new Room[width][lines.size()];
+		for(int i=0;i<lines.size();i++){
+			for(int j=0;j<width;j++){
+				String elem=lines.get(i)[j];
+				if(elem.equals("-")){
+					System.out.println("detected a dash");
+					rooms[i][j]=null;
+				}else{
+					rooms[i][j]=new Room(elem);
+				}
+			}
+		}
+
+		Board board=new Board(rooms); 	
+		
+		
+		return board;	
+	}
+	
+	
 }
+

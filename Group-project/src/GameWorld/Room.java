@@ -6,25 +6,48 @@ import java.util.Set;
 
 public class Room {
 
-	private Room[] roomsConnected=new Room[4];
+
 	private Set<Container> containers=new HashSet<Container>();
-	private Set<Player> players=new HashSet<Player>();
+	private Set<GameCharacter> gameCharacters=new HashSet<GameCharacter>();
+	private String room;
 	
-	public Room() {
+	public Room(String room) {
+		this.room=room;
 	}
+	
 	
 
-	public void removePlayer(Player player){
-		this.players.remove(player);
+	public void removePlayer(GameCharacter c){
+		this.gameCharacters.remove(c);
 	}
 	
-	public void addPlayer(Player player){
-		this.players.add(player);
-	}
-	
-	public Room getNorthRoom(){
-		return roomsConnected[Character.NORTH];
+	public void addGameCharacter(GameCharacter c){
+		this.gameCharacters.add(c);
 	}
 	
 	
-}
+	
+	
+	public void addContainer(Container container){
+		this.containers.add(container);
+	}
+	
+	
+	//returns a set of vamps in this room.
+	//returns an empty set if no vamps in this room.
+	public Set<Vamp> getVamps(){
+		Set<Vamp> vamps=new HashSet<Vamp>();
+		for(GameCharacter c:gameCharacters){
+			if(c instanceof Vamp){
+				vamps.add((Vamp)c);
+			}
+		}
+		return vamps;
+	}
+	
+	@Override
+	public String toString(){
+		return this.room;
+	}
+	}
+	
