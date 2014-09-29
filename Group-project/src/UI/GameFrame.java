@@ -2,6 +2,7 @@ package UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,7 +23,8 @@ public class GameFrame extends JFrame {
 	//Stuff to use from gameworld...
 	private Board board;
 	private int uid;
-	private Player player;
+	//private Player player; we don't need a player here, we will pass in an actionlistener
+	private ActionListener player;
 			
 		/**
 		 * This is the constructor for the Actual JFrame
@@ -32,7 +34,7 @@ public class GameFrame extends JFrame {
 		 * @param string 
 		 */
 			
-		public GameFrame(String string, Board board, int uid, Player player){
+		public GameFrame(String string, Board board, int uid, ActionListener player){
 			
 			//Game logic's information
 			this.setBoard(board);

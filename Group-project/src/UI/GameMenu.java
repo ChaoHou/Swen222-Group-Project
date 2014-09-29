@@ -42,7 +42,8 @@ public class GameMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Board board;	
 	private int uid;
-	private Player player;
+	private ActionListener player; //changed to ActionListener, add this to all of your buttons
+									//you don't need to make your own button listener, we will pass in one
 	/**
 	 * This is the constructor for the JFrame
 	 * @param board 
@@ -50,7 +51,7 @@ public class GameMenu extends JPanel {
 	 * @param uid 
 	 */
 	
-	public GameMenu(Board board, int uid, Player player){  	
+	public GameMenu(Board board, int uid, ActionListener player){  	
 		this.board = board;
 		this.uid = uid;
 		this.player = player;
@@ -127,10 +128,10 @@ public class GameMenu extends JPanel {
 			right = new JButton("Turn Right");
 			changeRoom = new JButton("Change Room");
 			//Action Listeners for buttons		
-			ButtonListener b = new ButtonListener();
-			left.addActionListener(b);
-			right.addActionListener(b);
-			changeRoom.addActionListener(b);			
+			//ButtonListener b = new ButtonListener();
+			left.addActionListener(player);
+			right.addActionListener(player);
+			changeRoom.addActionListener(player);			
 			//Setting up the directionalPanel
 			directionPanel = new JPanel();
 			directionPanel.add(label1);
@@ -153,43 +154,7 @@ public class GameMenu extends JPanel {
 			
 
 		}	
-		
-		
-		//Actions Listener for the buttons		
-		public class ButtonListener implements ActionListener{
-			public void actionPerformed(ActionEvent event){
-				//When turning left
-				if(event.getSource() == left){
-					if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
-						board.getCharacter(uid).rotateTo(GameCharacter.WEST);
-					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
-						board.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
-					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
-						board.getCharacter(uid).rotateTo(GameCharacter.EAST);
-					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
-						board.getCharacter(uid).rotateTo(GameCharacter.NORTH);
-				}				
-				//When turning right
-				else if(event.getSource() == right){
-					if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
-						board.getCharacter(uid).rotateTo(GameCharacter.EAST);
-					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
-						board.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
-					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
-						board.getCharacter(uid).rotateTo(GameCharacter.WEST);
-					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
-						board.getCharacter(uid).rotateTo(GameCharacter.NORTH);
-
-				}
-				else if(event.getSource() == changeRoom){
-					//Use room
-					String answer = (String) JOptionPane.showInputDialog(null, "Which Room would you like to go to?", null, 
-							 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "d", "dd"}, null);
-				
-					System.out.println("You moved to Room: " + answer );
-				}	
-			}
-		}	
+			
 	}
 	
 	
