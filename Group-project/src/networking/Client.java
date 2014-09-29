@@ -54,7 +54,11 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 						int amount = input.readInt();
 						byte[] data = new byte[amount];
 						input.readFully(data);					
-						game.fromByteArray(data);		
+						game.fromByteArray(data);	
+						
+						
+						String facing = game.getCharacter(uid).intDirToString();
+						System.out.println("Player:"+uid+" now facing:"+facing);
 					}
 
 					Thread.sleep(50);
