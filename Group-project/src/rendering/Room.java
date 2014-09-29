@@ -33,14 +33,23 @@ public class Room {
         gl.glVertex3f(-x, y, z);   // Bottom Left Of The Quad (Top)
         gl.glVertex3f(x, y, z);    // Bottom Right Of The Quad (Top)
 
-        gl.glNormal3f(0.0f,-1.0f,0.0f);
+        gl.glNormal3f(0.0f, -1.0f, 0.0f);
         gl.glColor3f(1.0f, 0.5f, 0.0f);     // Set The Color To Orange
         gl.glVertex3f(x, -y, z);   // Top Right Of The Quad (Bottom)
         gl.glVertex3f(-x, -y, z);  // Top Left Of The Quad (Bottom)
         gl.glVertex3f(-x, -y, -z); // Bottom Left Of The Quad (Bottom)
         gl.glVertex3f(x, -y, -z);  // Bottom Right Of The Quad (Bottom)
-        rquad += 0.15;
+
+        gl.glEnd();
 
         for (Wall w: walls) {w.render(gl);}
+    }
+
+    public void rotateL() {
+        for (Wall w: walls) {w.rotateL();}
+    }
+
+    public void rotateR() {
+        for (Wall w: walls) {w.rotateR();}
     }
 }

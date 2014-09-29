@@ -15,13 +15,14 @@ import java.util.ArrayList;
 /**
  * Created by innocence on 25/09/2014.
  */
-public class RendererMain {
+public class RendererTest {
     public static void main(String[] args) {
         GLProfile glprofile = GLProfile.get(GLProfile.GL2);
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
         final GLCanvas glcanvas = new GLCanvas( glcapabilities );
-
-        glcanvas.addGLEventListener( new Renderer(setRoom()));
+        Renderer renderer = new Renderer(setRoom());
+        glcanvas.addGLEventListener(renderer);
+        glcanvas.addKeyListener(renderer);
 
         final JFrame jframe = new JFrame( "Rendering window" );
         jframe.addWindowListener( new WindowAdapter() {

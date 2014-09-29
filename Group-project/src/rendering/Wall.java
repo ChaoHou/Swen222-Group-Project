@@ -68,7 +68,6 @@ public class Wall {
                 break;
         }
         gl.glEnd();                         // Done Drawing The Quad
-        rquad += 0.15;
 
 //        gl.glBegin(GL2.GL_QUADS);
 //        gl.glNormal3d(0.0, 1.0, 0.0);
@@ -78,5 +77,15 @@ public class Wall {
 //        gl.glVertex3d(0.9,0.9,-10.0);
 //        gl.glVertex3d(0.9,0.1,-10.0);
 //        gl.glEnd();
+    }
+
+    public void rotateR() {
+        rquad += 90.0;
+
+    }
+
+    public void rotateL() {
+        rquad -= 90.0;
+
     }
 }
