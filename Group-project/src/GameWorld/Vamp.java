@@ -106,6 +106,16 @@ public class Vamp extends GameCharacter{
 		}
 	}
 	
+	public void rotateTo(int dir){
+		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
+				dir==Vamp.SOUTH || dir==Vamp.WEST){
+			facing=dir;
+			System.out.println("Player:"+uid+" now facing "+ intDirToString());
+		}else{
+			throw new IllegalArgumentException("invalid direction to face.");
+		}
+	}
+	
 	public void toOutputStream(DataOutputStream dout) throws IOException {		
 		dout.writeInt(uid);
 		dout.writeInt(facing);

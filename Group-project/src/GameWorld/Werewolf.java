@@ -51,6 +51,17 @@ public class Werewolf extends GameCharacter{
 			return true;
 		}
 	}
+	
+	@Override
+	public void rotateTo(int dir) {
+		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
+				dir==Vamp.SOUTH || dir==Vamp.WEST){
+			facing=dir;
+			System.out.println("Werewolf now facing "+ intDirToString());
+		}else{
+			throw new IllegalArgumentException("invalid direction to face.");
+		}
+	}
 
 	@Override
 	public void toOutputStream(DataOutputStream dout) throws IOException {
@@ -64,5 +75,7 @@ public class Werewolf extends GameCharacter{
 		
 		return temp;
 	}
+
+
 	
 }

@@ -17,15 +17,7 @@ public abstract class GameCharacter {
 	//protected Room inRoom; //delete to reduce coupling
 	protected Board game;
 	
-	public void rotateTo(int dir){
-		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
-				dir==Vamp.SOUTH || dir==Vamp.WEST){
-			facing=dir;
-			System.out.println("now facing "+ intDirToString());
-		}else{
-			throw new IllegalArgumentException("invalid direction to face.");
-		}
-	}
+	public abstract void rotateTo(int dir);
 	
 	
 	public String intDirToString(){
