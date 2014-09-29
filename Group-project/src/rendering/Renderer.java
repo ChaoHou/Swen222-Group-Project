@@ -5,11 +5,13 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Created by innocence on 25/09/2014.
  */
-public class Renderer implements GLEventListener {
+public class Renderer implements GLEventListener, KeyListener {
 
     private final Room room;
     private GLU glu = new GLU();
@@ -72,5 +74,23 @@ public class Renderer implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         room.render(gl);
         gl.glFlush();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keycode = e.getKeyCode();
+        if (keycode == KeyEvent.VK_LEFT) {room.rotateL();}
+        if (keycode == KeyEvent.VK_RIGHT) {room.rotateR();}
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
