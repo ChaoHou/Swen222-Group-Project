@@ -84,6 +84,7 @@ public class Main {
 		System.out.println("done with registering vamp");
 		BoardFrame frame=new BoardFrame("single user mode", game, uid, new Player(uid, game));
 		game.startGame();
+		
 		while(true){
 			//game running
 		}
