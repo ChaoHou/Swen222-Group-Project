@@ -75,12 +75,7 @@ public class Main {
 		}else{
 			try{
 				Board game=createBoardFromFile(filename);
-				singleUserGame(game);
-				
-				
-				
-				
-				
+				singleUserGame(game);			
 				
 				
 			}catch(Exception e){
@@ -94,6 +89,30 @@ public class Main {
 		System.exit(0);
 	}
 
+	
+	public static void singleUserGame(Board game){
+//		System.out.println("in single user mode-------------------------");
+//
+//		int uid=game.registerVamp();
+//		System.out.println("done with registering vamp");
+//		BoardFrame frame=new BoardFrame("single user mode", game, uid, new Player(uid, game));
+//		game.startGame();
+//		
+//		while(true){
+//			//game running
+//		}
+//		
+		
+		//This is for the construction of the game
+		
+		int uid = game.registerVamp();		
+		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game));
+		gg.setVisible(true);    
+        while(true){
+        	//game running	        	
+        }
+		
+	}
 	
 	private static void usage() {
 		String[][] info = {
@@ -191,29 +210,6 @@ public class Main {
 			System.exit(1);
 		} 
 	}
-
-
-	public static void singleUserGame(Board game){
-	//		System.out.println("in single user mode-------------------------");
-	//
-	//		int uid=game.registerVamp();
-	//		System.out.println("done with registering vamp");
-	//		BoardFrame frame=new BoardFrame("single user mode", game, uid, new Player(uid, game));
-	//		game.startGame();
-	//		
-	//		while(true){
-	//			//game running
-	//		}
-			
-			//This is for the construction of the game
-			GameFrame gg = new GameFrame();
-			gg.setVisible(true);    
-	        while(gg.isVisible()){
-	        	
-	        	        	
-	        }
-			
-		}
 
 
 	private static void multiUserGame(Board game, Server[] connections) {
