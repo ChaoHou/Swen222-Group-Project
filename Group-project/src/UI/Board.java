@@ -79,7 +79,7 @@ public class Board {
 	
 	public int registerVamp(){
 		System.out.println("in registerVamp()");
-		startRoom.playerLeaveRoom(new Vamp(uid,this));
+		startRoom.playerEnterRoom(new Vamp(uid,this));
 //		vamps.add(new Vamp(uid, this));
 		return uid++;
 	}
@@ -94,6 +94,9 @@ public class Board {
 		//loop through rooms to find the character
 		for(Room[] row:rooms){
 			for(Room r:row){
+				if(r == null){
+					continue;
+				}
 				for(Vamp v:r.getVamps()){
 					if(v.getUid() == uid){
 						return v;
@@ -108,6 +111,9 @@ public class Board {
 	public Room getRoomContainsPlayer(Vamp player){
 		for(Room[] row:rooms){
 			for(Room r:row){
+				if(r == null){
+					continue;
+				}
 				if(r.getVamps().contains(player)){
 					return r;
 				}
@@ -119,6 +125,9 @@ public class Board {
 	public Room getRoomContainsNPC(){
 		for(Room[] row:rooms){
 			for(Room r:row){
+				if(r == null){
+					continue;
+				}
 				if(r.getWerewolf() != null){
 					return r;
 				}
@@ -145,7 +154,9 @@ public class Board {
 		
 		for(Room[] row:rooms){
 			for(Room room:row){
-				room.toOutputStream(dout);
+				if(room != null){
+					room.toOutputStream(dout);
+				}
 			}
 		}
 		
@@ -160,7 +171,9 @@ public class Board {
 		
 		for(Room[] row:rooms){
 			for(Room room:row){
-				room.fromInputStream(din, this);
+				if(room != null){
+					room.fromInputStream(din, this);
+				}
 			}
 		}
 	}

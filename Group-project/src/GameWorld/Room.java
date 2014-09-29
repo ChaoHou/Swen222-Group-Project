@@ -25,12 +25,12 @@ public class Room {
 	
 	
 
-	public void playerEnterRoom(Vamp c){
-		this.players.add(c);
-	}
-	
 	public void playerLeaveRoom(Vamp c){
 		this.players.remove(c);
+	}
+	
+	public void playerEnterRoom(Vamp c){
+		this.players.add(c);
 	}
 	
 	public void npcEnterRoom(Werewolf w){
