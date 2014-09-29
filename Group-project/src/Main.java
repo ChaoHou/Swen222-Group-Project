@@ -73,12 +73,7 @@ public class Main {
 		}else{
 			try{
 				Board game=createBoardFromFile(filename);
-				singleUserGame(game);
-				
-				
-				
-				
-				
+				singleUserGame(game);			
 				
 				
 			}catch(Exception e){
@@ -104,13 +99,16 @@ public class Main {
 //		while(true){
 //			//game running
 //		}
+//		
+		
 		
 		//This is for the construction of the game
-		GameFrame gg = new GameFrame();
+		
+		int uid = game.registerVamp();		
+		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game));
 		gg.setVisible(true);    
-        while(gg.isVisible()){
-        	
-        	        	
+        while(true){
+        	//game running	        	
         }
 		
 	}

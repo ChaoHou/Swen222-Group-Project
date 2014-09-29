@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import UI.GameMenu.NavigationPanel;
+import UI.GameMenu.NavigationPanel.ButtonListener;
+
 /**
  * This Panel represents the "Main Menu" 
  * The Main Menu is what first appears when you start the game. It will ask you to:
@@ -25,16 +28,22 @@ import javax.swing.JPanel;
 
 public class MainMenu extends JPanel {	 
 	
+	
 	private boolean isNewGame = false;
 	private boolean isInstructions = false;
 	private boolean isCredits = false;
 	
 	private GameFrame currentGame;
+	private MainMenu menu;
 	
 	private Map<String, JButton> buttons = new HashMap<String, JButton>();
 
-	public MainMenu(GameFrame board){		
+	public MainMenu(GameFrame board){	
+		menu = this;
 		this.currentGame= board;
+		
+		
+		
 		//Buttons
 		JButton newGame, instructions, changeRoom;		
 		newGame = new JButton("New Game");
@@ -93,13 +102,24 @@ public class MainMenu extends JPanel {
 		public void actionPerformed(ActionEvent event){
 			if(event.getSource() == buttons.get("newGame")){
 				setNewGame(true);
-				currentGame.setGame();
-				currentGame.setVisible(true);
-				//updateUI();
+				//Starts a new game!
+				String answer = (String) JOptionPane.showInputDialog(null, "Select a mode", null, 
+						JOptionPane.PLAIN_MESSAGE, null, new String[]{ "Single Player", "MultiPlayer"}, null);
+
+				if(answer.equals("Single Player")){
+					currentGame.setGame();
+					currentGame.getBoard().startGame();
+					currentGame.setVisible(true);	
+					updateUI();
+				}
+				else if(answer.equals("Multiplayer")){
+					System.out.println("No");
+
+				}
 			}
 			else if(event.getSource() == buttons.get("instructions")){
 				System.out.println("You clicked instructions");
-				remove(buttons.get("newGame"));
+
 				updateUI();
 
 			}

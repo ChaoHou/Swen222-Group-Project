@@ -12,18 +12,34 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import networking.Player;
+
 
 public class GameFrame extends JFrame {
 	
-
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
+	
+	//Stuff to use from gameworld...
+	private Board board;
+	private int uid;
+	private Player player;
 			
 		/**
 		 * This is the constructor for the Actual JFrame
 		 * It starts off with one Panel, the GameMenu screen
+		 * @param player 
+		 * @param uid 
+		 * @param string 
 		 */
 			
-		public GameFrame(){	
+		public GameFrame(String string, Board board, int uid, Player player){
+			
+			//Game logic's information
+			this.setBoard(board);
+			this.uid = uid;			
+			this.player = player;
+			
+			
 			//Layout
 			FlowLayout fullMenu = new FlowLayout();
 			fullMenu.setAlignment(100);				
@@ -53,17 +69,29 @@ public class GameFrame extends JFrame {
 			JPanel render = new JPanel();
 			render.setPreferredSize(new Dimension (1000, 500));
 			render.setBackground(Color.white);
-			GameMenu game = new GameMenu();
-			
+			GameMenu game = new GameMenu(board, uid, player);			
 			this.getPanels().put("render", render);
 			this.getPanels().put("game", game);
-			
-			this.getContentPane().remove(getPanels().get("menu"));
-			
+			this.getContentPane().remove(getPanels().get("menu"));			
 			this.getContentPane().add(render);
 			this.getContentPane().add(game);
 		    this.repaint();
-
+		}
+		
+		/**
+		 * This method's for the instruction menu
+		 * @return
+		 */
+		public void showInstructions(){
+			
+			
+		}
+		
+		/**
+		 * This method's for a detailed map
+		 * @return
+		 */
+		public void showMap(){
 			
 		}
 
@@ -75,6 +103,14 @@ public class GameFrame extends JFrame {
 
 		public void setPanels(Map<String, JPanel> panels) {
 			this.panels = panels;
+		}
+
+		public Board getBoard() {
+			return board;
+		}
+
+		public void setBoard(Board board) {
+			this.board = board;
 		}
 
 

@@ -23,6 +23,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import networking.Player;
+import GameWorld.GameCharacter;
+
 /**
  * Game UI Features:
  * 1.) A Map
@@ -37,12 +40,21 @@ import javax.swing.SwingConstants;
 
 public class GameMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
-		
+	private Board board;	
+	private int uid;
+	private Player player;
 	/**
 	 * This is the constructor for the JFrame
+	 * @param board 
+	 * @param player 
+	 * @param uid 
 	 */
 	
-	public GameMenu(){  	
+	public GameMenu(Board board, int uid, Player player){  	
+		this.board = board;
+		this.uid = uid;
+		this.player = player;
+		
         //FlowLayout 
 		FlowLayout fullMenu = new FlowLayout();
 		fullMenu.setAlignment(100);				
@@ -144,14 +156,29 @@ public class GameMenu extends JPanel {
 		
 		
 		//Actions Listener for the buttons		
-		private class ButtonListener implements ActionListener{
+		public class ButtonListener implements ActionListener{
 			public void actionPerformed(ActionEvent event){
+				//When turning left
 				if(event.getSource() == left){
-					System.out.println("You moved Left");
-
-				}
+					if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
+						board.getCharacter(uid).rotateTo(GameCharacter.WEST);
+					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
+						board.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
+					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
+						board.getCharacter(uid).rotateTo(GameCharacter.EAST);
+					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
+						board.getCharacter(uid).rotateTo(GameCharacter.NORTH);
+				}				
+				//When turning right
 				else if(event.getSource() == right){
-					System.out.println("You moved Right");
+					if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
+						board.getCharacter(uid).rotateTo(GameCharacter.EAST);
+					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
+						board.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
+					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
+						board.getCharacter(uid).rotateTo(GameCharacter.WEST);
+					else if(board.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
+						board.getCharacter(uid).rotateTo(GameCharacter.NORTH);
 
 				}
 				else if(event.getSource() == changeRoom){
