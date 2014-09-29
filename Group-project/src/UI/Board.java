@@ -1,5 +1,10 @@
 package UI;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +14,17 @@ import GameWorld.Vamp;
 
 public class Board {
 	
-	 private List<Vamp> vamps=new ArrayList<Vamp>();
+	 //private List<Vamp> vamps=new ArrayList<Vamp>();
+	
+	 /* made the rooms contain characters to reduce coupling */
 	 private Room[][] rooms=new Room[4][4];
+	 private Room startRoom;
 	 private int uid=0;
 	 
 	
 	public Board(Room[][] rooms){
 		this.rooms=rooms;
-		
+		startRoom = rooms[0][1];
 	}
 	
 	
@@ -71,21 +79,53 @@ public class Board {
 	
 	public int registerVamp(){
 		System.out.println("in registerVamp()");
-		vamps.add(new Vamp(uid, this));
+		startRoom.playerLeaveRoom(new Vamp(uid,this));
+//		vamps.add(new Vamp(uid, this));
 		return uid++;
 	}
 	
 	
 	public Vamp getCharacter(int uid){
-		for(Vamp vamp:this.vamps){
-			if(vamp.getUid()==uid){
-				return vamp;
+//		for(Vamp vamp:this.vamps){
+//			if(vamp.getUid()==uid){
+//				return vamp;
+//			}
+//		}
+		//loop through rooms to find the character
+		for(Room[] row:rooms){
+			for(Room r:row){
+				for(Vamp v:r.getVamps()){
+					if(v.getUid() == uid){
+						return v;
+					}
+				}
 			}
 		}
 		
 		throw new IllegalArgumentException("invalid uid passed in.");
 	}
 
+	public Room getRoomContainsPlayer(Vamp player){
+		for(Room[] row:rooms){
+			for(Room r:row){
+				if(r.getVamps().contains(player)){
+					return r;
+				}
+			}
+		}
+		throw new IllegalArgumentException("invalid uid passed in.");
+	}
+	
+	public Room getRoomContainsNPC(){
+		for(Room[] row:rooms){
+			for(Room r:row){
+				if(r.getWerewolf() != null){
+					return r;
+				}
+			}
+		}
+		throw new IllegalArgumentException("invalid uid passed in.");
+	}
 	
 	//method for werewolves to enter random rooms.
 	public void enterRandomRoom(){
@@ -93,10 +133,35 @@ public class Board {
 	}
 	
 	public void startGame(){
-		System.out.println("isEmpty vamps list: "+vamps.isEmpty());
-		for(Vamp vamp:vamps){
-			vamp.respawn(rooms[0][1]);
-		}
+//		System.out.println("isEmpty vamps list: "+vamps.isEmpty());
+//		for(Vamp vamp:vamps){
+//			vamp.respawn(rooms[0][1]);
+//		}
 	}
 	
+	public synchronized byte[] toByteArray() throws IOException{
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		DataOutputStream dout = new DataOutputStream(bout);
+		
+		for(Room[] row:rooms){
+			for(Room room:row){
+				room.toOutputStream(dout);
+			}
+		}
+		
+		dout.flush();
+
+		return bout.toByteArray();
+	}
+	
+	public synchronized void fromByteArray(byte[] bytes) throws IOException{
+		ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+		DataInputStream din = new DataInputStream(bin);
+		
+		for(Room[] row:rooms){
+			for(Room room:row){
+				room.fromInputStream(din, this);
+			}
+		}
+	}
 }
