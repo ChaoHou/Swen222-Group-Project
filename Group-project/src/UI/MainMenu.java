@@ -17,6 +17,7 @@ import javax.swing.JPanel;
  * The Main Menu is what first appears when you start the game. It will ask you to:
  * 1.) Start a new Game
  * 2.) See the Instructions
+ * -Instructions is an inner class in Main Menu
  * 
  *
  * @author Raul John De Guzman-
@@ -28,9 +29,12 @@ public class MainMenu extends JPanel {
 	private boolean isInstructions = false;
 	private boolean isCredits = false;
 	
+	private GameFrame currentGame;
+	
 	private Map<String, JButton> buttons = new HashMap<String, JButton>();
 
-	public MainMenu(){		
+	public MainMenu(GameFrame board){		
+		this.currentGame= board;
 		//Buttons
 		JButton newGame, instructions, changeRoom;		
 		newGame = new JButton("New Game");
@@ -89,8 +93,9 @@ public class MainMenu extends JPanel {
 		public void actionPerformed(ActionEvent event){
 			if(event.getSource() == buttons.get("newGame")){
 				setNewGame(true);
-				
-
+				currentGame.setGame();
+				currentGame.setVisible(true);
+				//updateUI();
 			}
 			else if(event.getSource() == buttons.get("instructions")){
 				System.out.println("You clicked instructions");

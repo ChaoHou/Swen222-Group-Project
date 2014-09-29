@@ -13,6 +13,12 @@ import networking.Server;
 import GameWorld.Room;
 import UI.Board;
 import UI.BoardFrame;
+import UI.GameFrame;
+import UI.MainMenu;
+import UI.GameFrame;
+import UI.GameMenu;
+import UI.MainMenu;
+import UI.GameFrame;
 
 
 public class Main {
@@ -68,26 +74,45 @@ public class Main {
 			try{
 				Board game=createBoardFromFile(filename);
 				singleUserGame(game);
+				
+				
+				
+				
+				
+				
+				
 			}catch(Exception e){
 				
 			}
 		}
+		
+		
+		
 		
 		System.exit(0);
 	}
 
 	
 	public static void singleUserGame(Board game){
-		System.out.println("in single user mode-------------------------");
-
-		int uid=game.registerVamp();
-		System.out.println("done with registering vamp");
-		BoardFrame frame=new BoardFrame("single user mode", game, uid, new Player(uid, game));
-		game.startGame();
+//		System.out.println("in single user mode-------------------------");
+//
+//		int uid=game.registerVamp();
+//		System.out.println("done with registering vamp");
+//		BoardFrame frame=new BoardFrame("single user mode", game, uid, new Player(uid, game));
+//		game.startGame();
+//		
+//		while(true){
+//			//game running
+//		}
 		
-		while(true){
-			//game running
-		}
+		//This is for the construction of the game
+		GameFrame gg = new GameFrame();
+		gg.setVisible(true);    
+        while(gg.isVisible()){
+        	
+        	        	
+        }
+		
 	}
 	
 	private static void usage() {
