@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * Created by innocence on 25/09/2014.
+ * Created by Kyohei Kudo on 25/09/2014.
  */
 public class Renderer implements GLEventListener, KeyListener {
 

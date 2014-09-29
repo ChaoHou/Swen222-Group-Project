@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Created by innocence on 25/09/2014.
+ * Created by Kyohei Kudo on 25/09/2014.
  */
 public class RendererTest {
     public static void main(String[] args) {

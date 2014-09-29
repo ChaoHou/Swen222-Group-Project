@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by innocence on 25/09/2014.
+ * Created by Kyohei Kudo on 25/09/2014.
  */
 public class Room {
     private float rquad = 0.0f;

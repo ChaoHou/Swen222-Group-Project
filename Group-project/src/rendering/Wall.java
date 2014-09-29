@@ -6,7 +6,7 @@ import javax.media.opengl.GL2GL3;
 import javax.media.opengl.GLAutoDrawable;
 
 /**
- * Created by innocence on 25/09/2014.
+ * Created by Kyohei Kudo on 25/09/2014.
  */
 public class Wall {
     private final DIRECTION dir;
