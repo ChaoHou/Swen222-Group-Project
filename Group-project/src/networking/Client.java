@@ -1,5 +1,8 @@
 package networking;
 
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -9,11 +12,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 import GameWorld.GameCharacter;
 import UI.Board;
+import UI.GameFrame;
 import UI.TestUI;
 
-public class Client extends Thread implements MouseListener,KeyListener {
+public class Client extends Thread implements MouseListener,KeyListener,ActionListener {
 	private final Socket socket;
 	private final DataOutputStream output;
 	private final DataInputStream input;
@@ -21,6 +27,8 @@ public class Client extends Thread implements MouseListener,KeyListener {
 	private final int uid;
 	
 	private Board game;
+	
+	private GameFrame gameFrame;
 	
 	public Client(Socket socket,Board game) throws IOException{
 		this.socket = socket;
@@ -31,6 +39,9 @@ public class Client extends Thread implements MouseListener,KeyListener {
 		
 		this.game = game;
 		//new TestUI(this);
+		gameFrame = new GameFrame("multi user mode", game, uid, this);
+		gameFrame.setVisible(true);    
+		gameFrame.repaint();
 	}
 	
 	public void run(){
@@ -51,8 +62,9 @@ public class Client extends Thread implements MouseListener,KeyListener {
 
 				}
 
-				socket.close();
+				
 			}
+			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,5 +129,32 @@ public class Client extends Thread implements MouseListener,KeyListener {
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String action = e.getActionCommand();
+		//System.out.println(action);
+		try {
+			if(action.equals("Turn Left")){
+				output.writeInt(Server.ACTION.ROTATE_L.ordinal());
+			}				
+			//When turning right
+			else if(action.equals("Turn Right")){
+				output.writeInt(Server.ACTION.ROTATE_R.ordinal());
+
+			}
+			else if(action.equals("Change Room")){
+				//Use room
+				String answer = (String) JOptionPane.showInputDialog(null, "Which Room would you like to go to?", null, 
+						 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "d", "dd"}, null);
+			
+				System.out.println("You moved to Room: " + answer );
+			}
+		
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 }

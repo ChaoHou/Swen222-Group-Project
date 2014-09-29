@@ -42,7 +42,7 @@ public class Player implements KeyListener,ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		System.out.println(action);
+		//System.out.println(action);
 		if(action.equals("Turn Left")){
 			if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
 				game.getCharacter(uid).rotateTo(GameCharacter.WEST);

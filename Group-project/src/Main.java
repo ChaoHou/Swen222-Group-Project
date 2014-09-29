@@ -213,8 +213,9 @@ public class Main {
 
 
 	private static void multiUserGame(Board game, Server[] connections) {
-		// TODO Auto-generated method stub
-		
+		while(true){
+			Thread.yield();
+		}
 	}
 
 
