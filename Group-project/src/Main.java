@@ -68,8 +68,7 @@ public class Main {
 		} else if (url != null && gameClock != DEFAULT_CLK_PERIOD) {
 			System.out.println("Cannot overide clock period when connecting to server.");
 			System.exit(1);
-		} 
-		
+		}
 		if(server){
 			runServer(port, nplayers, gameClock, broadcastClock);
 		}else if(url!=null){
@@ -77,16 +76,16 @@ public class Main {
 		}else{
 			try{
 				Board game=createBoardFromFile(filename);
-				singleUserGame(game);			
+				singleUserGame(game);
 				
 				
 			}catch(Exception e){
-				
+                System.err.println(e.getMessage());
 			}
 		}
-		
-		
-		
+
+
+
 		
 		System.exit(0);
 	}
