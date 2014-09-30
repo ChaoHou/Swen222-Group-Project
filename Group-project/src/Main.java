@@ -26,7 +26,7 @@ public class Main {
 	private static final int DEFAULT_CLK_PERIOD = 20;
 	private static final int DEFAULT_BROADCAST_CLK_PERIOD = 5;
 
-	private static final String filename="map.txt";
+	private static String filename="map.txt";
 	
 	public static void main(String[] args) {
 
@@ -55,6 +55,7 @@ public class Main {
 					port = Integer.parseInt(args[++i]);
 				}
 			} else {
+				filename = args[i];
 				System.out.println("Wrong argument");
 			}
 		}
@@ -66,8 +67,7 @@ public class Main {
 		} else if (url != null && gameClock != DEFAULT_CLK_PERIOD) {
 			System.out.println("Cannot overide clock period when connecting to server.");
 			System.exit(1);
-		} 
-		
+		}
 		if(server){
 			runServer(port, nplayers, gameClock, broadcastClock);
 		}else if(url!=null){
@@ -75,16 +75,16 @@ public class Main {
 		}else{
 			try{
 				Board game=createBoardFromFile(filename);
-				singleUserGame(game);			
+				singleUserGame(game);
 				
 				
 			}catch(Exception e){
-				
+                System.err.println(e.getMessage());
 			}
 		}
-		
-		
-		
+
+
+
 		
 		System.exit(0);
 	}
