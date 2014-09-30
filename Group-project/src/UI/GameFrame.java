@@ -15,6 +15,8 @@ import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import com.jogamp.opengl.util.FPSAnimator;
@@ -31,6 +33,7 @@ public class GameFrame extends JFrame {
 	//Stuff to use from gameworld...
 	private Board board;
 	private int uid;
+	private boolean runningGame;
 	//private Player player; we don't need a player here, we will pass in an actionlistener
 	private ActionListener player;
 	
@@ -47,7 +50,7 @@ public class GameFrame extends JFrame {
 			
 			//Game logic's information
 			this.setBoard(board);
-			this.uid = uid;			
+			this.setUid(uid);			
 			this.player = player;
 			this.renderer = renderer;
 			
@@ -57,19 +60,42 @@ public class GameFrame extends JFrame {
 			fullMenu.setHgap(0);		
 			fullMenu.setAlignment(FlowLayout.CENTER);
 			this.setLayout(fullMenu);	
-
-			//Set up the main menu
-			MainMenu MainMenu = new MainMenu(this);	
-			getPanels().put("menu", MainMenu);  
+			//Sets up the menu bar
+		    JMenuBar menubar = new JMenuBar();
+		    JMenu help = new JMenu("Help");
+		    menubar.add(help);
+		    this.setJMenuBar(menubar);
+		    //Set up the instructions and map(while keeping them invisible)
+		    instructionsMenu menu = new instructionsMenu(this);	
+		    
+			this.getPanels().put("instructions", menu);	
 			
-			//Start up at the main menu first:
+			this.getContentPane().add(menu);
+			
+		    this.getPanels().get("instructions").setVisible(false);	 
+		    
+			//Opens up the main menu
+			setMainMenu();		
+		}
+		
+		/**
+		 * This method sets up the main menu:
+		 */
+		
+		public void setMainMenu(){
+			//Make sure nothing's in the frame right now...
+			//this.getContentPane().removeAll();		
+			this.setRunningGame(false);
+			this.repaint();
+			//Set up the main menu now:
+		    MainMenu MainMenu = new MainMenu(this);	
+			getPanels().put("menu", MainMenu);  
 			this.getContentPane().add(MainMenu);
 			this.setTitle("Vampire Mansion");
 			this.setSize(1000,740);
 			this.setResizable(false);
 			setLocationRelativeTo(null);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
-					
 		}
 		
 		/**
@@ -89,7 +115,7 @@ public class GameFrame extends JFrame {
 	        
 			//renderPanel.setPreferredSize(new Dimension (1000, 500));
 			//renderPanel.setBackground(Color.white);
-			GameMenu game = new GameMenu(board, uid, player);			
+			GameMenu game = new GameMenu(this, player);			
 			//this.getPanels().put("render", renderPanel);
 			this.getPanels().put("game", game);
 			this.getContentPane().remove(getPanels().get("menu"));			
@@ -99,11 +125,19 @@ public class GameFrame extends JFrame {
 		}
 		
 		/**
-		 * This method's for the instruction menu
+		 * This method's for showing the instruction menu
 		 * @return
 		 */
-		public void showInstructions(){
-			
+		public void showInstructions(){					
+			if(isRunningGame()){
+				this.getPanels().get("render").setVisible(false);
+				this.getPanels().get("game").setVisible(false);
+				this.getPanels().get("instructions").setVisible(true);
+			}
+			else{
+				this.getPanels().get("menu").setVisible(false);	
+				this.getPanels().get("instructions").setVisible(true);
+			}
 			
 		}
 		
@@ -113,6 +147,18 @@ public class GameFrame extends JFrame {
 		 */
 		public void showMap(){
 			
+			
+		}
+		
+		/**
+		 * This methods shows the game if it's not appearing
+		 */
+		
+		public void showGame(){
+			if(isRunningGame()){
+				this.getPanels().get("render").setVisible(true);
+				this.getPanels().get("game").setVisible(true);
+			}	
 		}
 
 
@@ -131,6 +177,22 @@ public class GameFrame extends JFrame {
 
 		public void setBoard(Board board) {
 			this.board = board;
+		}
+
+		public int getUid() {
+			return uid;
+		}
+
+		public void setUid(int uid) {
+			this.uid = uid;
+		}
+
+		public boolean isRunningGame() {
+			return runningGame;
+		}
+
+		public void setRunningGame(boolean runningGame) {
+			this.runningGame = runningGame;
 		}
 
 
