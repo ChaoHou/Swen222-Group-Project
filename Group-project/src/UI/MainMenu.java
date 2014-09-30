@@ -118,7 +118,9 @@ public class MainMenu extends JPanel {
 			}
 			else if(event.getSource() == buttons.get("instructions")){
 				System.out.println("You clicked instructions");
-
+				//currentGame.get
+				currentGame.showInstructions();
+				currentGame.setVisible(true);	
 				updateUI();
 
 			}

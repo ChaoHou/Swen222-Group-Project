@@ -40,10 +40,16 @@ import GameWorld.GameCharacter;
 
 public class GameMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private Board board;	
-	private int uid;
+	private GameFrame currentGame;
+	
+//	private Board board;	
+//	private int uid;
+//	private ActionListener player; //changed to ActionListener, add this to all of your buttons
+//									//you don't need to make your own button listener, we will pass in one
+//	private Board board;	
+//	private int uid;
 	private ActionListener player; //changed to ActionListener, add this to all of your buttons
-									//you don't need to make your own button listener, we will pass in one
+//									//you don't need to make your own button listener, we will pass in one
 	/**
 	 * This is the constructor for the JFrame
 	 * @param board 
@@ -51,9 +57,13 @@ public class GameMenu extends JPanel {
 	 * @param uid 
 	 */
 	
-	public GameMenu(Board board, int uid, ActionListener player){  	
-		this.board = board;
-		this.uid = uid;
+	
+	
+	public GameMenu(GameFrame game, ActionListener player){  
+		
+		//this.board = board;
+		//this.uid = uid;
+		this.currentGame = game;
 		this.player = player;
 		
         //FlowLayout 
@@ -118,11 +128,9 @@ public class GameMenu extends JPanel {
 		private JPanel roomPanel;
 		private NavigationPanel y = this;
 		
-		public NavigationPanel(){
-			
+		public NavigationPanel(){			
 		    JLabel label1 = new JLabel("Turn Around", JLabel.CENTER);
 		    JLabel label2 = new JLabel("Change Room", JLabel.CENTER);
-
 			//Buttons
 			left = new JButton("Turn Left");
 			right = new JButton("Turn Right");
@@ -154,7 +162,10 @@ public class GameMenu extends JPanel {
 			
 
 		}	
-			
+		
+		
+		//Actions Listener for the buttons		
+
 	}
 	
 	
@@ -218,6 +229,13 @@ public class GameMenu extends JPanel {
 					//Use room
 					System.out.println("Attack Player 3");
 					p1.setLabel("P1");
+				}	
+				else if(event.getSource() == p4){
+					//Use room
+					System.out.println("Attack Player 4");
+					currentGame.showInstructions();
+					currentGame.setVisible(true);
+					currentGame.repaint();
 				}	
 			}
 		}	
