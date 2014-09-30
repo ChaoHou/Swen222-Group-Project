@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,16 +23,12 @@ public class GameFrame extends JFrame {
 	
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
 	
-	//Stuff to use from Gameworld Package
+	//Stuff to use from gameworld...
 	private Board board;
 	private int uid;
-	private Player player;
-	//This is to check if a game's running or not
-	private boolean runningGame = false;
-	//These are images to be used
-	private Image instructions;
-	private Image map;
-	private Image poster;
+	private boolean runningGame;
+	//private Player player; we don't need a player here, we will pass in an actionlistener
+	private ActionListener player;
 			
 		/**
 		 * This is the constructor for the Actual JFrame
@@ -41,7 +38,8 @@ public class GameFrame extends JFrame {
 		 * @param string 
 		 */
 			
-		public GameFrame(String string, Board board, int uid, Player player){		
+		public GameFrame(String string, Board board, int uid, ActionListener player){
+			
 			//Game logic's information
 			this.setBoard(board);
 			this.setUid(uid);			
@@ -98,7 +96,7 @@ public class GameFrame extends JFrame {
 			JPanel render = new JPanel();
 			render.setPreferredSize(new Dimension (1000, 480));
 			render.setBackground(Color.white);
-			GameMenu game = new GameMenu(this);			
+			GameMenu game = new GameMenu(this, player);			
 			this.getPanels().put("render", render);
 			this.getPanels().put("game", game);
 			this.getContentPane().remove(getPanels().get("menu"));			

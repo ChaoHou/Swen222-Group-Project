@@ -26,9 +26,11 @@ public class Main {
 	private static final int DEFAULT_CLK_PERIOD = 20;
 	private static final int DEFAULT_BROADCAST_CLK_PERIOD = 5;
 
+	private static final String filename="map.txt";
+	
 	public static void main(String[] args) {
 
-		String filename="map.txt";
+		
 		boolean server = false;
 		int nplayers = 0;
 		String url = null;
@@ -101,7 +103,6 @@ public class Main {
 //		}
 //		
 		
-		
 		//This is for the construction of the game	
 		int uid = game.registerVamp();		
 		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game));
@@ -143,9 +144,9 @@ public class Main {
 	}
 	
 	private static void runClient(String addr, int port,int gameClock, int broadcastClock){		
-		Socket s;
+		
 		try {
-			s = new Socket(addr,port);
+			Socket s = new Socket(addr,port);
 			System.out.println("CLIENT CONNECTED TO " + addr + ":" + port);			
 			//SlaveConnection slave = new SlaveConnection(s,broadcastClock);
 			//SlaveActionHandler actionSlave = new SlaveActionHandler(slave,gameClock);
@@ -153,7 +154,9 @@ public class Main {
 			
 			//slave.start();
 			//actionSlave.run();
-			Client client = new Client(s);
+			Board game=createBoardFromFile(filename);
+			
+			Client client = new Client(s,game);
 			client.run();
 			
 			
@@ -167,7 +170,8 @@ public class Main {
 		}
 		
 	}
-	
+
+
 	private static void runServer(int port, int nplayers, int gameClock, int broadcastClock) {	
 		//ClockThread clk = new ClockThread(gameClock);	
 		
@@ -175,40 +179,27 @@ public class Main {
 		System.out.println("CLUEDO SERVER LISTENING ON PORT " + port);
 		System.out.println("CLUEDO SERVER AWAITING " + nplayers + " PLAYERS");
 		try {
-			//MasterConnection[] connections = new MasterConnection[nplayers];
-			//int[] uids = new int[nplayers];
-			Socket[] sockets = new Socket[nplayers];
+			Board game = createBoardFromFile(filename);
+			//Socket[] sockets = new Socket[nplayers];
+			Server[] connections = new Server[nplayers];
 			// Now, we await connections.
-			ServerSocket ss = new ServerSocket(port);			
+			ServerSocket ss = new ServerSocket(port);	
+			
 			while (1 == 1) {
 				// 	Wait for a socket
 				Socket s = ss.accept();
 				System.out.println("ACCEPTED CONNECTION FROM: " + s.getInetAddress());				
 				
-				int uid = nplayers;
+				int uid = game.registerVamp();
 				System.out.println("PLAYER UID: "+uid);
 				
-				sockets[--nplayers] = s;
-				DataOutputStream output = new DataOutputStream(s.getOutputStream());
-				output.writeInt(uid);
-				
+				connections[--nplayers] = new Server(s,game,uid);
+				connections[nplayers].start();
 				//connections[--nplayers] = new MasterConnection(s,broadcastClock,uid);
 				if(nplayers == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
-					
-					//MasterActionHandler actionMaster = new MasterActionHandler(connections,gameClock);
-					
-					//initialize and start the connections
-//					for(MasterConnection master:connections){
-//						master.setActionHandler(actionMaster);
-//						master.start();
-//					}
-//					actionMaster.run();
-					//System.out.println("ALL CLIENTS DISCONNECTED --- GAME OVER");
-					// done
-					// close the server
-					Server server = new Server(sockets);
-					server.run();
+					multiUserGame(game,connections);
+					System.out.println("ALL CLIENTS DISCONNECTED --- GAME OVER");
 					
 					ss.close();
 				}
@@ -218,7 +209,15 @@ public class Main {
 			System.exit(1);
 		} 
 	}
-	
+
+
+	private static void multiUserGame(Board game, Server[] connections) {
+		while(true){
+			Thread.yield();
+		}
+	}
+
+
 	private static Board createBoardFromFile(String filename) throws IOException{
 		FileReader fr = new FileReader(filename);		
 		BufferedReader br = new BufferedReader(fr);

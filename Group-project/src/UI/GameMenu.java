@@ -42,12 +42,29 @@ public class GameMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private GameFrame currentGame;
 	
+//	private Board board;	
+//	private int uid;
+//	private ActionListener player; //changed to ActionListener, add this to all of your buttons
+//									//you don't need to make your own button listener, we will pass in one
+//	private Board board;	
+//	private int uid;
+	private ActionListener player; //changed to ActionListener, add this to all of your buttons
+//									//you don't need to make your own button listener, we will pass in one
 	/**
 	 * This is the constructor for the JFrame
+	 * @param board 
+	 * @param player 
+	 * @param uid 
 	 */
 	
-	public GameMenu(GameFrame game){  	
+	
+	
+	public GameMenu(GameFrame game, ActionListener player){  
+		
+		//this.board = board;
+		//this.uid = uid;
 		this.currentGame = game;
+		this.player = player;
 		
         //FlowLayout 
 		FlowLayout fullMenu = new FlowLayout();
@@ -109,6 +126,7 @@ public class GameMenu extends JPanel {
 		private JButton left, right, changeRoom;
 		private JPanel directionPanel;
 		private JPanel roomPanel;
+		private NavigationPanel y = this;
 		
 		public NavigationPanel(){			
 		    JLabel label1 = new JLabel("Turn Around", JLabel.CENTER);
@@ -118,10 +136,10 @@ public class GameMenu extends JPanel {
 			right = new JButton("Turn Right");
 			changeRoom = new JButton("Change Room");
 			//Action Listeners for buttons		
-			ButtonListener b = new ButtonListener();
-			left.addActionListener(b);
-			right.addActionListener(b);
-			changeRoom.addActionListener(b);			
+			//ButtonListener b = new ButtonListener();
+			left.addActionListener(player);
+			right.addActionListener(player);
+			changeRoom.addActionListener(player);			
 			//Setting up the directionalPanel
 			directionPanel = new JPanel();
 			directionPanel.add(label1);

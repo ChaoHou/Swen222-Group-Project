@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import UI.GameMenu.NavigationPanel;
-import UI.GameMenu.NavigationPanel.ButtonListener;
 
 /**
  * This Panel represents the "Main Menu" 

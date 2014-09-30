@@ -5,52 +5,91 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Server {
-	private final Socket[] sockets;
-	private final DataOutputStream[] outputs;
-	private final DataInputStream[] inputs;
+import GameWorld.GameCharacter;
+import UI.Board;
+
+public class Server extends Thread {
 	
-	public Server(Socket[] sockets) throws IOException{
-		this.sockets = sockets;
-		outputs = new DataOutputStream[sockets.length];
-		inputs = new DataInputStream[sockets.length];
-		for(int i=0;i<sockets.length;i++){
-			outputs[i] = new DataOutputStream(sockets[i].getOutputStream());
-			inputs[i] = new DataInputStream(sockets[i].getInputStream());
-		}
+	public enum ACTION{
+		ROTATE_R,
+		ROTATE_L,
 	}
 	
-	public void run(){
-		while(true){
-			try {
-				for(DataInputStream input:inputs){
-					if(input.available() != 0){
-						int uid = input.readInt();
-						int x = input.readInt();
-						int y = input.readInt();
-						broadcast(uid, x, y);
+	private final Socket socket;
+	private final DataOutputStream output;
+	private final DataInputStream input;
+
+	private final int uid;
+
+	private Board game;
+
+	public Server(Socket socket, Board game, int uid) throws IOException {
+		this.socket = socket;
+		output = new DataOutputStream(socket.getOutputStream());
+		input = new DataInputStream(socket.getInputStream());
+
+		this.uid = uid;
+
+		this.game = game;
+		
+		output.writeInt(uid);
+	}
+
+	public void run() {
+
+		try {
+			boolean exit = false;
+			while (!exit) {
+				try {
+
+					if (input.available() != 0) {
+						ACTION action = ACTION.values()[input.readInt()];
+						rotate(action);
+						
+						
+						// broadcast the state of the board to client
+						byte[] state = game.toByteArray();
+						output.writeInt(state.length);
+						output.write(state);
+						output.flush();
 					}
+
+					
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+
 				}
+
 				
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-	
-	public void broadcast(int uid,int x,int y){
-		System.out.println("uid: "+uid+" x:"+x+" y:"+y);
-		for(DataOutputStream output:outputs){
-			try {
-				output.writeInt(uid);
-				output.writeInt(x);
-				output.writeInt(y);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+	public void rotate(ACTION action){
+		if(action.equals(ACTION.ROTATE_L)){
+			
+			if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.WEST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
+				game.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.EAST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
+				game.getCharacter(uid).rotateTo(GameCharacter.NORTH);
+		}else if(action.equals(ACTION.ROTATE_R)){
+			
+			if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.EAST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
+				game.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.WEST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
+				game.getCharacter(uid).rotateTo(GameCharacter.NORTH);
 		}
 	}
 }

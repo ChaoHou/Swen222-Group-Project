@@ -1,13 +1,17 @@
 package networking;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.JOptionPane;
 
 import GameWorld.GameCharacter;
 import UI.Board;
 
 
-public class Player implements KeyListener{
+public class Player implements KeyListener,ActionListener{
 
 	private int uid;
 	private Board game;
@@ -36,10 +40,47 @@ public class Player implements KeyListener{
 	}
 
 	@Override
+	public void actionPerformed(ActionEvent e) {
+		String action = e.getActionCommand();
+		//System.out.println(action);
+		if(action.equals("Turn Left")){
+			if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.WEST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
+				game.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.EAST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
+				game.getCharacter(uid).rotateTo(GameCharacter.NORTH);
+		}				
+		//When turning right
+		else if(action.equals("Turn Right")){
+			if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.NORTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.EAST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
+				game.getCharacter(uid).rotateTo(GameCharacter.SOUTH);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.SOUTH)
+				game.getCharacter(uid).rotateTo(GameCharacter.WEST);
+			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
+				game.getCharacter(uid).rotateTo(GameCharacter.NORTH);
+
+		}
+		else if(action.equals("Change Room")){
+			//Use room
+			String answer = (String) JOptionPane.showInputDialog(null, "Which Room would you like to go to?", null, 
+					 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "d", "dd"}, null);
+		
+			System.out.println("You moved to Room: " + answer );
+		}
+	}
+
+
+	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {

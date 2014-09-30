@@ -1,8 +1,12 @@
 package GameWorld;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import UI.Board;
 
-public class GameCharacter {
+public abstract class GameCharacter {
 	public static final int NORTH=0;
 	public static final int EAST=1;
 	public static final int SOUTH=2;
@@ -10,18 +14,10 @@ public class GameCharacter {
 	public static final int NO_DIRECTION=4;
 	
 	protected int facing;
-	protected Room inRoom;
+	//protected Room inRoom; //delete to reduce coupling
 	protected Board game;
 	
-	public void rotateTo(int dir){
-		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
-				dir==Vamp.SOUTH || dir==Vamp.WEST){
-			facing=dir;
-			System.out.println("now facing "+ intDirToString());
-		}else{
-			throw new IllegalArgumentException("invalid direction to face.");
-		}
-	}
+	public abstract void rotateTo(int dir);
 	
 	
 	public String intDirToString(){
@@ -39,18 +35,18 @@ public class GameCharacter {
 		}
 			
 	}
-	public boolean enterRoom(){
-		Room roomToEnter=game.getRoomAhead(inRoom, facing);
-		
-		if(roomToEnter==null){
-			System.out.println("no room ahead");
-			return false;
-		}else{
-			System.out.println("entering "+roomToEnter+" from "+inRoom);
-			inRoom=roomToEnter;
-			System.out.println("entered "+roomToEnter);
-			return true;
-		}
+	
+	public void setDirectionFacing(int dir){
+		facing=dir;
 	}
+	
+	public int getDirectionFacing(){
+		return facing;
+	}
+	
+	public abstract boolean enterRoom();
+	
+	public abstract void toOutputStream(DataOutputStream dout) throws IOException;
+	
 	
 }
