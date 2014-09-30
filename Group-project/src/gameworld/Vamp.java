@@ -1,10 +1,10 @@
-package GameWorld;
+package gameworld;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import UI.Board;
+import ui.Board;
 
 
 public class Vamp extends GameCharacter{

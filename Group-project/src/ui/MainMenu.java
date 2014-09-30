@@ -1,4 +1,4 @@
-package UI;
+package ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import UI.GameMenu.NavigationPanel;
+import ui.GameMenu.NavigationPanel;
 
 /**
  * This Panel represents the "Main Menu" 

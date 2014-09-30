@@ -1,5 +1,7 @@
 package networking;
 
+import gameworld.GameCharacter;
+
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,10 +18,9 @@ import javax.swing.JOptionPane;
 
 import rendering.Renderer;
 import rendering.RendererTest;
-import GameWorld.GameCharacter;
-import UI.Board;
-import UI.GameFrame;
-import UI.TestUI;
+import ui.Board;
+import ui.GameFrame;
+import ui.TestUI;
 
 public class Client extends Thread implements MouseListener,KeyListener,ActionListener {
 	private final Socket socket;

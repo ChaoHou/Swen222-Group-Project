@@ -1,3 +1,5 @@
+import gameworld.Room;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileReader;
@@ -9,18 +11,14 @@ import java.util.ArrayList;
 
 import rendering.Renderer;
 import rendering.RendererTest;
+import ui.Board;
+import ui.BoardFrame;
+import ui.GameFrame;
+import ui.GameMenu;
+import ui.MainMenu;
 import networking.Client;
 import networking.Player;
 import networking.Server;
-import GameWorld.Room;
-import UI.Board;
-import UI.BoardFrame;
-import UI.GameFrame;
-import UI.MainMenu;
-import UI.GameFrame;
-import UI.GameMenu;
-import UI.MainMenu;
-import UI.GameFrame;
 
 
 public class Main {

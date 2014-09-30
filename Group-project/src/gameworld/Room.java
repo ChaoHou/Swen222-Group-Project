@@ -1,4 +1,4 @@
-package GameWorld;
+package gameworld;
 
 import java.awt.Container;
 import java.io.DataInputStream;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import UI.Board;
+import ui.Board;
 
 public class Room {
 

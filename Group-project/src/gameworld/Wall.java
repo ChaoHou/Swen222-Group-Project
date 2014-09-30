@@ -1,4 +1,4 @@
-package GameWorld;
+package gameworld;
 
 public class Wall {
 	public static final int NORTH_WALL=0;

@@ -1,4 +1,8 @@
-package UI;
+package ui;
+
+import gameworld.GameCharacter;
+import gameworld.Room;
+import gameworld.Vamp;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -7,10 +11,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import GameWorld.GameCharacter;
-import GameWorld.Room;
-import GameWorld.Vamp;
 
 public class Board {
 	

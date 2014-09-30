@@ -1,4 +1,4 @@
-package GameWorld;
+package gameworld;
 
 import java.util.ArrayList;
 import java.util.List;

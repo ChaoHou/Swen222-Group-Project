@@ -1,4 +1,6 @@
-package UI;
+package ui;
+
+import gameworld.GameCharacter;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -24,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import networking.Player;
-import GameWorld.GameCharacter;
 
 /**
  * Game UI Features:

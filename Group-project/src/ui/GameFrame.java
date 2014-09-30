@@ -1,4 +1,4 @@
-package UI;
+package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,6 +38,8 @@ public class GameFrame extends JFrame {
 	private ActionListener player;
 	
 	private Renderer renderer;
+	private GLCanvas canvas;
+	
 		/**
 		 * This is the constructor for the Actual JFrame
 		 * It starts off with one Panel, the GameMenu screen
@@ -104,12 +106,15 @@ public class GameFrame extends JFrame {
 		
 		public void setGame(){
 			this.setLayout(new BorderLayout());
-			//JPanel renderPanel = new JPanel();
+		//	JPanel renderPanel = new JPanel();
+			
 			GLProfile glprofile = GLProfile.get(GLProfile.GL2);
 	        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 	        final GLCanvas glcanvas = new GLCanvas( glcapabilities );
 	        glcanvas.addGLEventListener(renderer);
-	        //renderPanel.add(glcanvas);
+	        
+	    //    renderPanel.add(glcanvas);
+	        
 	        FPSAnimator animator= new FPSAnimator(glcanvas,60);
 	        animator.start();
 	        
@@ -118,9 +123,15 @@ public class GameFrame extends JFrame {
 			GameMenu game = new GameMenu(this, player);			
 			//this.getPanels().put("render", renderPanel);
 			this.getPanels().put("game", game);
-			this.getContentPane().remove(getPanels().get("menu"));			
-			this.getContentPane().add(glcanvas,BorderLayout.CENTER);
-			this.getContentPane().add(game,BorderLayout.SOUTH);
+		//	this.getPanels().put("render", renderPanel);
+			
+			this.getContentPane().remove(getPanels().get("menu"));	
+			//this.getContentPane().add(renderPanel);
+			
+			this.canvas = glcanvas;
+			
+			this.getContentPane().add(glcanvas, BorderLayout.CENTER);
+			this.getContentPane().add(game, BorderLayout.SOUTH);
 		    this.repaint();
 		}
 		
@@ -130,7 +141,7 @@ public class GameFrame extends JFrame {
 		 */
 		public void showInstructions(){					
 			if(isRunningGame()){
-				this.getPanels().get("render").setVisible(false);
+				this.canvas.setVisible(false);
 				this.getPanels().get("game").setVisible(false);
 				this.getPanels().get("instructions").setVisible(true);
 			}

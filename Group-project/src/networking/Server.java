@@ -1,12 +1,13 @@
 package networking;
 
+import gameworld.GameCharacter;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import GameWorld.GameCharacter;
-import UI.Board;
+import ui.Board;
 
 public class Server extends Thread {
 	

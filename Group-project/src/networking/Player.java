@@ -1,5 +1,7 @@
 package networking;
 
+import gameworld.GameCharacter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,8 +10,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JOptionPane;
 
 import rendering.Renderer;
-import GameWorld.GameCharacter;
-import UI.Board;
+import ui.Board;
 
 
 public class Player implements KeyListener,ActionListener{
@@ -76,6 +77,9 @@ public class Player implements KeyListener,ActionListener{
 					 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "d", "dd"}, null);
 		
 			System.out.println("You moved to Room: " + answer );
+		}
+		else if(action.equals("p1")){
+			
 		}
 	}
 
