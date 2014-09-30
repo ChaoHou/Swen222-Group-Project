@@ -28,7 +28,7 @@ public class Main {
 	private static final int DEFAULT_CLK_PERIOD = 20;
 	private static final int DEFAULT_BROADCAST_CLK_PERIOD = 5;
 
-	private static final String filename="map.txt";
+	private static String filename="map.txt";
 	
 	public static void main(String[] args) {
 
@@ -57,6 +57,7 @@ public class Main {
 					port = Integer.parseInt(args[++i]);
 				}
 			} else {
+				filename = args[i];
 				System.out.println("Wrong argument");
 			}
 		}
