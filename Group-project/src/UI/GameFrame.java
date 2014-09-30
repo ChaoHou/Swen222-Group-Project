@@ -2,6 +2,7 @@ package UI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,11 +22,16 @@ public class GameFrame extends JFrame {
 	
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
 	
-	//Stuff to use from gameworld...
+	//Stuff to use from Gameworld Package
 	private Board board;
 	private int uid;
 	private Player player;
+	//This is to check if a game's running or not
 	private boolean runningGame = false;
+	//These are images to be used
+	private Image instructions;
+	private Image map;
+	private Image poster;
 			
 		/**
 		 * This is the constructor for the Actual JFrame
@@ -51,7 +57,15 @@ public class GameFrame extends JFrame {
 		    JMenu help = new JMenu("Help");
 		    menubar.add(help);
 		    this.setJMenuBar(menubar);
-		 
+		    //Set up the instructions and map(while keeping them invisible)
+		    instructionsMenu menu = new instructionsMenu(this);	
+		    
+			this.getPanels().put("instructions", menu);	
+			
+			this.getContentPane().add(menu);
+			
+		    this.getPanels().get("instructions").setVisible(false);	 
+		    
 			//Opens up the main menu
 			setMainMenu();		
 		}
@@ -62,7 +76,7 @@ public class GameFrame extends JFrame {
 		
 		public void setMainMenu(){
 			//Make sure nothing's in the frame right now...
-			this.getContentPane().removeAll();		
+			//this.getContentPane().removeAll();		
 			this.setRunningGame(false);
 			this.repaint();
 			//Set up the main menu now:
@@ -98,20 +112,17 @@ public class GameFrame extends JFrame {
 		 * This method's for showing the instruction menu
 		 * @return
 		 */
-		public void showInstructions(){
-			instructionsMenu menu = new instructionsMenu(this);
-			this.getPanels().put("instructions", menu);
-			
+		public void showInstructions(){					
 			if(isRunningGame()){
 				this.getPanels().get("render").setVisible(false);
 				this.getPanels().get("game").setVisible(false);
+				this.getPanels().get("instructions").setVisible(true);
 			}
 			else{
 				this.getPanels().get("menu").setVisible(false);	
+				this.getPanels().get("instructions").setVisible(true);
 			}
 			
-			this.getContentPane().add(menu);
-		    this.repaint();		
 		}
 		
 		/**
@@ -131,7 +142,8 @@ public class GameFrame extends JFrame {
 			if(isRunningGame()){
 				this.getPanels().get("render").setVisible(true);
 				this.getPanels().get("game").setVisible(true);
-			}		}
+			}	
+		}
 
 
 		public Map<String, JPanel> getPanels() {

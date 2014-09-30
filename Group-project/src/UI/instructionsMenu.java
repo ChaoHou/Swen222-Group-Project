@@ -53,9 +53,8 @@ public class instructionsMenu extends JPanel{
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent event){
 			if(event.getSource() == back){
-				//Remove instructions
-				game.getContentPane().remove(game.getPanels().get("instructions"));		
-
+				//Hide the instructions
+				game.getPanels().get("instructions").setVisible(false);		
 				//Check if you're in a current game or not
 				if(game.isRunningGame()){
 					game.showGame();
