@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import rendering.Renderer;
+import rendering.RendererTest;
 import networking.Client;
 import networking.Player;
 import networking.Server;
@@ -106,7 +108,8 @@ public class Main {
 		//This is for the construction of the game
 		
 		int uid = game.registerVamp();		
-		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game));
+		Renderer renderer = new Renderer(RendererTest.setRoom());
+		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
 		gg.setVisible(true);    
         while(true){
         	//game running	        	
@@ -156,8 +159,8 @@ public class Main {
 			//slave.start();
 			//actionSlave.run();
 			Board game=createBoardFromFile(filename);
-			
-			Client client = new Client(s,game);
+			Renderer renderer = new Renderer(RendererTest.setRoom());
+			Client client = new Client(s,game,renderer);
 			client.run();
 			
 			

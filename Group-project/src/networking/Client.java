@@ -14,6 +14,8 @@ import java.net.Socket;
 
 import javax.swing.JOptionPane;
 
+import rendering.Renderer;
+import rendering.RendererTest;
 import GameWorld.GameCharacter;
 import UI.Board;
 import UI.GameFrame;
@@ -30,16 +32,18 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 	
 	private GameFrame gameFrame;
 	
-	public Client(Socket socket,Board game) throws IOException{
+	private Renderer renderer;
+	
+	public Client(Socket socket,Board game,Renderer renderer) throws IOException{
 		this.socket = socket;
 		output = new DataOutputStream(socket.getOutputStream());
 		input = new DataInputStream(socket.getInputStream());
 		
 		uid = input.readInt();
-		
+		this.renderer = renderer;
 		this.game = game;
 		//new TestUI(this);
-		gameFrame = new GameFrame("multi user mode", game, uid, this);
+		gameFrame = new GameFrame("multi user mode", game, uid, this,renderer);
 		gameFrame.setVisible(true);    
 		gameFrame.repaint();
 	}
@@ -142,10 +146,12 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 		try {
 			if(action.equals("Turn Left")){
 				output.writeInt(Server.ACTION.ROTATE_L.ordinal());
+				renderer.rotateL();
 			}				
 			//When turning right
 			else if(action.equals("Turn Right")){
 				output.writeInt(Server.ACTION.ROTATE_R.ordinal());
+				renderer.rotateR();
 
 			}
 			else if(action.equals("Change Room")){

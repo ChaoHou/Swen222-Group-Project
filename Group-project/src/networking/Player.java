@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JOptionPane;
 
+import rendering.Renderer;
 import GameWorld.GameCharacter;
 import UI.Board;
 
@@ -15,10 +16,12 @@ public class Player implements KeyListener,ActionListener{
 
 	private int uid;
 	private Board game;
+	private Renderer renderer;
 	
-	public Player(int uid, Board game){	
+	public Player(int uid, Board game,Renderer renderer){	
 		this.uid=uid;
 		this.game=game;
+		this.renderer = renderer;
 	}
 	
 	
@@ -52,6 +55,7 @@ public class Player implements KeyListener,ActionListener{
 				game.getCharacter(uid).rotateTo(GameCharacter.EAST);
 			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.EAST)
 				game.getCharacter(uid).rotateTo(GameCharacter.NORTH);
+			renderer.rotateL();
 		}				
 		//When turning right
 		else if(action.equals("Turn Right")){
@@ -63,6 +67,7 @@ public class Player implements KeyListener,ActionListener{
 				game.getCharacter(uid).rotateTo(GameCharacter.WEST);
 			else if(game.getCharacter(uid).getDirectionFacing() == GameCharacter.WEST)
 				game.getCharacter(uid).rotateTo(GameCharacter.NORTH);
+			renderer.rotateR();
 
 		}
 		else if(action.equals("Change Room")){

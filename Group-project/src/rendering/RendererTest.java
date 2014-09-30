@@ -5,7 +5,9 @@ import com.jogamp.opengl.util.FPSAnimator;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
+import javax.media.opengl.awt.GLJPanel;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,7 +25,7 @@ public class RendererTest {
         Renderer renderer = new Renderer(setRoom());
         glcanvas.addGLEventListener(renderer);
         glcanvas.addKeyListener(renderer);
-
+        
         final JFrame jframe = new JFrame( "Rendering window" );
         jframe.addWindowListener( new WindowAdapter() {
             public void windowClosing( WindowEvent windowevent ) {
@@ -34,13 +36,17 @@ public class RendererTest {
 
         FPSAnimator animator= new FPSAnimator(glcanvas,60);
         animator.start();
+        
 
         jframe.getContentPane().add( glcanvas, BorderLayout.CENTER );
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(200,200));
+        jframe.getContentPane().add(panel,BorderLayout.SOUTH);
         jframe.setSize( 640, 480 );
         jframe.setVisible( true );
     }
 
-    private static Room setRoom() {
+    public static Room setRoom() {
         List<Wall> walls = new ArrayList<Wall>();
         walls.add(new Wall(Wall.DIRECTION.NORTH));
         walls.add(new Wall(Wall.DIRECTION.SOUTH));

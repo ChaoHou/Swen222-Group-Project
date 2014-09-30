@@ -89,6 +89,14 @@ public class Renderer implements GLEventListener, KeyListener {
 
     }
 
+    public void rotateL(){
+    	room.rotateL();
+    }
+    
+    public void rotateR(){
+    	room.rotateR();
+    }
+    
     @Override
     public void keyReleased(KeyEvent e) {
 

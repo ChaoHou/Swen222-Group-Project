@@ -1,4 +1,5 @@
 package UI;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,10 +10,17 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLCanvas;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.jogamp.opengl.util.FPSAnimator;
+
+import rendering.Renderer;
+import rendering.RendererTest;
 import networking.Player;
 
 
@@ -25,7 +33,8 @@ public class GameFrame extends JFrame {
 	private int uid;
 	//private Player player; we don't need a player here, we will pass in an actionlistener
 	private ActionListener player;
-			
+	
+	private Renderer renderer;
 		/**
 		 * This is the constructor for the Actual JFrame
 		 * It starts off with one Panel, the GameMenu screen
@@ -34,13 +43,13 @@ public class GameFrame extends JFrame {
 		 * @param string 
 		 */
 			
-		public GameFrame(String string, Board board, int uid, ActionListener player){
+		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){
 			
 			//Game logic's information
 			this.setBoard(board);
 			this.uid = uid;			
 			this.player = player;
-			
+			this.renderer = renderer;
 			
 			//Layout
 			FlowLayout fullMenu = new FlowLayout();
@@ -68,15 +77,24 @@ public class GameFrame extends JFrame {
 		 */
 		
 		public void setGame(){
-			JPanel render = new JPanel();
-			render.setPreferredSize(new Dimension (1000, 500));
-			render.setBackground(Color.white);
+			this.setLayout(new BorderLayout());
+			//JPanel renderPanel = new JPanel();
+			GLProfile glprofile = GLProfile.get(GLProfile.GL2);
+	        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
+	        final GLCanvas glcanvas = new GLCanvas( glcapabilities );
+	        glcanvas.addGLEventListener(renderer);
+	        //renderPanel.add(glcanvas);
+	        FPSAnimator animator= new FPSAnimator(glcanvas,60);
+	        animator.start();
+	        
+			//renderPanel.setPreferredSize(new Dimension (1000, 500));
+			//renderPanel.setBackground(Color.white);
 			GameMenu game = new GameMenu(board, uid, player);			
-			this.getPanels().put("render", render);
+			//this.getPanels().put("render", renderPanel);
 			this.getPanels().put("game", game);
 			this.getContentPane().remove(getPanels().get("menu"));			
-			this.getContentPane().add(render);
-			this.getContentPane().add(game);
+			this.getContentPane().add(glcanvas,BorderLayout.CENTER);
+			this.getContentPane().add(game,BorderLayout.SOUTH);
 		    this.repaint();
 		}
 		
