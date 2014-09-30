@@ -125,6 +125,7 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 		}else if(code==KeyEvent.VK_E){
 			game.getCharacter(this.uid).enterRoom();
 		}
+		
 	}
 
 	@Override
