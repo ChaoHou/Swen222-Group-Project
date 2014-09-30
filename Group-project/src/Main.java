@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import rendering.Renderer;
 import rendering.RendererTest;
 import ui.Board;
-import ui.BoardFrame;
 import ui.GameFrame;
 import ui.GameMenu;
 import ui.MainMenu;
