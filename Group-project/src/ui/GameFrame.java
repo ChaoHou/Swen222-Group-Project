@@ -30,32 +30,26 @@ public class GameFrame extends JFrame {
 	
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
 	
-	//Stuff to use from gameworld...
+	//Stuff from gameworld package
 	private Board board;
 	private int uid;
 	private boolean runningGame;
-	//private Player player; we don't need a player here, we will pass in an actionlistener
-	private ActionListener player;
-	
+ 	private ActionListener player;
+ 	//Stuff from rendering package
 	private Renderer renderer;
 	private GLCanvas canvas;
 	
 		/**
 		 * This is the constructor for the Actual JFrame
 		 * It starts off with one Panel, the GameMenu screen
-		 * @param player 
-		 * @param uid 
-		 * @param string 
 		 */
 			
-		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){
-			
+		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){	
 			//Game logic's information
 			this.setBoard(board);
 			this.setUid(uid);			
 			this.player = player;
-			this.renderer = renderer;
-			
+			this.renderer = renderer;		
 			//Layout
 			FlowLayout fullMenu = new FlowLayout();
 			fullMenu.setAlignment(100);				
@@ -69,13 +63,13 @@ public class GameFrame extends JFrame {
 		    this.setJMenuBar(menubar);
 		    //Set up the instructions and map(while keeping them invisible)
 		    instructionsMenu menu = new instructionsMenu(this);	
-		    
+		    mapMenu map = new mapMenu(this);
 			this.getPanels().put("instructions", menu);	
-			
+			this.getPanels().put("map", map);
 			this.getContentPane().add(menu);
-			
+			this.getContentPane().add(map);
 		    this.getPanels().get("instructions").setVisible(false);	 
-		    
+		    this.getPanels().get("map").setVisible(false);
 			//Opens up the main menu
 			setMainMenu();		
 		}
@@ -105,33 +99,24 @@ public class GameFrame extends JFrame {
 		 */
 		
 		public void setGame(){
+			//Layout
 			this.setLayout(new BorderLayout());
-		//	JPanel renderPanel = new JPanel();
-			
+		    //Rendering
 			GLProfile glprofile = GLProfile.get(GLProfile.GL2);
 	        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 	        final GLCanvas glcanvas = new GLCanvas( glcapabilities );
-	        glcanvas.addGLEventListener(renderer);
-	        
-	    //    renderPanel.add(glcanvas);
-	        
+	        glcanvas.addGLEventListener(renderer);    
 	        FPSAnimator animator= new FPSAnimator(glcanvas,60);
 	        animator.start();
-	        
-			//renderPanel.setPreferredSize(new Dimension (1000, 500));
-			//renderPanel.setBackground(Color.white);
-			GameMenu game = new GameMenu(this, player);			
-			//this.getPanels().put("render", renderPanel);
-			this.getPanels().put("game", game);
-		//	this.getPanels().put("render", renderPanel);
-			
-			this.getContentPane().remove(getPanels().get("menu"));	
-			//this.getContentPane().add(renderPanel);
-			
+			//Game menu (The Game's interface)
+			GameMenu game = new GameMenu(this, player);		
+			//Putting everything into the JFrame
+			this.getPanels().put("game", game);			
+			this.getContentPane().remove(getPanels().get("menu"));		
 			this.canvas = glcanvas;
-			
 			this.getContentPane().add(glcanvas, BorderLayout.CENTER);
 			this.getContentPane().add(game, BorderLayout.SOUTH);
+			this.runningGame = true;
 		    this.repaint();
 		}
 		
@@ -157,8 +142,14 @@ public class GameFrame extends JFrame {
 		 * @return
 		 */
 		public void showMap(){
-			
-			
+			    mapMenu map = new mapMenu(this);
+				this.getPanels().put("map", map);
+				this.getContentPane().add(map);
+ 				this.canvas.setVisible(false);
+				this.getPanels().get("game").setVisible(false);
+				this.getPanels().get("map").setVisible(true);
+				this.repaint();
+				//((mapMenu) this.getPanels().get("map")).redraw(this.getGraphics());
 		}
 		
 		/**
@@ -167,7 +158,7 @@ public class GameFrame extends JFrame {
 		
 		public void showGame(){
 			if(isRunningGame()){
-				this.getPanels().get("render").setVisible(true);
+				this.canvas.setVisible(true);
 				this.getPanels().get("game").setVisible(true);
 			}	
 		}
@@ -205,10 +196,5 @@ public class GameFrame extends JFrame {
 		public void setRunningGame(boolean runningGame) {
 			this.runningGame = runningGame;
 		}
-
-
-		
-
-
 
 }

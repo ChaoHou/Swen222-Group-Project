@@ -23,7 +23,7 @@ public class Board {
 	 
 	
 	public Board(Room[][] rooms){
-		this.rooms=rooms;
+		this.setRooms(rooms);
 		startRoom = rooms[0][1];
 	}
 	
@@ -50,11 +50,11 @@ public class Board {
 				break;
 		}
 		
-		for(int i=0;i<rooms.length;i++){
-			for(int j=0;j<rooms[0].length;j++){
-				if(rooms[i][j]==currentRoom){
+		for(int i=0;i<getRooms().length;i++){
+			for(int j=0;j<getRooms()[0].length;j++){
+				if(getRooms()[i][j]==currentRoom){
 					if(canEnter(i+dy,j+dx)){
-						return rooms[i+dy][j+dx];
+						return getRooms()[i+dy][j+dx];
 					}else{
 						return null;
 					}
@@ -70,7 +70,7 @@ public class Board {
 	
 	//determines if room (coordinate as argument) can be entered. 
 	private boolean canEnter(int i, int j){
-		if(i<0 || i>=rooms.length || j<0 || j>=rooms[0].length ||  rooms[i][j]==null){
+		if(i<0 || i>=getRooms().length || j<0 || j>=getRooms()[0].length ||  getRooms()[i][j]==null){
 			return false;
 		}else{
 			return true;
@@ -92,7 +92,7 @@ public class Board {
 //			}
 //		}
 		//loop through rooms to find the character
-		for(Room[] row:rooms){
+		for(Room[] row:getRooms()){
 			for(Room r:row){
 				if(r == null){
 					continue;
@@ -109,7 +109,7 @@ public class Board {
 	}
 
 	public Room getRoomContainsPlayer(Vamp player){
-		for(Room[] row:rooms){
+		for(Room[] row:getRooms()){
 			for(Room r:row){
 				if(r == null){
 					continue;
@@ -123,7 +123,7 @@ public class Board {
 	}
 	
 	public Room getRoomContainsNPC(){
-		for(Room[] row:rooms){
+		for(Room[] row:getRooms()){
 			for(Room r:row){
 				if(r == null){
 					continue;
@@ -152,7 +152,7 @@ public class Board {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		DataOutputStream dout = new DataOutputStream(bout);
 		
-		for(Room[] row:rooms){
+		for(Room[] row:getRooms()){
 			for(Room room:row){
 				if(room != null){
 					room.toOutputStream(dout);
@@ -169,12 +169,22 @@ public class Board {
 		ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 		DataInputStream din = new DataInputStream(bin);
 		
-		for(Room[] row:rooms){
+		for(Room[] row:getRooms()){
 			for(Room room:row){
 				if(room != null){
 					room.fromInputStream(din, this);
 				}
 			}
 		}
+	}
+
+
+	public Room[][] getRooms() {
+		return rooms;
+	}
+
+
+	public void setRooms(Room[][] rooms) {
+		this.rooms = rooms;
 	}
 }

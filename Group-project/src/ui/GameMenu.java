@@ -35,35 +35,14 @@ import networking.Player;
  * 4.) Player's Statistics and Inventory
  */
 
-//The "Board" of the game (and all of it's fields)
-//The list of players in the game. 
-//The current player using this particular frame
 
 public class GameMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private GameFrame currentGame;
-	
-//	private Board board;	
-//	private int uid;
-//	private ActionListener player; //changed to ActionListener, add this to all of your buttons
-//									//you don't need to make your own button listener, we will pass in one
-//	private Board board;	
-//	private int uid;
-	private ActionListener player; //changed to ActionListener, add this to all of your buttons
-//									//you don't need to make your own button listener, we will pass in one
-	/**
-	 * This is the constructor for the JFrame
-	 * @param board 
-	 * @param player 
-	 * @param uid 
-	 */
+	private GameFrame currentGame;	
+	private ActionListener player; 
 	
 	
-	
-	public GameMenu(GameFrame game, ActionListener player){  
-		
-		//this.board = board;
-		//this.uid = uid;
+	public GameMenu(GameFrame game, ActionListener player){  	
 		this.currentGame = game;
 		this.player = player;
 		
@@ -91,14 +70,22 @@ public class GameMenu extends JPanel {
 	public class MapPanel extends JPanel{
 		private JPanel Map;
 		private JLabel name;
+		private JButton bigMap;
 		
 		public MapPanel(){
 		    name = new JLabel("Player Something", JLabel.CENTER);
 		    JLabel mapName = new JLabel("Map", JLabel.CENTER);
-		    
+		    	    
+		    bigMap = new JButton("Click for bigger map");
 			Map = new JPanel();
 			Map.setPreferredSize(new Dimension(150,150));
 			Map.setBackground(Color.black);			
+			Map.add(bigMap);
+			
+			
+			ButtonListener b = new ButtonListener();
+			//Action Listeners for buttons
+			bigMap.addActionListener(b);
 			
 			this.add(mapName);
 			this.add(Map);
@@ -108,6 +95,17 @@ public class GameMenu extends JPanel {
 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 
 		}
+		
+		//Actions Listener for the buttons		
+				private class ButtonListener implements ActionListener{
+					public void actionPerformed(ActionEvent event){
+						if(event.getSource() == bigMap){
+							currentGame.showMap();
+							currentGame.setVisible(true);
+						    updateUI();
+						}						
+					}
+				}	
 	
 	}
 
@@ -137,7 +135,6 @@ public class GameMenu extends JPanel {
 			right = new JButton("Turn Right");
 			changeRoom = new JButton("Change Room");
 			//Action Listeners for buttons		
-			//ButtonListener b = new ButtonListener();
 			left.addActionListener(player);
 			right.addActionListener(player);
 			changeRoom.addActionListener(player);			
@@ -160,13 +157,8 @@ public class GameMenu extends JPanel {
 			this.setBackground(Color.LIGHT_GRAY);
 			this.add(directionPanel);
 			this.add(roomPanel);
-			
-
 		}	
-		
-		
 		//Actions Listener for the buttons		
-
 	}
 	
 	
@@ -233,10 +225,9 @@ public class GameMenu extends JPanel {
 				}	
 				else if(event.getSource() == p4){
 					//Use room
-					System.out.println("Attack Player 4");
 					currentGame.showInstructions();
-					currentGame.setVisible(true);
-					currentGame.repaint();
+					currentGame.setVisible(true);					
+				    updateUI();
 				}	
 			}
 		}	
