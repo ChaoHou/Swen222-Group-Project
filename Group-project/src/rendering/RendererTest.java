@@ -39,9 +39,6 @@ public class RendererTest {
         
 
         jframe.getContentPane().add( glcanvas, BorderLayout.CENTER );
-        JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(200,200));
-        jframe.getContentPane().add(panel,BorderLayout.SOUTH);
         jframe.setSize( 640, 480 );
         jframe.setVisible( true );
     }

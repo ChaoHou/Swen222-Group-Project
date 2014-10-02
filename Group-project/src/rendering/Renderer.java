@@ -4,9 +4,16 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
+
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Kyohei Kudo on 25/09/2014.
@@ -16,6 +23,8 @@ public class Renderer implements GLEventListener, KeyListener {
     private final Room room;
     private GLU glu = new GLU();
 
+    private Texture texture;
+    
     public Renderer(Room room) {
         this.room = room;
     }
@@ -34,6 +43,22 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glFrontFace(GL.GL_CW);
         gl.glCullFace(GL.GL_BACK);
+        
+        try {
+			texture = TextureIO.newTexture(new File("wall.jpg"), false);
+			
+			gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+	        // Use linear filter for texture if image is smaller than the original texture
+	        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+		} catch (GLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
     }
 
     @Override
@@ -72,7 +97,7 @@ public class Renderer implements GLEventListener, KeyListener {
         GL2 gl = drawable.getGL().getGL2();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        room.render(gl);
+        room.render(gl,texture);
         gl.glFlush();
     }
 
