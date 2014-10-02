@@ -27,7 +27,6 @@ import ui.GameMenu.NavigationPanel;
 
 public class MainMenu extends JPanel {	 
 	
-	
 	private boolean isNewGame = false;
 	private boolean isInstructions = false;
 	private boolean isCredits = false;
@@ -44,20 +43,20 @@ public class MainMenu extends JPanel {
 		
 		
 		//Buttons
-		JButton newGame, instructions, changeRoom;		
+		JButton newGame, instructions, credits;		
 		newGame = new JButton("New Game");
 		instructions = new JButton("Instructions");
-		changeRoom = new JButton("Credits");
+		credits = new JButton("Credits");
 		
 		buttons.put("newGame", newGame);
 		buttons.put("instructions", instructions);
-		buttons.put("changeRoom", changeRoom);
+		buttons.put("credits", credits);
 		
 		//Action Listeners for buttons		
 		ButtonListener b = new ButtonListener();
 		newGame.addActionListener(b);
 		instructions.addActionListener(b);
-		changeRoom.addActionListener(b);	
+		credits.addActionListener(b);	
 		
 		//Setting up the Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -67,7 +66,7 @@ public class MainMenu extends JPanel {
 		
 		this.add(newGame);
 		this.add(instructions);
-		this.add(changeRoom);
+		this.add(credits);
 	}	
 	
 
@@ -118,19 +117,19 @@ public class MainMenu extends JPanel {
 			}
 			else if(event.getSource() == buttons.get("instructions")){
 				System.out.println("You clicked instructions");
-				//currentGame.get
 				currentGame.showInstructions();
 				currentGame.setVisible(true);	
 				updateUI();
 
 			}
-			else if(event.getSource() == buttons){
-				//Use room
-				String answer = (String) JOptionPane.showInputDialog(null, "Which Room would you like to go to?", null, 
-						JOptionPane.PLAIN_MESSAGE, null, new String[]{ "d", "dd"}, null);
+			else if(event.getSource() == buttons.get("credits")){
+				System.out.println("You clicked instructions");
+				currentGame.showMap();
+				currentGame.setVisible(true);	
+				updateUI();
 
-				System.out.println("You moved to Room: " + answer );
-			}	
+			}
+		
 		}
 	}	
 

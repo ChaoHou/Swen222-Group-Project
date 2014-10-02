@@ -81,6 +81,22 @@ public class Player implements KeyListener,ActionListener{
 		else if(action.equals("p1")){
 			
 		}
+		
+//		else if(action.equals("back")){
+//			//Hide the instructions
+//			game.getPanels().get("instructions").setVisible(false);		
+//			//Check if you're in a current game or not
+//			if(game.isRunningGame()){
+//				game.showGame();
+//				game.repaint();
+//				game.setVisible(true);
+//			}
+//			else{	
+//				game.setMainMenu();
+//				game.repaint();
+//				game.setVisible(true);
+//			}	
+//		}
 	}
 
 
