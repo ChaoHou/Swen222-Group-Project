@@ -42,6 +42,7 @@ public class mapMenu extends JPanel {
 		this.setPreferredSize(new Dimension(500,500));
 		this.setBackground(Color.LIGHT_GRAY);
 		this.add(mapPanel);	
+		this.repaint();
 	}	
 	
 
@@ -51,8 +52,8 @@ public class mapMenu extends JPanel {
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent event){
 			if(event.getSource() == backMap){
-				//Hide the instructions
-				game.getPanels().get("map").setVisible(false);		
+				//Remove the map screen
+				game.getPanels().remove("map");
 				//Check if you're in a current game or not
 				if(game.isRunningGame()){
 					game.showGame();

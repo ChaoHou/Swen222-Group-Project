@@ -142,12 +142,14 @@ public class GameFrame extends JFrame {
 		 * @return
 		 */
 		public void showMap(){
-			
-			//if(isRunningGame()){
-				this.canvas.setVisible(false);
+			    mapMenu map = new mapMenu(this);
+				this.getPanels().put("map", map);
+				this.getContentPane().add(map);
+ 				this.canvas.setVisible(false);
 				this.getPanels().get("game").setVisible(false);
 				this.getPanels().get("map").setVisible(true);
-		//	}
+				this.repaint();
+				//((mapMenu) this.getPanels().get("map")).redraw(this.getGraphics());
 		}
 		
 		/**

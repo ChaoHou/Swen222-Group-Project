@@ -225,10 +225,8 @@ public class GameMenu extends JPanel {
 				}	
 				else if(event.getSource() == p4){
 					//Use room
-					System.out.println(currentGame.getPanels().get("instructions") == null);
 					currentGame.showInstructions();
-					currentGame.setVisible(true);
-					
+					currentGame.setVisible(true);					
 				    updateUI();
 				}	
 			}
