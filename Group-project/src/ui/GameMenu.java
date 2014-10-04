@@ -14,10 +14,15 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,32 +73,26 @@ public class GameMenu extends JPanel {
 	 */
 	
 	public class MapPanel extends JPanel{
-		private JPanel Map;
-		private JLabel name;
 		private JButton bigMap;
 		
 		public MapPanel(){
-		    name = new JLabel("Player Something", JLabel.CENTER);
+			BufferedImage img = null;
+			try {
+				img = ImageIO.read(new File("src/mapSmall.png"));
+			} catch (IOException e) {
+			}
+			//Button
 		    JLabel mapName = new JLabel("Map", JLabel.CENTER);
-		    	    
-		    bigMap = new JButton("Click for bigger map");
-			Map = new JPanel();
-			Map.setPreferredSize(new Dimension(150,150));
-			Map.setBackground(Color.black);			
-			Map.add(bigMap);
-			
-			
+		    bigMap = new JButton();
+			bigMap.setIcon(new ImageIcon(img));			
 			ButtonListener b = new ButtonListener();
 			//Action Listeners for buttons
 			bigMap.addActionListener(b);
-			
 			this.add(mapName);
-			this.add(Map);
+			this.add(bigMap);
 			this.setBackground(Color.LIGHT_GRAY);
 			this.setPreferredSize(new Dimension(200,200));
-			this.add(name);		
-			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-
+ 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		}
 		
 		//Actions Listener for the buttons		

@@ -144,5 +144,3 @@ public class mapMenu extends JPanel {
 }
 
 
-
-
