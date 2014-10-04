@@ -3,18 +3,25 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -44,18 +51,23 @@ public class GameFrame extends JFrame {
 		 * It starts off with one Panel, the GameMenu screen
 		 */
 			
-		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){	
+		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){
+			//Background	
+			this.setLayout(new GridLayout());
+			BufferedImage img3 = null;
+			try {
+				img3 = ImageIO.read(new File("src/wallpaper.jpg"));
+			} catch (IOException e) {
+			}
+			JLabel x = new JLabel();
+			x.setIcon(new ImageIcon (img3));
+			x.setLayout(new FlowLayout());
+			this.setContentPane(x);
 			//Game logic's information
 			this.setBoard(board);
 			this.setUid(uid);			
 			this.player = player;
 			this.renderer = renderer;		
-			//Layout
-			FlowLayout fullMenu = new FlowLayout();
-			fullMenu.setAlignment(100);				
-			fullMenu.setHgap(0);		
-			fullMenu.setAlignment(FlowLayout.CENTER);
-			this.setLayout(fullMenu);	
 			//Sets up the menu bar
 		    JMenuBar menubar = new JMenuBar();
 		    JMenu help = new JMenu("Help");
@@ -86,7 +98,7 @@ public class GameFrame extends JFrame {
 			//Set up the main menu now:
 		    MainMenu MainMenu = new MainMenu(this);	
 			getPanels().put("menu", MainMenu);  
-			this.getContentPane().add(MainMenu);
+			this.getContentPane().add(MainMenu, BorderLayout.LINE_START);
 			this.setTitle("Vampire Mansion");
 			this.setSize(1000,740);
 			this.setResizable(false);
@@ -149,7 +161,6 @@ public class GameFrame extends JFrame {
 				this.getPanels().get("game").setVisible(false);
 				this.getPanels().get("map").setVisible(true);
 				this.repaint();
-				//((mapMenu) this.getPanels().get("map")).redraw(this.getGraphics());
 		}
 		
 		/**

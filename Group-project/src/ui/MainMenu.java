@@ -1,12 +1,19 @@
 package ui;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,34 +46,54 @@ public class MainMenu extends JPanel {
 	public MainMenu(GameFrame board){	
 		menu = this;
 		this.currentGame= board;
-		
-		
+			
+		BufferedImage img = null;
+		BufferedImage img2 = null;
+		BufferedImage img3 = null;	
+		BufferedImage img4 = null;
+		try {
+			img = ImageIO.read(new File("src/newgame1.png"));
+			img2 = ImageIO.read(new File("src/newgame2.png"));
+			img3 = ImageIO.read(new File("src/Instructions1.png"));	
+			img4 = ImageIO.read(new File("src/Instructions2.png"));
+		} catch (IOException e) {
+		}
 		
 		//Buttons
-		JButton newGame, instructions, credits;		
-		newGame = new JButton("New Game");
-		instructions = new JButton("Instructions");
-		credits = new JButton("Credits");
-		
+		JButton newGame, instructions;		
+		newGame = new JButton();
+		newGame.setIcon(new ImageIcon(img));
+        newGame.setRolloverIcon(new ImageIcon(img2));
+        newGame.setPreferredSize(new Dimension(150,50));
+        newGame.setBorder(null);	
+		instructions = new JButton();
+		instructions = new JButton();
+		instructions.setIcon(new ImageIcon(img3));
+        instructions.setPreferredSize(new Dimension(150,50));
+        instructions.setRolloverIcon(new ImageIcon(img4));
+        instructions.setBorder(null);
 		buttons.put("newGame", newGame);
 		buttons.put("instructions", instructions);
-		buttons.put("credits", credits);
-		
 		//Action Listeners for buttons		
 		ButtonListener b = new ButtonListener();
 		newGame.addActionListener(b);
 		instructions.addActionListener(b);
-		credits.addActionListener(b);	
-		
 		//Setting up the Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		this.setPreferredSize(new Dimension(200,700));
-		this.setBackground(Color.LIGHT_GRAY);
+		this.setPreferredSize(new Dimension(200,200));
+		this.setBackground(Color.black);
+	    this.setLayout(new FlowLayout());
+	    
+	    //Adding the buttons
+	    JPanel x = new JPanel();
+	    x.add(newGame);
+	    x.setBackground(Color.black);
+	    x.add(instructions);
+	    x.setLayout(new FlowLayout());
+	    x.setPreferredSize(new Dimension (150, 400));
+		this.add(x, BorderLayout.NORTH);
+		//this.add(instructions, BorderLayout.NORTH);
 		
-		
-		this.add(newGame);
-		this.add(instructions);
-		this.add(credits);
 	}	
 	
 
@@ -114,6 +141,7 @@ public class MainMenu extends JPanel {
 					System.out.println("No");
 
 				}
+				
 			}
 			else if(event.getSource() == buttons.get("instructions")){
 				System.out.println("You clicked instructions");
@@ -122,13 +150,7 @@ public class MainMenu extends JPanel {
 				updateUI();
 
 			}
-			else if(event.getSource() == buttons.get("credits")){
-				System.out.println("You clicked instructions");
-				currentGame.showMap();
-				currentGame.setVisible(true);	
-				updateUI();
-
-			}
+	
 		
 		}
 	}	
