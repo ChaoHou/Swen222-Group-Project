@@ -21,9 +21,9 @@ import javax.swing.JPanel;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
+import control.Player;
 import rendering.Renderer;
 import rendering.RendererTest;
-import networking.Player;
 
 
 public class GameFrame extends JFrame {
@@ -62,8 +62,8 @@ public class GameFrame extends JFrame {
 		    menubar.add(help);
 		    this.setJMenuBar(menubar);
 		    //Set up the instructions and map(while keeping them invisible)
-		    instructionsMenu menu = new instructionsMenu(this);	
-		    mapMenu map = new mapMenu(this);
+		    InstructionsMenu menu = new InstructionsMenu(this);	
+		    MapMenu map = new MapMenu(this);
 			this.getPanels().put("instructions", menu);	
 			this.getPanels().put("map", map);
 			this.getContentPane().add(menu);
@@ -142,7 +142,7 @@ public class GameFrame extends JFrame {
 		 * @return
 		 */
 		public void showMap(){
-			    mapMenu map = new mapMenu(this);
+			    MapMenu map = new MapMenu(this);
 				this.getPanels().put("map", map);
 				this.getContentPane().add(map);
  				this.canvas.setVisible(false);

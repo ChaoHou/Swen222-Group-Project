@@ -10,10 +10,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import networking.Player;
+import control.Player;
 
 
-public class instructionsMenu extends JPanel{
+public class InstructionsMenu extends JPanel{
 	/**
 	 * This is the instructions menu for the game. It can be opened:
 	 * -Any time playing the game
@@ -24,7 +24,7 @@ public class instructionsMenu extends JPanel{
 	private JPanel instructionsPanel;
 	private GameFrame game;
 	
-	public instructionsMenu(GameFrame game){	
+	public InstructionsMenu(GameFrame game){	
 		this.game = game;	
 	    JLabel label1 = new JLabel("There are instructions here, I swear", JLabel.CENTER);
 		//Buttons

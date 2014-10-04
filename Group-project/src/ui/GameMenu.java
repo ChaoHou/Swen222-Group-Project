@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import networking.Player;
+import control.Player;
 
 /**
  * Game UI Features:

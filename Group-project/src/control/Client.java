@@ -1,4 +1,4 @@
-package networking;
+package control;
 
 import gameworld.GameCharacter;
 

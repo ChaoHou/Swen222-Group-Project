@@ -14,14 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class mapMenu extends JPanel {	
+public class MapMenu extends JPanel {	
 	private JButton backMap;
 	private JPanel mapPanel;
 	private GameFrame game;
 	//Rooms to draw
 	private Room[][] rooms;
 	
-	public mapMenu(GameFrame game){	
+	public MapMenu(GameFrame game){	
 		this.game = game;	
 		rooms = this.game.getBoard().getRooms();
 	    JLabel label1 = new JLabel("Map Screen", JLabel.CENTER);
