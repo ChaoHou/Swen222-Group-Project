@@ -6,8 +6,6 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
-import com.jogamp.opengl.util.gl2.GLUT;
-import gameworld.Vamp;
 import rendering.primitive.Sphere;
 import ui.Board;
 
@@ -26,9 +24,9 @@ public class Renderer implements GLEventListener, KeyListener {
 //    private final Vamp player;
     private GLU glu;
 
-    private Vector3df cameraPos = new Vector3df(0.0,0.0,10.0);
-    private Vector3df lookAt = new Vector3df(0.0,0.0,0.0);
-    private Vector3df cameraTop = new Vector3df(0.0,1.0,0.0);
+    private Vector3D cameraPos = new Vector3D(0.0,0.0,10.0);
+    private Vector3D lookAt = new Vector3D(0.0,0.0,0.0);
+    private Vector3D cameraTop = new Vector3D(0.0,1.0,0.0);
 
 //    private Texture texture;
 
@@ -107,7 +105,7 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glLoadIdentity();
 
         // perspective
-        glu.gluPerspective(100.0f, (float) width/(float) height, 1.0, 100.0);
+        glu.gluPerspective(100.0f, (float) width / (float) height, 1.0, 100.0);
 
         // change back to model view matrix
         gl.glMatrixMode(GL2.GL_MODELVIEW);
@@ -130,7 +128,7 @@ public class Renderer implements GLEventListener, KeyListener {
 //        gl.glEnable(GL.GL_CULL_FACE);
 //        // フラットシェーディングモデル
 //        gl.glShadeModel(GL2.GL_FLAT);
-        Sphere.render(gl, new Vector3df(0.0, 0.0, 0.0), 5);
+        Sphere.render(gl, new Vector3D(0.0, 0.0, 0.0), 5);
         gl.glFlush();
     }
 
