@@ -104,7 +104,7 @@ public class Main {
 		
 		//This is for the construction of the game	
 		int uid = game.registerVamp();		
-		Renderer renderer = new Renderer(RendererTest.setRoom());
+		Renderer renderer = new Renderer(game, uid); //this line is modified by Kyohei :)
 		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
 		gg.setVisible(true);    
         while(true){
@@ -155,9 +155,9 @@ public class Main {
 			//slave.start();
 			//actionSlave.run();
 			Board game=createBoardFromFile(filename);
-			Renderer renderer = new Renderer(RendererTest.setRoom());
-			Client client = new Client(s,game,renderer);
-			client.run();
+//			Renderer renderer = new Renderer(game, uid);//this line is modified by Kyohei :)
+//			Client client = new Client(s,game,renderer);
+//			client.run();
 			
 			
 			
