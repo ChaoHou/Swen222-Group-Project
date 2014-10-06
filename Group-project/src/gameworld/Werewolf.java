@@ -12,32 +12,39 @@ public class Werewolf extends GameCharacter{
 	public Werewolf(Board game){
 		this.game = game;
 	}
+
 	
+	/*
+	 * Enters a random room and kills vamps in it.
+	 */
+	public void prowl(){
+		kill();
+		enterRandomRoom();
+		kill();
+	}
+	
+	
+	/*
+	 * Randomly enters a room.
+	 */
 	public void enterRandomRoom(){
-		
 		while(true){
 			int random=(int)(Math.random()*5);
 			rotateTo(random);
 			if(enterRoom()){
 				break;
 			}
-		}
-		
+		}	
 	}
 	
 	
-	//instant-kills any player/s in the same room.
-	public void kill(){
-		Set<Vamp> vamps=game.getRoomContainsNPC().getVamps();
-		for(Vamp vamp:vamps){
-			vamp.setStatus(Vamp.DEAD);
-		}
-		
-	}
-
+	/*
+	 * Called by enterRandomRoom() to enter a room.
+	 * Returns true if entered the room.
+	 */
 	@Override
 	public boolean enterRoom() {
-		Room roomFrom = game.getRoomContainsNPC();
+		Room roomFrom = game.getRoomContainingWerewolf();
 		Room roomToEnter=game.getRoomAhead(roomFrom, facing);
 		
 		if(roomToEnter==null){
@@ -45,12 +52,26 @@ public class Werewolf extends GameCharacter{
 			return false;
 		}else{
 			System.out.println("entering "+roomToEnter+" from "+roomFrom);
-			Werewolf temp = roomFrom.npcLeaveRoom(this);
-			roomToEnter.npcEnterRoom(temp);
+			Werewolf temp = roomFrom.werewolfLeaveRoom(this);
+			roomToEnter.werewolfEnterRoom(temp);
 			System.out.println("entered "+roomToEnter);
 			return true;
 		}
 	}
+
+	
+	/*
+	 * Instant-kills any player/s in the same room.
+	 */
+	public void kill(){
+		Room room=game.getRoomContainingWerewolf();
+		Set<Vamp> vamps=room.getVamps();
+		for(Vamp vamp:vamps){
+			vamp.setStatus(Vamp.DEAD);
+		}
+		
+	}
+
 	
 	@Override
 	public void rotateTo(int dir) {
@@ -63,6 +84,7 @@ public class Werewolf extends GameCharacter{
 		}
 	}
 
+	
 	@Override
 	public void toOutputStream(DataOutputStream dout) throws IOException {
 		dout.writeInt(facing);

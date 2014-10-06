@@ -62,7 +62,7 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 						game.fromByteArray(data);	
 						
 						
-						String facing = game.getCharacter(uid).intDirToString();
+						String facing = game.getVamp(uid).intDirToString();
 						System.out.println("Player:"+uid+" now facing:"+facing);
 					}
 
@@ -116,15 +116,15 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 		int code=e.getKeyCode();
 		
 		if(code==KeyEvent.VK_W){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.NORTH);
+			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
 		}else if(code==KeyEvent.VK_D){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.EAST);
+			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
 		}else if(code==KeyEvent.VK_S){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.SOUTH);
+			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
 		}else if(code==KeyEvent.VK_A){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.WEST);
+			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
 		}else if(code==KeyEvent.VK_E){
-			game.getCharacter(this.uid).enterRoom();
+			game.getVamp(this.uid).enterRoom();
 		}
 		
 	}

@@ -91,7 +91,7 @@ public class Vamp extends GameCharacter{
 	}
 	
 	public boolean enterRoom(){
-		Room roomFrom = game.getRoomContainsPlayer(this);
+		Room roomFrom = game.getRoomContainingPlayer(this);
 		Room roomToEnter=game.getRoomAhead(roomFrom, facing);
 		
 		if(roomToEnter==null){
