@@ -24,7 +24,7 @@ public class Renderer implements GLEventListener, KeyListener {
 //    private final Vamp player;
     private GLU glu;
 
-    private Vector3D cameraPos = new Vector3D(0.0,0.0,10.0);
+    private Vector3D cameraPos = new Vector3D(0.0,70.0,100.0);
     private Vector3D lookAt = new Vector3D(0.0,0.0,0.0);
     private Vector3D cameraTop = new Vector3D(0.0,1.0,0.0);
 
@@ -51,9 +51,9 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glDepthFunc(GL.GL_LEQUAL);               // The Type Of Depth Testing To Do
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
         gl.glClearColor(0f,0f,0f,1f);
-//        gl.glEnable(GL.GL_CULL_FACE);
-//        gl.glFrontFace(GL.GL_CW);
-//        gl.glCullFace(GL.GL_BACK);
+        enableLighting(gl);
+        gl.glEnable(GL.GL_CULL_FACE);
+        gl.glCullFace(GL.GL_BACK);
         
 //        try {
 //			texture = TextureIO.newTexture(new File("wall.jpg"), false);
@@ -70,6 +70,15 @@ public class Renderer implements GLEventListener, KeyListener {
 //		}
         
         
+    }
+
+    private void enableLighting(GL2 gl) {
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+//        gl.glEnable(gl.GL_COLOR_MATERIAL);
+//        gl.glEnable(GL2.GL_NORMALIZE);
+//        gl.glEnable(GL.GL_DEPTH_TEST);
+//        gl.glShadeModel(GL2.GL_FLAT);
     }
 
     @Override
@@ -91,12 +100,16 @@ public class Renderer implements GLEventListener, KeyListener {
         GL2 gl = drawable.getGL().getGL2();
 
         gl.glViewport(0, 0, width, height);
+        gl.glLoadIdentity();
+//        gl.glOrtho(200,200,200,200,-1,100);
 
 
     }
 
     private void update(GL2 gl) {
         setCamera(gl);
+        float[] temp = new float[]{0f,100f,0f,1f};
+        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_POSITION,temp,0);
     }
 
     private void setCamera(GL2 gl) {
@@ -105,7 +118,7 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glLoadIdentity();
 
         // perspective
-        glu.gluPerspective(100.0f, (float) width / (float) height, 1.0, 100.0);
+        glu.gluPerspective(35.0f, (float) width / (float) height, 1.0, 300.0);
 
         // change back to model view matrix
         gl.glMatrixMode(GL2.GL_MODELVIEW);
@@ -119,15 +132,6 @@ public class Renderer implements GLEventListener, KeyListener {
 
 //        board.getRoomContainsPlayer(player).render(gl,texture);
         room.render(gl);
-//        GLUT glut = new GLUT();
-//        gl.glEnable(GL2.GL_LIGHTING);
-//        gl.glEnable(GL2.GL_LIGHT0);
-//        gl.glEnable(gl.GL_COLOR_MATERIAL);
-//        gl.glEnable(GL2.GL_NORMALIZE);
-//        gl.glEnable(GL.GL_DEPTH_TEST);
-//        gl.glEnable(GL.GL_CULL_FACE);
-//        // フラットシェーディングモデル
-//        gl.glShadeModel(GL2.GL_FLAT);
         Sphere.render(gl, new Vector3D(0.0, 0.0, 0.0), 5);
         gl.glFlush();
     }
