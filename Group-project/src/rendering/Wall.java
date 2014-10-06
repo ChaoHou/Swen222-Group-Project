@@ -27,8 +27,7 @@ public class Wall {
     }
 
     public void render(GL2 gl) {
-        gl.glLoadIdentity();
-        gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+//        gl.glLoadIdentity();
         gl.glBegin(GL2.GL_QUADS);            // Draw A Quad
 
         switch (dir) {
@@ -77,15 +76,5 @@ public class Wall {
 //        gl.glVertex3d(0.9,0.9,-10.0);
 //        gl.glVertex3d(0.9,0.1,-10.0);
 //        gl.glEnd();
-    }
-
-    public void rotateR() {
-        rquad += 90.0;
-
-    }
-
-    public void rotateL() {
-        rquad -= 90.0;
-
     }
 }
