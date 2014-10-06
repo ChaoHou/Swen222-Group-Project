@@ -6,6 +6,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
+import rendering.primitive.Cylinder;
 import rendering.primitive.Sphere;
 import ui.Board;
 
@@ -24,8 +25,8 @@ public class Renderer implements GLEventListener, KeyListener {
 //    private final Vamp player;
     private GLU glu;
 
-    private Vector3D cameraPos = new Vector3D(0.0,70.0,100.0);
-    private Vector3D lookAt = new Vector3D(0.0,0.0,0.0);
+    private Vector3D cameraPos = new Vector3D(0.0,48.0,150.0);
+    private Vector3D lookAt = new Vector3D(0.0,42.0,0.0);
     private Vector3D cameraTop = new Vector3D(0.0,1.0,0.0);
 
 //    private Texture texture;
@@ -132,7 +133,8 @@ public class Renderer implements GLEventListener, KeyListener {
 
 //        board.getRoomContainsPlayer(player).render(gl,texture);
         room.render(gl);
-        Sphere.render(gl, new Vector3D(0.0, 0.0, 0.0), 5);
+        Cylinder.render(gl,new Vector3D(0.0,20.0,0.0), 2.5,20.0,1);
+        Sphere.render(gl, new Vector3D(0.0, 20.0, 0.0), 5);
         gl.glFlush();
     }
 

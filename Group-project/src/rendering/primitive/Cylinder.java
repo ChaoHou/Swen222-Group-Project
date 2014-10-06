@@ -8,27 +8,26 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
 /**
- * Created by innocence on 04/10/2014.
+ * draw a cylinder below a point given.
+ * Created by Kyohei Kudo.
  */
 public class Cylinder {
     private static GLU glu = new GLU();
-    public static void render(GL2 gl, Vector3D pos, double len, double rad, int axis) {
+    public static void render(GL2 gl, Vector3D pos, double rad, double len, int axis) {
         GLUquadric quadric = glu.gluNewQuadric();
         gl.glPushMatrix();
+        gl.glTranslated(pos.x(), pos.y(), pos.z());
         switch(axis) {
             case 0:
                 gl.glRotated(-90.0,0.0,1.0,0.0);
-                gl.glTranslated(0.0, 0.0, -0.5 * len);
+                gl.glTranslated(0.0, 0.0, -len);
                 break;
             case 1:
                 gl.glRotated(-90.0, 1.0, 0.0, 0.0);
-                gl.glTranslated(0.0, 0.0, -0.5 * len);
-                break;
-            case 2:
-                gl.glTranslated(0.0, 0.0, -0.5 * len);
+                gl.glTranslated(0.0, 0.0, -len);
                 break;
             default:
-                gl.glTranslated(0.0, 0.0, -0.5 * len);
+                gl.glTranslated(0.0, 0.0, -len);
         }
 
         glu.gluQuadricDrawStyle(quadric, GLU.GLU_FILL);

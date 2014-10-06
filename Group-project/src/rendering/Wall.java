@@ -12,7 +12,7 @@ public class Wall {
     private final DIRECTION dir;
     private float rquad = 0.0f;
     private float x = 64.0f;
-    private float y = 48.0f;
+    private float y = 96.0f;
     private float z = 64.0f;
 
     public Wall(DIRECTION dir) {
@@ -36,15 +36,15 @@ public class Wall {
                 gl.glColor3f(1.0f, 0.0f, 0.0f);     // Set The Color To Red
                 gl.glVertex3f(x, y, -z);    // Top Right Of The Quad (Front)
                 gl.glVertex3f(-x, y, -z);   // Top Left Of The Quad (Front)
-                gl.glVertex3f(-x, -y, -z);  // Bottom Left Of The Quad (Front)
-                gl.glVertex3f(x, -y, -z);   // Bottom Right Of The Quad (Front)
+                gl.glVertex3f(-x, 0f, -z);  // Bottom Left Of The Quad (Front)
+                gl.glVertex3f(x, 0f, -z);   // Bottom Right Of The Quad (Front)
                 break;
 
             case SOUTH:
                 gl.glNormal3f(0.0f, 0.0f, -1.0f);
                 gl.glColor3f(1.0f, 1.0f, 0.0f);     // Set The Color To Yellow
-                gl.glVertex3f(x, -y, z);  // Bottom Left Of The Quad (Back)
-                gl.glVertex3f(-x, -y, z); // Bottom Right Of The Quad (Back)
+                gl.glVertex3f(x, 0f, z);  // Bottom Left Of The Quad (Back)
+                gl.glVertex3f(-x, 0f, z); // Bottom Right Of The Quad (Back)
                 gl.glVertex3f(-x, y, z);  // Top Right Of The Quad (Back)
                 gl.glVertex3f(x, y, z);   // Top Left Of The Quad (Back)
                 break;
@@ -54,8 +54,8 @@ public class Wall {
                 gl.glColor3f(0.0f, 0.0f, 1.0f);     // Set The Color To Blue
                 gl.glVertex3f(-x, y, -z);  // Top Left Of The Quad (Left
                 gl.glVertex3f(-x, y, z);   // Top Right Of The Quad (Left))
-                gl.glVertex3f(-x, -y, z);  // Bottom Right Of The Quad (Left)
-                gl.glVertex3f(-x, -y, -z); // Bottom Left Of The Quad (Left)
+                gl.glVertex3f(-x, 0f, z);  // Bottom Right Of The Quad (Left)
+                gl.glVertex3f(-x, 0f, -z); // Bottom Left Of The Quad (Left)
                 break;
 
             case EAST:
@@ -63,8 +63,8 @@ public class Wall {
                 gl.glColor3f(1.0f, 0.0f, 1.0f);     // Set The Color To Violet
                 gl.glVertex3f(x, y, z);    // Top Left Of The Quad (Right)
                 gl.glVertex3f(x, y, -z);   // Top Right Of The Quad (Right)
-                gl.glVertex3f(x, -y, -z);  // Bottom Right Of The Quad (Right)
-                gl.glVertex3f(x, -y, z);   // Bottom Left Of The Quad (Right)
+                gl.glVertex3f(x, 0f, -z);  // Bottom Right Of The Quad (Right)
+                gl.glVertex3f(x, 0f, z);   // Bottom Left Of The Quad (Right)
                 break;
         }
         gl.glEnd();                         // Done Drawing The Quad
