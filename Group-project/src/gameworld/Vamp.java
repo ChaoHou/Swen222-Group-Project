@@ -123,6 +123,14 @@ public class Vamp extends GameCharacter{
 		return this.inventory;
 	}
 	
+	public void collectItem(Collectable item){
+		this.getInventory().add(item);
+	}
+	
+	public void removeItem(Collectable item){
+		this.getInventory().remove(item);
+	}
+	
 	public void toOutputStream(DataOutputStream dout) throws IOException {		
 		dout.writeInt(uid);
 		dout.writeInt(facing);
