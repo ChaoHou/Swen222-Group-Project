@@ -6,10 +6,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
-import rendering.primitive.Box;
-import rendering.primitive.Cone;
-import rendering.primitive.Cylinder;
-import rendering.primitive.Sphere;
+import rendering.primitive.*;
 import ui.Board;
 
 import java.awt.event.KeyEvent;
@@ -27,9 +24,14 @@ public class Renderer implements GLEventListener, KeyListener {
 //    private final Vamp player;
     private GLU glu;
 
+    /**
+     * position of camera
+     */
     private Vector3D cameraPos = new Vector3D(0.0,48.0,150.0);
     private Vector3D lookAt = new Vector3D(0.0,42.0,0.0);
     private Vector3D cameraTop = new Vector3D(0.0,1.0,0.0);
+
+    private double angle = 0;
 
 //    private Texture texture;
 
@@ -103,30 +105,27 @@ public class Renderer implements GLEventListener, KeyListener {
         GL2 gl = drawable.getGL().getGL2();
 
         gl.glViewport(0, 0, width, height);
+        gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
-//        gl.glOrtho(200,200,200,200,-1,100);
+        glu.gluPerspective(35.0f, (float) width / (float) height, 1.0, 300.0);
+
+        // change back to model view matrix
+        gl.glMatrixMode(GL2.GL_MODELVIEW);
 
 
     }
 
     private void update(GL2 gl) {
         setCamera(gl);
-        float[] temp = new float[]{0f,100f,0f,1f};
+        float[] temp = new float[]{10f,100f,30f,1f};
         gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_POSITION,temp,0);
     }
 
     private void setCamera(GL2 gl) {
         // change to projection matrix
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glLoadIdentity();
-
-        // perspective
-        glu.gluPerspective(35.0f, (float) width / (float) height, 1.0, 300.0);
-
-        // change back to model view matrix
-        gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
         glu.gluLookAt(cameraPos.x(), cameraPos.y(), cameraPos.z(), lookAt.x(), lookAt.y(), lookAt.z(), cameraTop.x(), cameraTop.y(), cameraTop.z());
+        gl.glRotated(angle,0,1,0);
     }
 
     private void render(GL2 gl) {
@@ -137,8 +136,9 @@ public class Renderer implements GLEventListener, KeyListener {
         room.render(gl);
         Cylinder.render(gl, new Vector3D(0.0, 20.0, 0.0), 2.5, 20.0, 0);
         Sphere.render(gl, new Vector3D(0.0, 20.0, 0.0), 5);
-        Cone.render(gl, new Vector3D(0.0, 30.0, 0.0), 5, 30.0, 2);
-        Box.render(gl,new Vector3D(-10,0,0), new Vector3D(5,5,5));
+        Cone.render(gl, new Vector3D(0.0, 30.0, 0.0), 5, 30.0, 5);
+        Box.render(gl,new Vector3D(-64,0,0), new Vector3D(20,5,20));
+        Tetra.render(gl, new Vector3D(-5, 10, 0), new Vector3D(20, 5, 20),0);
         gl.glFlush();
     }
 
@@ -156,13 +156,13 @@ public class Renderer implements GLEventListener, KeyListener {
     }
 
     public void rotateL(){
-//        dir -= 90.0;
-        System.out.println("rotate left");
+        angle -= 10.0;
+//        System.out.println("rotate left");
     }
     
     public void rotateR(){
-//        dir += 90.0;
-        System.out.println("rotate right");
+        angle += 90.0;
+//        System.out.println("rotate right");
     }
     
     @Override
