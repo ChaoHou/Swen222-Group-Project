@@ -88,20 +88,7 @@ public class Main {
 		System.exit(0);
 	}
 
-	
 	public static void singleUserGame(Board game){
-//		System.out.println("in single user mode-------------------------");
-//
-//		int uid=game.registerVamp();
-//		System.out.println("done with registering vamp");
-//		BoardFrame frame=new BoardFrame("single user mode", game, uid, new Player(uid, game));
-//		game.startGame();
-//		
-//		while(true){
-//			//game running
-//		}
-//		
-		
 		//This is for the construction of the game	
 		int uid = game.registerVamp();		
 		Renderer renderer = new Renderer(RendererTest.setRoom());
@@ -171,7 +158,6 @@ public class Main {
 		
 	}
 
-
 	private static void runServer(int port, int nplayers, int gameClock, int broadcastClock) {	
 		//ClockThread clk = new ClockThread(gameClock);	
 		
@@ -210,13 +196,11 @@ public class Main {
 		} 
 	}
 
-
 	private static void multiUserGame(Board game, Server[] connections) {
 		while(true){
 			Thread.yield();
 		}
 	}
-
 
 	private static Board createBoardFromFile(String filename) throws IOException{
 		FileReader fr = new FileReader(filename);		

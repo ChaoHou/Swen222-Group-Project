@@ -60,6 +60,9 @@ public class Room {
 		this.containers.add(container);
 	}
 	
+	public void addFurniture(Furniture furniture){
+		this.furniture.add(furniture);
+	}
 	
 	//returns a set of vamps in this room.
 	//returns an empty set if no vamps in this room.
