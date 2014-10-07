@@ -9,15 +9,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import control.Client;
+import control.Player;
+import control.Server;
 import rendering.Renderer;
 import rendering.RendererTest;
 import ui.Board;
 import ui.GameFrame;
 import ui.GameMenu;
 import ui.MainMenu;
-import networking.Client;
-import networking.Player;
-import networking.Server;
 
 
 public class Main {

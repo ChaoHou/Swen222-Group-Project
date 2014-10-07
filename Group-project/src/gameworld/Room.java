@@ -4,20 +4,28 @@ import java.awt.Container;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ui.Board;
 
 public class Room {
 
+	public static final int NORTH=0;
+	public static final int EAST=1;
+	public static final int SOUTH=2;
+	public static final int WEST=3;
 
+	private List<Wall> walls=new ArrayList<Wall>();
+	private Set<Furniture> furniture=new HashSet<Furniture>();
 	private Set<Container> containers=new HashSet<Container>();
 	private Set<Vamp> players = new HashSet<Vamp>();
 	private Werewolf werewolf = null;
 	private String room;
-	//also contains walls?
-	//wall contains furniture?
+	
+	
 	
 	public Room(String room) {
 		this.room=room;
@@ -33,15 +41,16 @@ public class Room {
 		this.players.add(c);
 	}
 	
-	public void npcEnterRoom(Werewolf w){
+	public void werewolfEnterRoom(Werewolf w){
 		werewolf = w;
 	}
 	
-	public Werewolf npcLeaveRoom(Werewolf w){
+	public Werewolf werewolfLeaveRoom(Werewolf w){
 		Werewolf temp = werewolf;
 		werewolf = null;
 		return temp;
 	}
+	
 	
 	public Werewolf getWerewolf(){
 		return werewolf;

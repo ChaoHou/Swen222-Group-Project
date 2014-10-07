@@ -9,17 +9,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import control.WerewolfThread;
 
 public class Board {
 	
-	 //private List<Vamp> vamps=new ArrayList<Vamp>();
-	
+	 private Set<Vamp> vamps=new HashSet<Vamp>();
+	 private WerewolfThread werewolfThread;
 	 /* made the rooms contain characters to reduce coupling */
 	 private Room[][] rooms=new Room[4][4];
 	 private Room startRoom;
 	 private int uid=0;
+	 
+	 
 	 
 	
 	public Board(Room[][] rooms){
@@ -28,7 +32,23 @@ public class Board {
 	}
 	
 	
-	public Room getRoomAhead(Room currentRoom, int dir){
+	/*
+	 * Start game by respawning all vamps in startroom and unleashing the werewolf.
+	 */
+	public void startGame(){
+		System.out.println("isEmpty vamps list: "+vamps.isEmpty());
+		for(Vamp vamp:vamps){
+			vamp.respawn(startRoom);
+		}
+		this.werewolfThread=new WerewolfThread();
+		this.werewolfThread.start();
+		
+	}
+	
+	/*
+	 * Determines if there is a room ahead of this room (facing this particular direction). 
+	 */
+	public synchronized Room getRoomAhead(Room currentRoom, int dir){
 		
 		int dx=0;
 		int dy=0;
@@ -68,7 +88,9 @@ public class Board {
 	}
 	
 	
-	//determines if room (coordinate as argument) can be entered. 
+	/*
+	 * Determines if rooms[i][j] is actually a Room (that can be entered).
+	 */
 	private boolean canEnter(int i, int j){
 		if(i<0 || i>=getRooms().length || j<0 || j>=getRooms()[0].length ||  getRooms()[i][j]==null){
 			return false;
@@ -77,38 +99,30 @@ public class Board {
 		}
 	}
 	
-	public int registerVamp(){
+	
+	public synchronized int registerVamp(){
 		System.out.println("in registerVamp()");
-		startRoom.playerEnterRoom(new Vamp(uid,this));
-//		vamps.add(new Vamp(uid, this));
+		Vamp newVamp=new Vamp(uid, this);
+		startRoom.playerEnterRoom(newVamp);
+		vamps.add(newVamp);
 		return uid++;
 	}
 	
 	
-	public Vamp getCharacter(int uid){
-//		for(Vamp vamp:this.vamps){
-//			if(vamp.getUid()==uid){
-//				return vamp;
-//			}
-//		}
+	public synchronized Vamp getVamp(int uid){
 		//loop through rooms to find the character
-		for(Room[] row:getRooms()){
-			for(Room r:row){
-				if(r == null){
-					continue;
-				}
-				for(Vamp v:r.getVamps()){
-					if(v.getUid() == uid){
-						return v;
-					}
-				}
+		for(Vamp vamp:getVamps()){
+			if(vamp.getUid()==uid){
+				return vamp;
 			}
 		}
+		
 		
 		throw new IllegalArgumentException("invalid uid passed in.");
 	}
 
-	public Room getRoomContainsPlayer(Vamp player){
+	
+	public synchronized Room getRoomContainingPlayer(Vamp player){
 		for(Room[] row:getRooms()){
 			for(Room r:row){
 				if(r == null){
@@ -122,7 +136,8 @@ public class Board {
 		throw new IllegalArgumentException("invalid uid passed in.");
 	}
 	
-	public Room getRoomContainsNPC(){
+	
+	public Room getRoomContainingWerewolf(){
 		for(Room[] row:getRooms()){
 			for(Room r:row){
 				if(r == null){
@@ -136,17 +151,7 @@ public class Board {
 		throw new IllegalArgumentException("invalid uid passed in.");
 	}
 	
-	//method for werewolves to enter random rooms.
-	public void enterRandomRoom(){
-		
-	}
 	
-	public void startGame(){
-//		System.out.println("isEmpty vamps list: "+vamps.isEmpty());
-//		for(Vamp vamp:vamps){
-//			vamp.respawn(rooms[0][1]);
-//		}
-	}
 	
 	public synchronized byte[] toByteArray() throws IOException{
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -183,6 +188,9 @@ public class Board {
 		return rooms;
 	}
 
+	public Set<Vamp> getVamps(){
+		return this.vamps;
+	}
 
 	public void setRooms(Room[][] rooms) {
 		this.rooms = rooms;

@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import networking.Player;
+//import networking.Player;
 
 /**
  * Game UI Features:
