@@ -60,4 +60,8 @@ public class Vector3D {
 
         return new Vector3D(v.x(),v.y(),v.z());
     }
+
+    public double[] toArray() {
+        return new double[]{x,y,z};
+    }
 }

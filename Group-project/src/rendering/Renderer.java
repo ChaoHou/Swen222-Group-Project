@@ -6,6 +6,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
+import rendering.primitive.Box;
 import rendering.primitive.Cone;
 import rendering.primitive.Cylinder;
 import rendering.primitive.Sphere;
@@ -136,7 +137,8 @@ public class Renderer implements GLEventListener, KeyListener {
         room.render(gl);
         Cylinder.render(gl, new Vector3D(0.0, 20.0, 0.0), 2.5, 20.0, 0);
         Sphere.render(gl, new Vector3D(0.0, 20.0, 0.0), 5);
-        Cone.render(gl, new Vector3D(0.0, 30.0, 0.0), 5, 30.0, 1);
+        Cone.render(gl, new Vector3D(0.0, 30.0, 0.0), 5, 30.0, 2);
+        Box.render(gl,new Vector3D(-10,0,0), new Vector3D(5,5,5));
         gl.glFlush();
     }
 
