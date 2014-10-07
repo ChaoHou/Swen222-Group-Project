@@ -42,7 +42,7 @@ public class Cone {
                 gl.glTranslated(0.0, 0.0, -height);
                 break;
             default:
-                gl.glRotated(-90.0,0.0,1.0,0.0);
+                gl.glRotated(-90.0, 1.0, 0.0, 0.0);
                 gl.glTranslated(0.0, 0.0, -height);
                 break;
         }
