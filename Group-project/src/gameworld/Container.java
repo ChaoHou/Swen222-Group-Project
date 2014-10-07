@@ -1,16 +1,16 @@
 package gameworld;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Container {
 	
 	public static final int DRAWER=0;
 	public static final int TREASURE_CHEST=1;
 	
-	//type of this containter, a drawer of a treasure chest.
+	//type of this container, a drawer or a treasure chest.
 	private int containerType;
-	private List<Collectable> items=new ArrayList<Collectable>();
+	private Set<Collectable> items=new HashSet<Collectable>();
 	
 	
 	public Container(int containerType){
@@ -23,6 +23,10 @@ public class Container {
 	
 	public void removeItem(Collectable item){
 		items.remove(item);
+	}
+	
+	public Set<Collectable> getItems(){
+		return this.items;
 	}
 	
 	public int getContainerType(){
