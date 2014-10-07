@@ -3,7 +3,6 @@ package ui;
 import gameworld.GameCharacter;
 import gameworld.Room;
 import gameworld.Vamp;
-import gameworld.WerewolfThread;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import control.WerewolfThread;
 
 public class Board {
 	

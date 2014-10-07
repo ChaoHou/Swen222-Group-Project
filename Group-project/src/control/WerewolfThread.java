@@ -1,4 +1,6 @@
-package gameworld;
+package control;
+
+import gameworld.Werewolf;
 
 import java.util.HashSet;
 
