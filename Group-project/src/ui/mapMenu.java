@@ -120,9 +120,10 @@ public class mapMenu extends JPanel {
 
 		public void redraw(Graphics g) {		
 			//Draw the player and werewolf on the map
-			for(int i =1; i< 6; i++){
-				for(int j=1; j<6; j++){
-				//	if(rooms[i][j].getVamps().isEmpty()){
+			for(int i =1; i< 5; i++){
+				for(int j=1; j<5; j++){
+					if(rooms[j-1][i-1] !=null){
+					if(!rooms[j-1][i-1].getVamps().isEmpty()){
 					
 					//I keep getting null errors calculating for
 					//Vampires in the room, why is that?
@@ -130,12 +131,15 @@ public class mapMenu extends JPanel {
 						g.setColor(Color.red);
 						g.fillOval(i*100-40, j*100-50, 20, 20);
 						
-						g.setColor(Color.gray);
-						g.fillOval(i*100-80, j*100-50, 20, 20);
+						
 
 						
-				//	}
-										
+					}
+					if(rooms[j-1][i-1].getWerewolf() != null){
+						g.setColor(Color.gray);
+						g.fillOval(i*100-80, j*100-50, 20, 20);
+					}
+					}				
 				
 				}
 			}
