@@ -96,7 +96,8 @@ public class Main {
 		Renderer renderer = new Renderer(RendererTest.setRoom());
 		
 		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
-		gg.setVisible(true);    
+		gg.setVisible(true);
+		game.startGame();
         while(true){
         	//game running	        	
         }
