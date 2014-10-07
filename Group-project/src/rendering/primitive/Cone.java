@@ -4,14 +4,11 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import rendering.Vector3D;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.GLUquadric;
 
 /**
- * draw a cylinder below a point given.
- * Created by Kyohei Kudo.
+ * Created by innocence on 07/10/2014.
  */
-public class Cylinder {
+public class Cone {
     public static void render(GL2 gl, Vector3D pos, double rad, double height, int axis) {
         GLUT glut = new GLUT();
         gl.glPushMatrix();
@@ -28,8 +25,9 @@ public class Cylinder {
             default:
                 gl.glTranslated(0.0, 0.0, -height);
         }
-        glut.glutSolidCylinder(rad,height,16,16);
+        glut.glutSolidCone(rad,height,16,16);
 
         gl.glPopMatrix();
+
     }
 }
