@@ -26,6 +26,29 @@ public class Vector3D {
         return this.z;
     }
 
+    public static Vector3D normal(Vector3D... vertices) {
+        if (vertices.length != 3) {
+            System.err.printf("Can't calculate normal. Number of vertices are inappropriate.\n");
+            return null;
+        }
+        return normalize(cross(subtract(vertices[1], vertices[0]), subtract(vertices[2], vertices[0])));
+    }
+
+    private static Vector3D normalize(Vector3D vector) {
+        double length = Math.sqrt(vector.x()*vector.x()+vector.y()*vector.y()+vector.z()*vector.z());
+        return new Vector3D(vector.x()/length,vector.y()/length,vector.z()/length);
+    }
+
+    private static Vector3D cross(Vector3D vec1, Vector3D vec2) {
+        return new Vector3D(vec1.y()*vec2.z()-vec1.z()*vec2.y(),
+                vec1.z()*vec2.x()-vec1.x()*vec2.z(),
+                vec1.x()*vec2.y()-vec1.y()*vec2.x());
+    }
+
+    private static Vector3D subtract(Vector3D vec1, Vector3D vec2) {
+        return new Vector3D(vec1.x()-vec2.x(),vec1.y()-vec2.y(),vec1.z()-vec2.z());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
