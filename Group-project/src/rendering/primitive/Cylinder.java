@@ -13,7 +13,9 @@ import javax.media.opengl.glu.GLUquadric;
  */
 public class Cylinder {
     public static void render(GL2 gl, Vector3D pos, double rad, double height, int axis) {
-        GLUT glut = new GLUT();
+        GLU glu = new GLU();
+        GLUquadric quadric = glu.gluNewQuadric();
+//        glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
         gl.glPushMatrix();
         gl.glTranslated(pos.x(), pos.y(), pos.z());
         switch(axis) {
@@ -28,7 +30,18 @@ public class Cylinder {
             default:
                 gl.glTranslated(0.0, 0.0, -height);
         }
-        glut.glutSolidCylinder(rad,height,16,16);
+        glu.gluCylinder(quadric, rad, rad, height, 16, 16);
+
+        gl.glPushMatrix();
+        gl.glRotated(180.0, 1.0, 0.0, 0.0);
+        glu.gluDisk(quadric, 0.0, rad, 16, 16);
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslated(0.0, 0.0, height);
+        glu.gluDisk(quadric, 0.0, rad, 16, 16);
+        gl.glPopMatrix();
+
 
         gl.glPopMatrix();
     }
