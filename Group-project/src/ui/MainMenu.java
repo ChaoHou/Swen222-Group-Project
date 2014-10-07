@@ -128,20 +128,10 @@ public class MainMenu extends JPanel {
 			if(event.getSource() == buttons.get("newGame")){
 				setNewGame(true);
 				//Starts a new game!
-				String answer = (String) JOptionPane.showInputDialog(null, "Select a mode", null, 
-						JOptionPane.PLAIN_MESSAGE, null, new String[]{ "Single Player", "MultiPlayer"}, null);
-
-				if(answer.equals("Single Player")){
 					currentGame.setGame();
 					currentGame.getBoard().startGame();
 					currentGame.setVisible(true);	
 					updateUI();
-				}
-				else if(answer.equals("Multiplayer")){
-					System.out.println("No");
-
-				}
-				
 			}
 			else if(event.getSource() == buttons.get("instructions")){
 				System.out.println("You clicked instructions");

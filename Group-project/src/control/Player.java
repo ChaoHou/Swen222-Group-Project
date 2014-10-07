@@ -73,10 +73,7 @@ public class Player implements KeyListener,ActionListener{
 		}
 		else if(action.equals("Change Room")){
 			//Use room
-			String answer = (String) JOptionPane.showInputDialog(null, "Which Room would you like to go to?", null, 
-					 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "d", "dd"}, null);
-		
-			System.out.println("You moved to Room: " + answer );
+			game.getVamp(uid).enterRoom();
 		}
 		else if(action.equals("p1")){
 			

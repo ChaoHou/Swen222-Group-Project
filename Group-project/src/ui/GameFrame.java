@@ -1,4 +1,7 @@
 package ui;
+import gameworld.Container;
+import gameworld.Vamp;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -73,15 +76,11 @@ public class GameFrame extends JFrame {
 		    JMenu help = new JMenu("Help");
 		    menubar.add(help);
 		    this.setJMenuBar(menubar);
-		    //Set up the instructions and map(while keeping them invisible)
+		    //Set up the instructions 
 		    instructionsMenu menu = new instructionsMenu(this);	
-		    mapMenu map = new mapMenu(this);
 			this.getPanels().put("instructions", menu);	
-			this.getPanels().put("map", map);
 			this.getContentPane().add(menu);
-			this.getContentPane().add(map);
 		    this.getPanels().get("instructions").setVisible(false);	 
-		    this.getPanels().get("map").setVisible(false);
 			//Opens up the main menu
 			setMainMenu();		
 		}
@@ -158,8 +157,8 @@ public class GameFrame extends JFrame {
 				this.getPanels().put("map", map);
 				this.getContentPane().add(map);
  				this.canvas.setVisible(false);
-				this.getPanels().get("game").setVisible(false);
-				this.getPanels().get("map").setVisible(true);
+				//this.getPanels().get("game").setVisible(false);
+				//this.getPanels().get("map").setVisible(true);
 				this.repaint();
 		}
 		
@@ -168,11 +167,30 @@ public class GameFrame extends JFrame {
 		 */
 		
 		public void showGame(){
+			if(this.getPanels().containsKey("map")){
+				this.getPanels().remove("map");		
+			}			
 			if(isRunningGame()){
 				this.canvas.setVisible(true);
+				//this.getPanels().get("game").setEnabled(true);
 				this.getPanels().get("game").setVisible(true);
 			}	
 		}
+		
+		/**
+		 * This method opens up a trade panel, 
+		 * This refers to when a player clicks a container
+		 * 1.) The two fields are two 
+		 */
+		
+		public void showTrade(Container c){
+			this.canvas.setVisible(false);
+			
+			
+			this.getPanels().get("").setVisible(true);
+		}
+		
+		
 
 
 		public Map<String, JPanel> getPanels() {
