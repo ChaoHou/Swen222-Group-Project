@@ -52,8 +52,8 @@ public class mapMenu extends JPanel {
 
 		//Setting up the outmost Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		this.setPreferredSize(new Dimension(500,500));
-		this.setBackground(Color.LIGHT_GRAY);
+		//this.setPreferredSize(new Dimension(500,500));
+		this.setBackground(Color.black);
 
 		this.add(map);
 	    this.add(mapDescription);			
