@@ -9,9 +9,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import control.Client;
+import control.Slave;
 import control.Player;
-import control.Server;
+import control.Master;
 import rendering.Renderer;
 import rendering.RendererTest;
 import ui.Board;
@@ -156,7 +156,7 @@ public class Main {
 			//actionSlave.run();
 			Board game=createBoardFromFile(filename);
 			Renderer renderer = new Renderer(RendererTest.setRoom());
-			Client client = new Client(s,game,renderer);
+			Slave client = new Slave(s,game,renderer);
 			client.run();
 			
 			
@@ -181,7 +181,7 @@ public class Main {
 		try {
 			Board game = createBoardFromFile(filename);
 			//Socket[] sockets = new Socket[nplayers];
-			Server[] connections = new Server[nplayers];
+			Master[] connections = new Master[nplayers];
 			// Now, we await connections.
 			ServerSocket ss = new ServerSocket(port);	
 			
@@ -193,7 +193,7 @@ public class Main {
 				int uid = game.registerVamp();
 				System.out.println("PLAYER UID: "+uid);
 				
-				connections[--nplayers] = new Server(s,game,uid);
+				connections[--nplayers] = new Master(s,game,uid);
 				connections[nplayers].start();
 				//connections[--nplayers] = new MasterConnection(s,broadcastClock,uid);
 				if(nplayers == 0) {
@@ -211,7 +211,7 @@ public class Main {
 	}
 
 
-	private static void multiUserGame(Board game, Server[] connections) {
+	private static void multiUserGame(Board game, Master[] connections) {
 		while(true){
 			Thread.yield();
 		}
