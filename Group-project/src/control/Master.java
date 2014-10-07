@@ -9,7 +9,7 @@ import java.net.Socket;
 
 import ui.Board;
 
-public class Server extends Thread {
+public class Master extends Thread {
 	
 	public enum ACTION{
 		ROTATE_R,
@@ -24,7 +24,7 @@ public class Server extends Thread {
 
 	private Board game;
 
-	public Server(Socket socket, Board game, int uid) throws IOException {
+	public Master(Socket socket, Board game, int uid) throws IOException {
 		this.socket = socket;
 		output = new DataOutputStream(socket.getOutputStream());
 		input = new DataInputStream(socket.getInputStream());
