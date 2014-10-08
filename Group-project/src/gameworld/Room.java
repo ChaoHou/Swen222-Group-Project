@@ -9,6 +9,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+
+import com.jogamp.opengl.util.texture.Texture;
+
 import ui.Board;
 
 public class Room {
@@ -18,7 +23,7 @@ public class Room {
 	public static final int SOUTH=2;
 	public static final int WEST=3;
 
-	private List<Wall> walls=new ArrayList<Wall>();
+	private Wall[] walls;
 	private Set<Furniture> furniture=new HashSet<Furniture>();
 	private Set<Container> containers=new HashSet<Container>();
 	private Set<Vamp> players = new HashSet<Vamp>();
@@ -27,8 +32,9 @@ public class Room {
 	
 	
 	
-	public Room(String room) {
+	public Room(String room, Wall[] walls) {
 		this.room=room;
+		this.walls = walls;
 	}
 	
 	
@@ -75,6 +81,17 @@ public class Room {
 		return this.room;
 	}
 	
+	public void draw(GL2 gl,int dir){
+		for(Wall wall:walls){
+			wall.draw(gl,dir);
+		}
+	}
+	
+	public void init(GL gl,Texture[] textures){
+		for(Wall w:walls){
+			w.init(gl,textures);
+		}
+	}
 	
 	public void toOutputStream(DataOutputStream dout) throws IOException {		
 		dout.writeInt(players.size());

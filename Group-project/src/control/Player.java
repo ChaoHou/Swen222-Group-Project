@@ -56,7 +56,7 @@ public class Player implements KeyListener,ActionListener{
 				game.getVamp(uid).rotateTo(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
 				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
-			renderer.rotateL();
+			//renderer.rotateL();
 		}				
 		//When turning right
 		else if(action.equals("Turn Right")){
@@ -68,7 +68,7 @@ public class Player implements KeyListener,ActionListener{
 				game.getVamp(uid).rotateTo(GameCharacter.WEST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
 				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
-			renderer.rotateR();
+			//renderer.rotateR();
 
 		}
 		else if(action.equals("Change Room")){

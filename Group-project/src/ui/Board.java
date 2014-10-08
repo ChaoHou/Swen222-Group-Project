@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.media.opengl.GL;
+
+import com.jogamp.opengl.util.texture.Texture;
+
 import control.WerewolfThread;
 
 public class Board {
@@ -196,5 +200,15 @@ public class Board {
 
 	public void setRooms(Room[][] rooms) {
 		this.rooms = rooms;
+	}
+	
+	public void initRooms(GL gl,Texture[] textures){
+		for(Room[] row:rooms){
+			for(Room r:row){
+				if(r != null){
+					r.init(gl,textures);
+				}
+			}
+		}
 	}
 }

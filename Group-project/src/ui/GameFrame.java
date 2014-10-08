@@ -32,7 +32,6 @@ import javax.swing.JPanel;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import rendering.Renderer;
-import rendering.RendererTest;
 //import networking.Player;
 
 

@@ -1,11 +1,15 @@
 package rendering;
 
+import gameworld.Vamp;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
+
+import ui.Board;
 
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
@@ -20,13 +24,17 @@ import java.io.IOException;
  */
 public class Renderer implements GLEventListener, KeyListener {
 
-    private final Room room;
+    private final Board game;
+    private final int uid;
+    
+    private String[] textureFiles = {"wall0.jpg","wall1.jpg","wall2.jpg","wall3.jpg","wall4.jpg"};
+    private Texture[] textures = new Texture[textureFiles.length];
+    
     private GLU glu = new GLU();
 
-    private Texture texture;
-    
-    public Renderer(Room room) {
-        this.room = room;
+    public Renderer(Board game,int uid) {
+        this.game = game;
+        this.uid = uid;
     }
 
     @Override
@@ -45,18 +53,25 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glCullFace(GL.GL_BACK);
         
         try {
-			texture = TextureIO.newTexture(new File("wall.jpg"), false);
 			
-			gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-	        // Use linear filter for texture if image is smaller than the original texture
-	        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+			for(int i=0;i<textureFiles.length;i++){
+				String dir = "resources/images/walls/"+textureFiles[i];
+				System.out.println("dir:"+dir);
+				textures[i] = TextureIO.newTexture(new File(dir),false);
+				//gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,GL.GL_LINEAR);
+				//gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,GL.GL_LINEAR);
+				textures[i].setTexParameterf(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST); 
+				textures[i].setTexParameterf(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST); 
+			}
+			
 		} catch (GLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        System.out.println("Texture Initialized");
+        
+        game.initRooms(gl,textures);
         
         
     }
@@ -68,8 +83,16 @@ public class Renderer implements GLEventListener, KeyListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-        update();
-        render(drawable);
+    	GL2 gl = drawable.getGL().getGL2();
+
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+
+        Vamp player = game.getVamp(uid);
+        gameworld.Room room = game.getRoomContainingPlayer(player);
+        
+        room.draw(gl,player.getDirectionFacing());
+        
+        gl.glFlush();
     }
 
     @Override
@@ -89,18 +112,6 @@ public class Renderer implements GLEventListener, KeyListener {
 
     }
 
-    private void update() {
-
-    }
-
-    private void render(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        room.render(gl,texture);
-        gl.glFlush();
-    }
-
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -109,17 +120,17 @@ public class Renderer implements GLEventListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keycode = e.getKeyCode();
-        if (keycode == KeyEvent.VK_LEFT) {room.rotateL();}
-        if (keycode == KeyEvent.VK_RIGHT) {room.rotateR();}
+//        if (keycode == KeyEvent.VK_LEFT) {room.rotateL();}
+//        if (keycode == KeyEvent.VK_RIGHT) {room.rotateR();}
 
     }
 
     public void rotateL(){
-    	room.rotateL();
+//    	room.rotateL();
     }
     
     public void rotateR(){
-    	room.rotateR();
+//    	room.rotateR();
     }
     
     @Override

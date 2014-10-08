@@ -1,7 +1,9 @@
 import gameworld.Room;
+import gameworld.Wall;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,7 +15,6 @@ import control.Slave;
 import control.Player;
 import control.Master;
 import rendering.Renderer;
-import rendering.RendererTest;
 import ui.Board;
 import ui.GameFrame;
 import ui.GameMenu;
@@ -25,7 +26,7 @@ public class Main {
 	private static final int DEFAULT_CLK_PERIOD = 20;
 	private static final int DEFAULT_BROADCAST_CLK_PERIOD = 5;
 
-	private static String filename="map.txt";
+	private static String filename="resources/maps/map.txt";
 	
 	public static void main(String[] args) {
 
@@ -92,7 +93,8 @@ public class Main {
 	public static void singleUserGame(Board game){
 		//This is for the construction of the game	
 		int uid = game.registerVamp();		
-		Renderer renderer = new Renderer(RendererTest.setRoom());
+		System.out.println("uid: "+uid);
+		Renderer renderer = new Renderer(game,uid);
 		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
 		gg.setVisible(true);    
         while(true){
@@ -143,7 +145,9 @@ public class Main {
 			//slave.start();
 			//actionSlave.run();
 			Board game=createBoardFromFile(filename);
-			Renderer renderer = new Renderer(RendererTest.setRoom());
+			//TODO
+			//need to set the uid to the renderer
+			Renderer renderer = new Renderer(game,0);
 			Slave client = new Slave(s,game,renderer);
 			client.run();
 			
@@ -228,7 +232,7 @@ public class Main {
 					System.out.println("detected a dash");
 					rooms[i][j]=null;
 				}else{
-					rooms[i][j]=new Room(elem);
+					rooms[i][j]=createRoom(elem);
 				}
 			}
 		}
@@ -239,6 +243,35 @@ public class Main {
 		return board;	
 	}
 	
-	
+	private static Room createRoom(String name) throws IOException{
+		String dir = "resources/maps/"+name+".txt";
+		System.out.println("file name:"+name);
+		System.out.println("dir: "+dir);
+		
+		try {
+			FileReader fr = new FileReader(dir);
+			BufferedReader br = new BufferedReader(fr);
+			
+			Wall[] walls = new Wall[4];
+			
+			String line;
+			for(int i=0;i<4;i++){
+				line = br.readLine();
+				String[] tokens = line.split(" "); //length should be greater than 0
+				
+				//System.out.println(tokens[i]);
+				//System.out.println(Integer.parseInt(tokens[i]));
+				
+				walls[i] = new Wall(i,Integer.parseInt(tokens[0]));
+			}
+			
+			return new Room(name,walls);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}		
+		
+		return null;
+	}
 }
 
