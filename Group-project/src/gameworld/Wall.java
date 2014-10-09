@@ -60,13 +60,13 @@ public class Wall {
 		case NORTH_WALL:
 			//gl.glColor3f(1.0f, 0.0f, 0.0f); // Set The Color To Red
 			gl.glTexCoord2f(left, bottom);
-			gl.glVertex3f(x, y, z); // Top Right Of The Quad (Front)
-			gl.glTexCoord2f(right, bottom);
-			gl.glVertex3f(-x, y, z); // Top Left Of The Quad (Front)
-			gl.glTexCoord2f(right, top);
 			gl.glVertex3f(-x, -y, z); // Bottom Left Of The Quad (Front)
-			gl.glTexCoord2f(left, top);
+			gl.glTexCoord2f(right, bottom);
 			gl.glVertex3f(x, -y, z); // Bottom Right Of The Quad (Front)
+			gl.glTexCoord2f(right, top);
+			gl.glVertex3f(x, y, z); // Top Right Of The Quad (Front)
+			gl.glTexCoord2f(left, top);
+			gl.glVertex3f(-x, y, z); // Top Left Of The Quad (Front)
 			break;
 
 		case SOUTH_WALL:
@@ -86,26 +86,26 @@ public class Wall {
 			gl.glNormal3f(-1.0f, 0.0f, 0.0f);
 			//gl.glColor3f(0.0f, 0.0f, 1.0f); // Set The Color To Blue
 			gl.glTexCoord2f(left, bottom);
-			gl.glVertex3f(-x, y, z); // Top Right Of The Quad (Left)
-			gl.glTexCoord2f(right, bottom);
-			gl.glVertex3f(-x, y, -z); // Top Left Of The Quad (Left)
-			gl.glTexCoord2f(right, top);
 			gl.glVertex3f(-x, -y, -z); // Bottom Left Of The Quad (Left)
-			gl.glTexCoord2f(left, top);
+			gl.glTexCoord2f(right, bottom);
 			gl.glVertex3f(-x, -y, z); // Bottom Right Of The Quad (Left)
+			gl.glTexCoord2f(right, top);
+			gl.glVertex3f(-x, y, z); // Top Right Of The Quad (Left)
+			gl.glTexCoord2f(left, top);
+			gl.glVertex3f(-x, y, -z); // Top Left Of The Quad (Left)
 			break;
 
 		case EAST_WALL:
 			gl.glNormal3f(-1.0f, 0.0f, 0.0f);
 			//gl.glColor3f(1.0f, 0.0f, 1.0f); // Set The Color To Violet
 			gl.glTexCoord2f(left, bottom);
-			gl.glVertex3f(x, y, -z); // Top Right Of The Quad (Right)
-			gl.glTexCoord2f(right, bottom);
-			gl.glVertex3f(x, y, z); // Top Left Of The Quad (Right)
-			gl.glTexCoord2f(right, top);
 			gl.glVertex3f(x, -y, z); // Bottom Left Of The Quad (Right)
-			gl.glTexCoord2f(left, top);
+			gl.glTexCoord2f(right, bottom);
 			gl.glVertex3f(x, -y, -z); // Bottom Right Of The Quad (Right)
+			gl.glTexCoord2f(right, top);
+			gl.glVertex3f(x, y, -z); // Top Right Of The Quad (Right)
+			gl.glTexCoord2f(left, top);
+			gl.glVertex3f(x, y, z); // Top Left Of The Quad (Right)
 			break;
 		}
 		
