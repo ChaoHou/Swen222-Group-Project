@@ -53,7 +53,7 @@ public class Room {
 	
 	public Werewolf werewolfLeaveRoom(Werewolf w){
 		Werewolf temp = werewolf;
-		werewolf = null;
+		this.werewolf = null;
 		return temp;
 	}
 	

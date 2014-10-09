@@ -69,7 +69,7 @@ public class GameFrame extends JFrame {
 			this.setBoard(board);
 			this.setUid(uid);			
 			this.player = player;
-			this.renderer = renderer;		
+			this.renderer = renderer;	
 			//Sets up the menu bar
 		    JMenuBar menubar = new JMenuBar();
 		    JMenu help = new JMenu("Help");

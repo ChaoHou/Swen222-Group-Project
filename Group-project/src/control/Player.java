@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import rendering.Renderer;
 import ui.Board;
+import ui.GameFrame;
 
 
 public class Player implements KeyListener,ActionListener{
@@ -74,6 +75,7 @@ public class Player implements KeyListener,ActionListener{
 		else if(action.equals("Change Room")){
 			//Use room
 			game.getVamp(uid).enterRoom();
+			
 		}
 		else if(action.equals("p1")){
 			
@@ -95,7 +97,7 @@ public class Player implements KeyListener,ActionListener{
 //			}	
 //		}
 	}
-
+	
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {

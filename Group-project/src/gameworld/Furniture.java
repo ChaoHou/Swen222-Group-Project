@@ -29,8 +29,6 @@ public class Furniture {
 	public int getFurnitureType(){
 		return this.furnitureType;
 	}
-	
-	
 	 
 
 }
