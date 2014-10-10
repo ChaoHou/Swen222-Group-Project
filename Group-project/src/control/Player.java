@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JOptionPane;
 
@@ -14,7 +16,7 @@ import ui.Board;
 import ui.GameFrame;
 
 
-public class Player implements KeyListener,ActionListener{
+public class Player implements KeyListener,ActionListener,MouseListener{
 
 	private int uid;
 	private Board game;
@@ -108,6 +110,42 @@ public class Player implements KeyListener,ActionListener{
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//int x = e.getX();
+		//int y = e.getY();
+		//System.out.println("x:"+x+" y:"+y);
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		System.out.println("Mouse pressed");
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}

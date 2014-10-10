@@ -41,7 +41,7 @@ public class Wall {
 		bottom = textures[textureIndex].getImageTexCoords().bottom();
 		left = textures[textureIndex].getImageTexCoords().left();
 		right = textures[textureIndex].getImageTexCoords().right();
-		System.out.println("top:"+top);
+		//System.out.println("top:"+top);
 	}
 
 	public void draw(GL2 gl,int facingDir) {
@@ -70,7 +70,7 @@ public class Wall {
 			break;
 
 		case SOUTH_WALL:
-			gl.glNormal3f(-1.0f, 0.0f, 0.0f);
+			//gl.glNormal3f(-1.0f, 0.0f, 0.0f);
 			//gl.glColor3f(1.0f, 1.0f, 0.0f); // Set The Color To Yellow
 			gl.glTexCoord2f(left, bottom);
 			gl.glVertex3f(x, -y, -z); // Bottom Left Of The Quad (Back)
@@ -83,7 +83,7 @@ public class Wall {
 			break;
 
 		case WEST_WALL:
-			gl.glNormal3f(-1.0f, 0.0f, 0.0f);
+			//gl.glNormal3f(-1.0f, 0.0f, 0.0f);
 			//gl.glColor3f(0.0f, 0.0f, 1.0f); // Set The Color To Blue
 			gl.glTexCoord2f(left, bottom);
 			gl.glVertex3f(-x, -y, -z); // Bottom Left Of The Quad (Left)
@@ -96,7 +96,7 @@ public class Wall {
 			break;
 
 		case EAST_WALL:
-			gl.glNormal3f(-1.0f, 0.0f, 0.0f);
+			//gl.glNormal3f(-1.0f, 0.0f, 0.0f);
 			//gl.glColor3f(1.0f, 0.0f, 1.0f); // Set The Color To Violet
 			gl.glTexCoord2f(left, bottom);
 			gl.glVertex3f(x, -y, z); // Bottom Left Of The Quad (Right)
@@ -115,7 +115,7 @@ public class Wall {
 		gl.glDisable(GL.GL_TEXTURE_2D);
 	}
 
-	private float getDir(int facingDir) {
+	public static float getDir(int facingDir) {
 		switch(facingDir){
 		case GameCharacter.NORTH:
 			return 180f;

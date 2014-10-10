@@ -1,3 +1,4 @@
+import gameworld.Container;
 import gameworld.Room;
 import gameworld.Wall;
 
@@ -95,8 +96,8 @@ public class Main {
 		int uid = game.registerVamp();		
 		System.out.println("uid: "+uid);
 		Renderer renderer = new Renderer(game,uid);
-		
-		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
+		Player player = new Player(uid,game,renderer);
+		GameFrame gg = new GameFrame("single user mode", game, uid, player,renderer);
 		gg.setVisible(true);
 		game.startGame();
         while(true){
@@ -256,18 +257,30 @@ public class Main {
 			
 			Wall[] walls = new Wall[4];
 			
-			String line;
+			String line = br.readLine();
+			String[] tokens = line.split(" ");
 			for(int i=0;i<4;i++){
-				line = br.readLine();
-				String[] tokens = line.split(" "); //length should be greater than 0
-				
-				//System.out.println(tokens[i]);
-				//System.out.println(Integer.parseInt(tokens[i]));
-				
-				walls[i] = new Wall(i,Integer.parseInt(tokens[0]));
+				walls[i] = new Wall(i,Integer.parseInt(tokens[i]));
 			}
 			
-			return new Room(name,walls);
+			Room room = new Room(name,walls);
+			
+			while((line = br.readLine()) != null){
+				tokens = line.split(" ");
+				int type = Integer.parseInt(tokens[0]);
+				int x = Integer.parseInt(tokens[1]);
+				int y = Integer.parseInt(tokens[2]);
+				int z = Integer.parseInt(tokens[3]);
+				int index = Integer.parseInt(tokens[4]);
+				Container container = new Container(type,x,y,z,index);
+				room.addContainer(container);
+			}
+			
+			
+			//Container container = new Container(Container.DRAWER,8,-5,9,3);
+			//return new Room(name,walls);
+			//room.addContainer(container);
+			return room;
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

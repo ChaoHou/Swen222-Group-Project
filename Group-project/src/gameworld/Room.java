@@ -1,6 +1,5 @@
 package gameworld;
 
-import java.awt.Container;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -85,11 +84,17 @@ public class Room {
 		for(Wall wall:walls){
 			wall.draw(gl,dir);
 		}
+		for(Container c:containers){
+			c.draw(gl,dir);
+		}
 	}
 	
 	public void init(GL gl,Texture[] textures){
 		for(Wall w:walls){
 			w.init(gl,textures);
+		}
+		for(Container c:containers){
+			c.init(gl, textures);
 		}
 	}
 	

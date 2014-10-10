@@ -116,6 +116,7 @@ public class GameFrame extends JFrame {
 	        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 	        final GLCanvas glcanvas = new GLCanvas( glcapabilities );
 	        glcanvas.addGLEventListener(renderer);    
+	        glcanvas.addMouseListener((MouseListener)player);
 	        FPSAnimator animator= new FPSAnimator(glcanvas,60);
 	        animator.start();
 			//Game menu (The Game's interface)
