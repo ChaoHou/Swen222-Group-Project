@@ -1,4 +1,5 @@
 import gameworld.Container;
+import gameworld.Orb;
 import gameworld.Room;
 import gameworld.Wall;
 
@@ -273,6 +274,13 @@ public class Main {
 				int z = Integer.parseInt(tokens[3]);
 				int index = Integer.parseInt(tokens[4]);
 				Container container = new Container(type,x,y,z,index);
+				
+				for(int i=5;i<tokens.length;i++){
+					int color = Integer.parseInt(tokens[i]);
+					Orb orb = new Orb(color);
+					container.addItem(orb);
+				}
+				
 				room.addContainer(container);
 			}
 			

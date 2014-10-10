@@ -135,7 +135,7 @@ public class GameFrame extends JFrame {
 			this.runningGame = true;
 		    this.repaint();
 		    map = new mapMenu(this);
-		   // ((Thread) player).start();
+		    ((Thread) player).start();
 
 		}
 		

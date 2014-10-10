@@ -19,7 +19,7 @@ import ui.GameMenu;
 import ui.GameMenu.StatsPanel;
 
 
-public class Player implements KeyListener,ActionListener,MouseListener{
+public class Player extends Thread implements KeyListener,ActionListener,MouseListener{
 
 	private int uid;
 	private Board game;
@@ -108,6 +108,8 @@ public class Player implements KeyListener,ActionListener,MouseListener{
 //			c.addItem(new HealthPack());
 			//Tell the frame to open the trade menu now:
 //			this.frame.showTrade(c);
+			
+			
 			this.frame.setVisible(true);
 		    this.frame.repaint();
 			
@@ -158,8 +160,9 @@ public class Player implements KeyListener,ActionListener,MouseListener{
 
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
+	public void mousePressed(MouseEvent e) {
 		System.out.println("Mouse pressed");
+		
 	}
 
 
@@ -167,5 +170,19 @@ public class Player implements KeyListener,ActionListener,MouseListener{
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void run(){
+		try {
+			while(true){
+				this.frame.getMapPanel().getMap().repaint();
+				
+				Thread.sleep(100);
+			}
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
