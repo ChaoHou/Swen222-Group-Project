@@ -3,7 +3,6 @@ import gameworld.Container;
 import gameworld.HealthPack;
 import gameworld.Orb;
 import control.Player;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -13,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
@@ -32,6 +30,10 @@ import rendering.Renderer;
 
 
 public class GameFrame extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
 	//Stuff from gameworld package
 	private Board board;
@@ -41,8 +43,7 @@ public class GameFrame extends JFrame {
  	//Stuff from rendering package
 	private Renderer renderer;
 	private GLCanvas canvas;
-	private mapMenu map = new mapMenu(this);
-;
+	private mapMenu map;
 	
 		/**
 		 * This is the constructor for the Actual JFrame
@@ -131,7 +132,7 @@ public class GameFrame extends JFrame {
 			this.getContentPane().add(game, BorderLayout.SOUTH);
 			this.runningGame = true;
 		    this.repaint();
-		    
+		    map = new mapMenu(this);
 		   // ((Thread) player).start();
 
 		}

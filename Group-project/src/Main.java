@@ -92,12 +92,16 @@ public class Main {
 	public static void singleUserGame(Board game){
 		//This is for the construction of the game	
 		int uid = game.registerVamp();	
-		//game.startGame();
+		System.out.println("ok");
 		Renderer renderer = new Renderer(RendererTest.setRoom());
-		
+		System.out.println("ok");
 		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
+		System.out.println("ok");
+
 		gg.setVisible(true);
-		game.startGame();
+		System.out.println("ok");
+
+	//	game.startGame();
         while(true){
         	//game running	        	
         }

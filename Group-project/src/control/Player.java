@@ -11,15 +11,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JOptionPane;
-
 import rendering.Renderer;
 import ui.Board;
 import ui.GameFrame;
 import ui.GameMenu.StatsPanel;
 
 
-public class Player implements KeyListener,ActionListener {
+public class Player extends Thread implements KeyListener,ActionListener {
 
 	private int uid;
 	private Board game;
@@ -134,17 +132,17 @@ public class Player implements KeyListener,ActionListener {
 		
 	}
 	
-//	public void run(){	
-//		try{
-//			while(true){
-//			Thread.sleep(1000);
-//			this.frame.getPanels().get("game").updateUI();
-//			this.frame.getMapPanel().getMap().repaint();
-//			}
-//			
-//		}catch(Exception e){
-//			System.out.println("error in mapThread");
-//		}
-//	}
+	public void run(){	
+		try{
+			while(true){
+			Thread.sleep(1000);
+			this.frame.getPanels().get("game").updateUI();
+			this.frame.getMapPanel().getMap().repaint();
+			}
+			
+		}catch(Exception e){
+			System.out.println("error in mapThread");
+		}
+	}
 	
 }
