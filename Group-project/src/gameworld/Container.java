@@ -18,15 +18,23 @@ public class Container {
 	}
 
 	public void addItem(Collectable item){
-		items.add(item);
+		getItems().add(item);
 	}
 	
 	public void removeItem(Collectable item){
-		items.remove(item);
+		getItems().remove(item);
 	}
 	
 	public int getContainerType(){
 		return this.containerType;
+	}
+
+	public List<Collectable> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Collectable> items) {
+		this.items = items;
 	}
 	
 	

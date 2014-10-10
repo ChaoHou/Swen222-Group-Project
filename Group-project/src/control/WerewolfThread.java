@@ -23,7 +23,7 @@ public class WerewolfThread extends Thread{
 	public void run(){
 		try{
 			Thread.sleep(1000);
-				this.werewolf.prowl();
+			this.werewolf.prowl();
 		}catch(Exception e){
 			System.out.println("error in WerewolfThread");
 		}

@@ -25,11 +25,12 @@ public class mapMenu extends JPanel {
 	private JButton backMap;
 	private JPanel mapDescription;
 	private GameFrame game;
+	private mapPicture map;
 	//Rooms to draw
 	private Room[][] rooms;
 
 	public mapMenu(GameFrame game){		
-		mapPicture map = new mapPicture();		
+		setMap(new mapPicture());		
 		this.game = game;	
 		rooms = this.game.getBoard().getRooms();	
 		//Buttons
@@ -39,9 +40,9 @@ public class mapMenu extends JPanel {
 		backMap.addActionListener(b);	
 		//Setting up the mapDescription
 		JLabel label1 = new JLabel(
-				"<html>The Map"
+				"<html>   Legend:"
 				+ " <br> Vampires = Red "
-				+ " <br> Wereworlf = Gray"
+				+ " <br> Werewolf = Gray"
 				+ " </html>", JLabel.CENTER);
 		
 		mapDescription = new JPanel();	
@@ -52,31 +53,40 @@ public class mapMenu extends JPanel {
 
 		//Setting up the outmost Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		//this.setPreferredSize(new Dimension(500,500));
 		this.setBackground(Color.black);
 
-		this.add(map);
-	    this.add(mapDescription);			
+		JLabel title = new JLabel("HURRY UP, THE WEREWOLF'S GONNA GET YOU", JLabel.CENTER);
+		title.setPreferredSize(new Dimension(1000, 40));
+		title.setForeground(Color.white);
+		this.add(title);
+		
+		this.add(getMap());
+	    this.add(mapDescription);	
 		this.repaint();
+	    
 	}	
+
+	public mapPicture getMap() {
+		return map;
+	}
+
+
+
+
+
+	public void setMap(mapPicture map) {
+		this.map = map;
+	}
 
 	//Actions Listener for the buttons		
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent event){
 			if(event.getSource() == backMap){
 				//Remove the map screen
-				game.getPanels().remove("map");
-				//Check if you're in a current game or not
-				if(game.isRunningGame()){
-					game.showGame();
-					game.repaint();
-					game.setVisible(true);
-				}
-				else{	
-					game.setMainMenu();
-					game.repaint();
-					game.setVisible(true);
-				}
+				game.showGame();
+				game.repaint();
+				game.setVisible(true);
+				
 			}
 
 		}
@@ -95,20 +105,20 @@ public class mapMenu extends JPanel {
 	 */
 	
 	public class mapPicture extends JLabel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public mapPicture(){
-			super();
-			
+			super();		
 			BufferedImage img = null;
 			try {
 				img = ImageIO.read(new File("src/map.png"));	
 			} catch (IOException e) {
 			}	
-			
 			this.setIcon(new ImageIcon(img));
-	        this.setLayout(new FlowLayout());
-			
-			
-			
+	        this.setLayout(new FlowLayout());		
 		}
 		
 		
@@ -123,27 +133,20 @@ public class mapMenu extends JPanel {
 			for(int i =1; i< 5; i++){
 				for(int j=1; j<5; j++){
 					if(rooms[j-1][i-1] !=null){
-					if(!rooms[j-1][i-1].getVamps().isEmpty()){
-					
-					//I keep getting null errors calculating for
-					//Vampires in the room, why is that?
-					
-						g.setColor(Color.red);
-						g.fillOval(i*100-40, j*100-50, 20, 20);
-						
-						
-
-						
-					}
-					if(rooms[j-1][i-1].getWerewolf() != null){
-						g.setColor(Color.gray);
-						g.fillOval(i*100-80, j*100-50, 20, 20);
-					}
+						//If a room has a vampire, draw him
+						if(!rooms[j-1][i-1].getVamps().isEmpty()){		
+							g.setColor(Color.red);
+							g.fillOval(i*100-40, j*100-50, 20, 20);
+						}
+						if(rooms[j-1][i-1].getWerewolf() != null){
+							g.setColor(Color.gray);
+							g.fillOval(i*100-80, j*100-50, 20, 20);
+						}
 					}				
-				
+
 				}
 			}
-			}
+		}
 	}
 }
 

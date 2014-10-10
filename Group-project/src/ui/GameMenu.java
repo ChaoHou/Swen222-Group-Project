@@ -1,34 +1,28 @@
 package ui;
 
-import gameworld.GameCharacter;
+import gameworld.Collectable;
+import gameworld.HealthPotion;
+import gameworld.Orb;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 //import networking.Player;
 
@@ -47,6 +41,9 @@ public class GameMenu extends JPanel {
 	private ActionListener player; 
 	
 	
+	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
+
+	
 	public GameMenu(GameFrame game, ActionListener player){  	
 		this.currentGame = game;
 		this.player = player;
@@ -59,14 +56,33 @@ public class GameMenu extends JPanel {
 		
 		//Everything is placed inside here
 		this.setLayout(fullMenu);	
-		this.setPreferredSize(new Dimension(1000, 200));		
+		this.setPreferredSize(new Dimension(1000, 200));	
+		
+		StatsPanel x = new StatsPanel();
+		this.getPanels().put("stats", x);
 		this.add(new MapPanel());
 		this.add(new NavigationPanel());
 		this.add(new CombatPanel());
-		this.add(new StatsPanel());	
+		this.add(x);	
+		
+		
 		this.setAlignmentX(BOTTOM_ALIGNMENT);		
 	}
 	
+
+	public Map<String, JPanel> getPanels() {
+		return panels;
+	}
+
+
+
+
+
+	public void setPanels(Map<String, JPanel> panels) {
+		this.panels = panels;
+	}
+
+
 	/**
 	 * This class is for the Map for the player
 	 * @author adreledeguzman-
@@ -242,33 +258,94 @@ public class GameMenu extends JPanel {
 	 */
 	
 	public class StatsPanel extends JPanel{		
-		//Actions Listener for the buttons		
+		//The two Panels:
 		private JPanel Health;
 		private JPanel Inventory;
 		
-		public StatsPanel(){
-		    JLabel label1 = new JLabel("Health", JLabel.CENTER);
-			JLabel label2 = new JLabel("Inventory", JLabel.CENTER);
-			
-			Health = new JPanel();
-			Health.setPreferredSize(new Dimension(350,90));
-			Health.setBackground(Color.gray);
-			Health.add(label1);
-		   
-			Inventory = new JPanel();
-			Inventory.setPreferredSize(new Dimension(350,90));
-			Inventory.setBackground(Color.DARK_GRAY);
-			Inventory.add(label2);
+		//Health:
+		BufferedImage img = null;
 		
+		//Inventory:
+				
+		public StatsPanel(){
+			//Hearth image
+			try {
+				img = ImageIO.read(new File("src/heart.png"));
+			} catch (IOException e) {
+			}		
+			//Draw the player's health
+			Health = new JPanel();
+			updateHealth();
+			//Draw the player's inventory: 
+			Inventory = new JPanel();
+			updateInventory();
+			//Set up the whole Panel now:
 			this.setPreferredSize(new Dimension(370,200));
 			this.setBackground(Color.LIGHT_GRAY);
 			this.add(Health);
 			this.add(Inventory);
 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-
-			
 		}
+		
+		public void updateHealth(){	
+			//This sets up the Hearts
+			this.Health.removeAll();
+			JLabel label1 = new JLabel("<html>Health <br/> </html>", JLabel.CENTER);
+		    label1.setPreferredSize(new Dimension(350,20));
+			Health.setPreferredSize(new Dimension(350,90));
+			Health.setBackground(Color.gray);
+			Health.add(label1);
+			int health = currentGame.getBoard().getVamp(currentGame.getUid()).getHealth();
+			System.out.println("Current health: " + health);
+			for(int i = 0; i<health; i++){
+				JLabel heart = new JLabel();
+			    heart.setIcon(new ImageIcon(img));
+				Health.add(heart);
+			}
+		}
+		
+		public void updateInventory(){	
+			//This sets up the inventory buttons
+			Inventory.removeAll();
+			JLabel label2 = new JLabel("Inventory", JLabel.CENTER);
+		    label2.setPreferredSize(new Dimension(350,20));	
+		    Inventory.setPreferredSize(new Dimension(350,90));
+			Inventory.setBackground(Color.DARK_GRAY);
+			Inventory.add(label2);
+			for(Collectable c : currentGame.getBoard().getVamp(currentGame.getUid()).getInventory()){
+				//If Orb:
+				if(c instanceof Orb){
+					JButton item = new JButton("Orb");
+					item.setIcon(new itemIcon(c));
+					item.addActionListener(player);
+			        item.setBorder(null);	
+					Inventory.add(item);
+				}
+				//If HealthPotion:
+				else if (c instanceof HealthPotion){
+					JButton item = new JButton("HealthPotion");
+					item.setIcon(new itemIcon(c));
+					//temp
+					item.addActionListener(player);
+			        item.setBorder(null);	
+					Inventory.add(item);
+				}
+			}		
+		}
+		
+		
+		
+		
 	}
+	
+	
+	public void enableButtons(){
+		
+	}
+	public void disableButtons(){
+		
+	}
+
 
 	
 

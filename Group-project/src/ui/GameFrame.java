@@ -1,16 +1,13 @@
 package ui;
 import gameworld.Container;
-import gameworld.Vamp;
+import gameworld.HealthPotion;
+import gameworld.Orb;
+import control.Player;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +19,6 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -32,14 +28,11 @@ import javax.swing.JPanel;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import rendering.Renderer;
-import rendering.RendererTest;
 //import networking.Player;
 
 
 public class GameFrame extends JFrame {
-	
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
-	
 	//Stuff from gameworld package
 	private Board board;
 	private int uid;
@@ -48,6 +41,8 @@ public class GameFrame extends JFrame {
  	//Stuff from rendering package
 	private Renderer renderer;
 	private GLCanvas canvas;
+	private mapMenu map = new mapMenu(this);
+;
 	
 		/**
 		 * This is the constructor for the Actual JFrame
@@ -55,6 +50,8 @@ public class GameFrame extends JFrame {
 		 */
 			
 		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){
+			 ((Player) player).setFrame(this);
+					 
 			//Background	
 			this.setLayout(new GridLayout());
 			BufferedImage img3 = null;
@@ -110,6 +107,11 @@ public class GameFrame extends JFrame {
 		 */
 		
 		public void setGame(){
+			//TEMP
+			this.getBoard().getVamp(this.getUid()).setHealth(3);
+			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPotion());
+			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));
+
 			//Layout
 			this.setLayout(new BorderLayout());
 		    //Rendering
@@ -129,6 +131,9 @@ public class GameFrame extends JFrame {
 			this.getContentPane().add(game, BorderLayout.SOUTH);
 			this.runningGame = true;
 		    this.repaint();
+		    
+		   // ((Thread) player).start();
+
 		}
 		
 		/**
@@ -153,12 +158,10 @@ public class GameFrame extends JFrame {
 		 * @return
 		 */
 		public void showMap(){
-			    mapMenu map = new mapMenu(this);
+			    map = new mapMenu(this);
 				this.getPanels().put("map", map);
 				this.getContentPane().add(map);
- 				this.canvas.setVisible(false);
-				//this.getPanels().get("game").setVisible(false);
-				//this.getPanels().get("map").setVisible(true);
+ 				this.canvas.setVisible(false);			
 				this.repaint();
 		}
 		
@@ -168,13 +171,20 @@ public class GameFrame extends JFrame {
 		
 		public void showGame(){
 			if(this.getPanels().containsKey("map")){
+				this.getPanels().get("map").setVisible(false);
 				this.getPanels().remove("map");		
+				
+			}	
+			else if(this.getPanels().containsKey("con")){
+				this.getPanels().get("con").setVisible(false);
+				this.getPanels().remove("con");					
 			}			
 			if(isRunningGame()){
 				this.canvas.setVisible(true);
-				//this.getPanels().get("game").setEnabled(true);
 				this.getPanels().get("game").setVisible(true);
 			}	
+			this.repaint();
+			
 		}
 		
 		/**
@@ -183,15 +193,14 @@ public class GameFrame extends JFrame {
 		 * 1.) The two fields are two 
 		 */
 		
-		public void showTrade(Container c){
-			this.canvas.setVisible(false);
-			
-			
-			this.getPanels().get("").setVisible(true);
+		public void showTrade(Container c){			
+			    containerMenu CM = new containerMenu(this, c);
+				this.getPanels().put("con", CM);
+				this.getContentPane().add(CM);
+				this.canvas.setVisible(false);
+			    this.repaint();
 		}
 		
-		
-
 
 		public Map<String, JPanel> getPanels() {
 			return panels;
@@ -225,5 +234,9 @@ public class GameFrame extends JFrame {
 		public void setRunningGame(boolean runningGame) {
 			this.runningGame = runningGame;
 		}
-
+		
+        public mapMenu getMapPanel(){
+        	return this.map;
+        }
+	
 }
