@@ -1,5 +1,6 @@
 package control;
 
+import gameworld.Container;
 import gameworld.GameCharacter;
 
 import java.awt.event.ActionEvent;
@@ -14,6 +15,8 @@ import javax.swing.JOptionPane;
 import rendering.Renderer;
 import ui.Board;
 import ui.GameFrame;
+import ui.GameMenu;
+import ui.GameMenu.StatsPanel;
 
 
 public class Player implements KeyListener,ActionListener,MouseListener{
@@ -21,6 +24,7 @@ public class Player implements KeyListener,ActionListener,MouseListener{
 	private int uid;
 	private Board game;
 	private Renderer renderer;
+	private GameFrame frame;
 	
 	public Player(int uid, Board game,Renderer renderer){	
 		this.uid=uid;
@@ -82,24 +86,39 @@ public class Player implements KeyListener,ActionListener,MouseListener{
 		else if(action.equals("p1")){
 			
 		}
+		else if(action.equals("HealthPotion")){
+			System.out.println("You Healed up to Max health");
+			game.getVamp(uid).setHealth(5);		
+
+			//Updating the Health Information:
+			StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+			x.updateHealth();
+			
+			frame.getPanels().get("game").repaint();
+			frame.getPanels().get("game").updateUI();
+
+		}
+		//TESTING SOMETHING:
+		else if(action.equals("Orb")){
+			//make a container
+//			Container c = new Container(0);
+//			c.addItem(new Orb(0));
+//			c.addItem(new Orb(1));
+//			c.addItem(new Orb(2));
+//			c.addItem(new HealthPack());
+			//Tell the frame to open the trade menu now:
+//			this.frame.showTrade(c);
+			this.frame.setVisible(true);
+		    this.frame.repaint();
+			
+		}
 		
-//		else if(action.equals("back")){
-//			//Hide the instructions
-//			game.getPanels().get("instructions").setVisible(false);		
-//			//Check if you're in a current game or not
-//			if(game.isRunningGame()){
-//				game.showGame();
-//				game.repaint();
-//				game.setVisible(true);
-//			}
-//			else{	
-//				game.setMainMenu();
-//				game.repaint();
-//				game.setVisible(true);
-//			}	
-//		}
+
 	}
 	
+	public void setFrame(GameFrame g){
+		this.frame = g;
+	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {

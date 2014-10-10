@@ -1,7 +1,7 @@
 package gameworld;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -13,9 +13,9 @@ public class Container {
 	public static final int DRAWER=0;
 	public static final int TREASURE_CHEST=1;
 	
-	//type of this container, a drawer or a treasure chest.
+	//type of this containter, a drawer of a treasure chest.
 	private int containerType;
-	private Set<Collectable> items=new HashSet<Collectable>();
+	private List<Collectable> items=new ArrayList<Collectable>();
 	
 	private Texture[] textures;
 	private int textureIndex;
@@ -37,19 +37,23 @@ public class Container {
 	}
 
 	public void addItem(Collectable item){
-		items.add(item);
+		getItems().add(item);
 	}
 	
 	public void removeItem(Collectable item){
-		items.remove(item);
-	}
-	
-	public Set<Collectable> getItems(){
-		return this.items;
+		getItems().remove(item);
 	}
 	
 	public int getContainerType(){
 		return this.containerType;
+	}
+
+	public List<Collectable> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Collectable> items) {
+		this.items = items;
 	}
 	
 	public void init(GL gl,Texture[] textures) {

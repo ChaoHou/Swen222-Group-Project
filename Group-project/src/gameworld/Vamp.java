@@ -67,7 +67,7 @@ public class Vamp extends GameCharacter{
 	}
 	
 	public boolean isDead(){
-		return health<=0;
+		return getHealth()<=0;
 	}	
 	
 	public void setStatus(int status){
@@ -135,7 +135,7 @@ public class Vamp extends GameCharacter{
 		dout.writeInt(uid);
 		dout.writeInt(facing);
 		dout.writeInt(status);
-		dout.writeInt(health);
+		dout.writeInt(getHealth());
 		dout.writeBoolean(isFighting);
 		dout.writeBoolean(isTrading);
 	}
@@ -155,6 +155,10 @@ public class Vamp extends GameCharacter{
 		temp.setTrading(isTrading);
 		
 		return temp;
+	}
+
+	public int getHealth() {
+		return health;
 	}
 	
 }

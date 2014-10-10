@@ -9,7 +9,6 @@ import ui.Board;
 
 public class Werewolf extends GameCharacter{	
 	
-	
 	public Werewolf(Board game){
 		this.game = game;
 	}
@@ -30,8 +29,7 @@ public class Werewolf extends GameCharacter{
 	 */
 	public void enterRandomRoom(){
 		while(true){
-			//random number 0-3 generated, each represents a direction (matches constant in GameCharacter).
-			int random=(int)(Math.random()*4);
+			int random=(int)(Math.random()*5);
 			rotateTo(random);
 			if(enterRoom()){
 				break;
@@ -53,10 +51,10 @@ public class Werewolf extends GameCharacter{
 			System.out.println("no room ahead");
 			return false;
 		}else{
-			System.out.println("entering: "+roomToEnter+"  from: "+roomFrom);
+			System.out.println("entering "+roomToEnter+" from "+roomFrom);
 			Werewolf temp = roomFrom.werewolfLeaveRoom(this);
 			roomToEnter.werewolfEnterRoom(temp);
-			System.out.println("entered: "+game.getRoomContainingWerewolf());
+			System.out.println("entered "+roomToEnter);
 			return true;
 		}
 	}
@@ -70,7 +68,6 @@ public class Werewolf extends GameCharacter{
 		Set<Vamp> vamps=room.getVamps();
 		for(Vamp vamp:vamps){
 			vamp.setStatus(Vamp.DEAD);
-			System.out.println("vamp"+vamp.getUid()+" is dead");
 		}
 		
 	}
@@ -78,12 +75,12 @@ public class Werewolf extends GameCharacter{
 	
 	@Override
 	public void rotateTo(int dir) {
-		if(dir==GameCharacter.NORTH || dir==GameCharacter.EAST ||
-				dir==GameCharacter.SOUTH || dir==GameCharacter.WEST){
+		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
+				dir==Vamp.SOUTH || dir==Vamp.WEST){
 			facing=dir;
-			System.out.println("Werewolf now facing: "+ intDirToString());
+			System.out.println("Werewolf now facing "+ intDirToString());
 		}else{
-			throw new IllegalArgumentException("invalid direction: "+dir);
+			throw new IllegalArgumentException("invalid direction to face.");
 		}
 	}
 
