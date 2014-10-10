@@ -2,7 +2,7 @@ package control;
 
 import gameworld.Container;
 import gameworld.GameCharacter;
-import gameworld.HealthPotion;
+import gameworld.HealthPack;
 import gameworld.Orb;
 import ui.GameMenu;
 
@@ -106,7 +106,7 @@ public class Player implements KeyListener,ActionListener {
 			c.addItem(new Orb(0));
 			c.addItem(new Orb(1));
 			c.addItem(new Orb(2));
-			c.addItem(new HealthPotion());
+			c.addItem(new HealthPack());
 			//Tell the frame to open the trade menu now:
 			this.frame.showTrade(c);
 			this.frame.setVisible(true);

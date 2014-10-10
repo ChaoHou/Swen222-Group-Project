@@ -1,6 +1,6 @@
 package ui;
 import gameworld.Container;
-import gameworld.HealthPotion;
+import gameworld.HealthPack;
 import gameworld.Orb;
 import control.Player;
 
@@ -109,7 +109,7 @@ public class GameFrame extends JFrame {
 		public void setGame(){
 			//TEMP
 			this.getBoard().getVamp(this.getUid()).setHealth(3);
-			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPotion());
+			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPack());
 			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));
 
 			//Layout

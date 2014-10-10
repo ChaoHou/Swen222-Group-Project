@@ -2,7 +2,7 @@ package ui;
 
 import gameworld.Collectable;
 import gameworld.Container;
-import gameworld.HealthPotion;
+import gameworld.HealthPack;
 import gameworld.Orb;
 
 import java.awt.Color;
@@ -82,13 +82,13 @@ public class containerMenu extends JPanel {
 			if(c instanceof Orb){
 				obj = new JCheckBox(Integer.toString(((Orb) c).getColor()));
 				obj.setIcon(new itemIcon(c));		
-				obj.setSelectedIcon(new itemIcon(new HealthPotion()));						
+				obj.setSelectedIcon(new itemIcon(new HealthPack()));						
 				obj.setBorder(null);	
 				checkContainer.add(obj);
 				containerPanel.add(obj);				
 			}
 			//If HealthPotion:
-			else if (c instanceof HealthPotion){
+			else if (c instanceof HealthPack){
 				obj = new JCheckBox();
 				obj.setIcon(new itemIcon(c));
 				obj.setSelectedIcon(new itemIcon(new Orb(2)));		
@@ -115,13 +115,13 @@ public class containerMenu extends JPanel {
 			if(c instanceof Orb){
 				obj = new JCheckBox(Integer.toString(((Orb) c).getColor()));
 				obj.setIcon(new itemIcon(c));		
-				obj.setSelectedIcon(new itemIcon(new HealthPotion()));						
+				obj.setSelectedIcon(new itemIcon(new HealthPack()));						
 				obj.setBorder(null);	
 				checkInventory.add(obj);
 				inventoryPanel.add(obj);
 			}
 			//If HealthPotion:
-			else if (c instanceof HealthPotion){
+			else if (c instanceof HealthPack){
 				obj = new JCheckBox();
 				obj.setIcon(new itemIcon(c));
 				obj.setSelectedIcon(new itemIcon(new Orb(2)));		
@@ -159,7 +159,7 @@ public class containerMenu extends JPanel {
 								break;
 							}
 							else{				
-								game.getBoard().getVamp(game.getUid()).getInventory().add(new HealthPotion());
+								game.getBoard().getVamp(game.getUid()).getInventory().add(new HealthPack());
 								container.getItems().remove(l);
 								break;
 							}
@@ -190,7 +190,7 @@ public class containerMenu extends JPanel {
 								break;
 							}
 							else{				
-								container.getItems().add(new HealthPotion());
+								container.getItems().add(new HealthPack());
 								game.getBoard().getVamp(game.getUid()).getInventory().remove(l);
 								break;
 							}

@@ -94,11 +94,10 @@ public class Main {
 		int uid = game.registerVamp();	
 		//game.startGame();
 		Renderer renderer = new Renderer(RendererTest.setRoom());
-		Player p = new Player(uid, game, renderer);	
-		GameFrame gg = new GameFrame("single user mode", game, uid, p,renderer);	
-	    p.setFrame(gg);
-		gg.setVisible(true); 
-
+		
+		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
+		gg.setVisible(true);
+		game.startGame();
         while(true){
         	//game running	        	
         }

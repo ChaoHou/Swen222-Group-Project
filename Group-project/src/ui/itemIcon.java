@@ -1,7 +1,7 @@
 package ui;
 
 import gameworld.Collectable;
-import gameworld.HealthPotion;
+import gameworld.HealthPack;
 import gameworld.Orb;
 
 import java.awt.image.BufferedImage;
@@ -38,7 +38,7 @@ public class itemIcon extends ImageIcon {
 					img = ImageIO.read(new File("src/redOrb.png"));
 				}
 			}
-			else if (c instanceof HealthPotion){
+			else if (c instanceof HealthPack){
 				img = ImageIO.read(new File("src/health.png"));
 			}
 		}

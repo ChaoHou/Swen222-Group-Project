@@ -1,7 +1,7 @@
 package ui;
 
 import gameworld.Collectable;
-import gameworld.HealthPotion;
+import gameworld.HealthPack;
 import gameworld.Orb;
 
 import java.awt.Color;
@@ -321,9 +321,9 @@ public class GameMenu extends JPanel {
 			        item.setBorder(null);	
 					Inventory.add(item);
 				}
-				//If HealthPotion:
-				else if (c instanceof HealthPotion){
-					JButton item = new JButton("HealthPotion");
+				//If healthpack:
+				else if (c instanceof HealthPack){
+					JButton item = new JButton("healthpack");
 					item.setIcon(new itemIcon(c));
 					//temp
 					item.addActionListener(player);
