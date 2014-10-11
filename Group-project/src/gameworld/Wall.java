@@ -2,6 +2,10 @@ package gameworld;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -16,102 +20,95 @@ public class Wall {
 	public static final int SOUTH_WALL = 2;
 	public static final int EAST_WALL = 3;
 
-	private float x = 10.0f;
-	private float y = 10.0f;
-	private float z = 10.0f;
-	//private float rquad = 0.0f;
-
+	private static final int BYTES_PER_FLOAT = 4;
+	
+	private static final float WIDTH = 10.0f;
+	private static final float[][] WALLS = {
+		//[0]north wall
+		{
+			-WIDTH,WIDTH,WIDTH,  //top left
+			-WIDTH,-WIDTH,WIDTH, //bottom left
+			WIDTH,-WIDTH,WIDTH,  //bottom right
+			WIDTH,WIDTH,WIDTH ,  //top right
+		},
+		//[1]west wall
+		{
+			-WIDTH,WIDTH,-WIDTH,  //top left
+			-WIDTH,-WIDTH,-WIDTH, //bottom left
+			-WIDTH,-WIDTH,WIDTH,  //bottom right
+			-WIDTH,WIDTH,WIDTH ,  //top right
+		},
+		//[2]south wall
+		{
+			WIDTH,WIDTH,-WIDTH,  //top left
+			WIDTH,-WIDTH,-WIDTH, //bottom left
+			-WIDTH,-WIDTH,-WIDTH,  //bottom right
+			-WIDTH,WIDTH,-WIDTH ,  //top right
+		},
+		//[3]east wall
+		{
+			WIDTH,WIDTH,WIDTH,  //top left
+			WIDTH,-WIDTH,WIDTH, //bottom left
+			WIDTH,-WIDTH,-WIDTH,  //bottom right
+			WIDTH,WIDTH,-WIDTH ,  //top right
+		},
+	};
+	
+	private FloatBuffer vertices;
+	private FloatBuffer textureV;
+	
 	private int dir;
-	private int textureIndex;
-	private float top;
-	private float bottom;
-	private float left;
-	private float right;
-
+	
 	private Texture[] textures;
+	private int textureIndex;
 
 	public Wall(int dir, int index) {
 		this.dir = dir;
 		this.textureIndex = index;
+		
+		float[] wall = WALLS[dir];
+		vertices = ByteBuffer.allocateDirect(wall.length*BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+		vertices.put(wall).position(0);
 	}
 
 	public void init(GL gl,Texture[] textures) {
 		this.textures = textures;
-		top = textures[textureIndex].getImageTexCoords().top();
-		bottom = textures[textureIndex].getImageTexCoords().bottom();
-		left = textures[textureIndex].getImageTexCoords().left();
-		right = textures[textureIndex].getImageTexCoords().right();
-		//System.out.println("top:"+top);
+		float top = textures[textureIndex].getImageTexCoords().top();
+		float bottom = textures[textureIndex].getImageTexCoords().bottom();
+		float left = textures[textureIndex].getImageTexCoords().left();
+		float right = textures[textureIndex].getImageTexCoords().right();
+
+		float[] tVertices = {
+				left,top,
+				left,bottom,
+				right,bottom,
+				right,top,
+		};
+		
+		textureV = ByteBuffer.allocateDirect(tVertices.length*BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+		textureV.put(tVertices).position(0);
 	}
 
 	public void draw(GL2 gl,int facingDir) {
 		
-		float rquad = getDir(facingDir);
-		//System.out.println(rquad);
 		gl.glLoadIdentity();
-		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+		gl.glRotatef(getDir(facingDir), 0.0f, 1.0f, 0.0f);
 		
 		gl.glEnable(GL.GL_TEXTURE_2D);
 		textures[textureIndex].enable(gl);
 		textures[textureIndex].bind(gl);
-		gl.glBegin(GL2.GL_QUADS);
+
+		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		
-		switch (dir) {
-		case NORTH_WALL:
-			//gl.glColor3f(1.0f, 0.0f, 0.0f); // Set The Color To Red
-			gl.glTexCoord2f(left, bottom);
-			gl.glVertex3f(-x, -y, z); // Bottom Left Of The Quad (Front)
-			gl.glTexCoord2f(right, bottom);
-			gl.glVertex3f(x, -y, z); // Bottom Right Of The Quad (Front)
-			gl.glTexCoord2f(right, top);
-			gl.glVertex3f(x, y, z); // Top Right Of The Quad (Front)
-			gl.glTexCoord2f(left, top);
-			gl.glVertex3f(-x, y, z); // Top Left Of The Quad (Front)
-			break;
-
-		case SOUTH_WALL:
-			//gl.glNormal3f(-1.0f, 0.0f, 0.0f);
-			//gl.glColor3f(1.0f, 1.0f, 0.0f); // Set The Color To Yellow
-			gl.glTexCoord2f(left, bottom);
-			gl.glVertex3f(x, -y, -z); // Bottom Left Of The Quad (Back)
-			gl.glTexCoord2f(right, bottom);
-			gl.glVertex3f(-x, -y, -z); // Bottom Right Of The Quad (Back)
-			gl.glTexCoord2f(right, top);
-			gl.glVertex3f(-x, y, -z); // Top Right Of The Quad (Back)
-			gl.glTexCoord2f(left, top);
-			gl.glVertex3f(x, y, -z); // Top Left Of The Quad (Back)
-			break;
-
-		case WEST_WALL:
-			//gl.glNormal3f(-1.0f, 0.0f, 0.0f);
-			//gl.glColor3f(0.0f, 0.0f, 1.0f); // Set The Color To Blue
-			gl.glTexCoord2f(left, bottom);
-			gl.glVertex3f(-x, -y, -z); // Bottom Left Of The Quad (Left)
-			gl.glTexCoord2f(right, bottom);
-			gl.glVertex3f(-x, -y, z); // Bottom Right Of The Quad (Left)
-			gl.glTexCoord2f(right, top);
-			gl.glVertex3f(-x, y, z); // Top Right Of The Quad (Left)
-			gl.glTexCoord2f(left, top);
-			gl.glVertex3f(-x, y, -z); // Top Left Of The Quad (Left)
-			break;
-
-		case EAST_WALL:
-			//gl.glNormal3f(-1.0f, 0.0f, 0.0f);
-			//gl.glColor3f(1.0f, 0.0f, 1.0f); // Set The Color To Violet
-			gl.glTexCoord2f(left, bottom);
-			gl.glVertex3f(x, -y, z); // Bottom Left Of The Quad (Right)
-			gl.glTexCoord2f(right, bottom);
-			gl.glVertex3f(x, -y, -z); // Bottom Right Of The Quad (Right)
-			gl.glTexCoord2f(right, top);
-			gl.glVertex3f(x, y, -z); // Top Right Of The Quad (Right)
-			gl.glTexCoord2f(left, top);
-			gl.glVertex3f(x, y, z); // Top Left Of The Quad (Right)
-			break;
-		}
+		gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertices);
+		gl.glTexCoordPointer(2, GL2.GL_FLOAT, 0, textureV);
 		
-		//textures[textureIndex].disable(gl);
-		//texture.destroy(gl);
-		gl.glEnd();
+		gl.glDrawArrays(GL.GL_TRIANGLE_FAN, 0, 4);
+		
+		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+
 		gl.glDisable(GL.GL_TEXTURE_2D);
 	}
 
