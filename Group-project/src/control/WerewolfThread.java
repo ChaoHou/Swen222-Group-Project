@@ -28,6 +28,7 @@ public class WerewolfThread extends Thread{
 				System.out.println("wolf slept half a second");
 				this.werewolf.prowl();
 				System.out.println("wolf has prowled ");
+				break;
 			}
 			
 		}catch(Exception e){

@@ -38,7 +38,7 @@ public class Container {
 		//this.y = y;
 		//this.z = z;
 		
-		box = new Box(new float[]{x,y,z},new float[]{1f,2f,3f},index);
+		box = new Box(new float[]{x,y,z},new float[]{1f,1f,1f},index);
 	}
 
 	public void addItem(Collectable item){

@@ -2,6 +2,7 @@ package control;
 
 import gameworld.Container;
 import gameworld.GameCharacter;
+import gameworld.Room;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +10,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 
+import javax.media.opengl.GL2;
 import javax.swing.JOptionPane;
 
 import rendering.Renderer;
@@ -163,6 +166,8 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	public void mousePressed(MouseEvent e) {
 		System.out.println("Mouse pressed");
 		
+		renderer.setMouseEvent(e);
+		
 	}
 
 
@@ -176,6 +181,18 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		try {
 			while(true){
 				this.frame.getMapPanel().getMap().repaint();
+				
+				if(renderer.selected){
+					Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+					for(Container c:room.getContainers()){
+						if(c!=null){
+							frame.showTrade(c);
+							frame.setVisible(true);
+							frame.repaint();
+						}
+					}
+					renderer.selected = false;
+				}
 				
 				Thread.sleep(100);
 			}

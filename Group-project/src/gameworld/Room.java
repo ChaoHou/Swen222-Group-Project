@@ -65,6 +65,10 @@ public class Room {
 		this.containers.add(container);
 	}
 	
+	public Set<Container> getContainers(){
+		return containers;
+	}
+	
 	public void addFurniture(Furniture furniture){
 		this.furniture.add(furniture);
 	}
