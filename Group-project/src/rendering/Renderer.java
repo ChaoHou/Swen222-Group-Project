@@ -47,7 +47,7 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glEnable(GL.GL_DEPTH_TEST);              // Enables Depth Testing
         gl.glDepthFunc(GL.GL_LEQUAL);               // The Type Of Depth Testing To Do
         // Really Nice Perspective Calculations
-//        gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+        gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glFrontFace(GL.GL_CW);
         gl.glCullFace(GL.GL_BACK);

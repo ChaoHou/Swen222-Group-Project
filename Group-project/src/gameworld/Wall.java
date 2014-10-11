@@ -94,7 +94,6 @@ public class Wall {
 		gl.glLoadIdentity();
 		gl.glRotatef(getDir(facingDir), 0.0f, 1.0f, 0.0f);
 		
-		gl.glEnable(GL.GL_TEXTURE_2D);
 		textures[textureIndex].enable(gl);
 		textures[textureIndex].bind(gl);
 
@@ -109,7 +108,6 @@ public class Wall {
 		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
 
-		gl.glDisable(GL.GL_TEXTURE_2D);
 	}
 
 	public static float getDir(int facingDir) {
