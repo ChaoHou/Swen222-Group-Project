@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 
 import rendering.Box;
 
@@ -19,24 +20,10 @@ public class Container {
 	private int containerType;
 	private List<Collectable> items=new ArrayList<Collectable>();
 	
-	//private Texture[] textures;
-	//private int textureIndex;
-//	private int x;
-//	private int y;
-//	private int z;
-	//private float width = 1f;
-//	private float top;
-//	private float bottom;
-//	private float left;
-//	private float right;
-	
 	private Box box;
 	
 	public Container(int containerType,int x,int y,int z,int index){
 		this.containerType=containerType;
-		//this.x = x;
-		//this.y = y;
-		//this.z = z;
 		
 		box = new Box(new float[]{x,y,z},new float[]{1f,1f,1f},index);
 	}
@@ -61,8 +48,11 @@ public class Container {
 		this.items = items;
 	}
 	
+	public boolean containsPoint(GL2 gl,GLU glu, int x,int y){
+		return box.containsPoint(gl, glu, x, y);
+	}
+	
 	public void init(GL gl,Texture[] textures) {
-//		this.textures = textures;
 		box.init(gl, textures);
 	}
 	

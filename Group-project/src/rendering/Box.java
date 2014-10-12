@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 
 import com.jogamp.opengl.util.texture.Texture;
 
@@ -74,12 +75,12 @@ public class Box {
 	
 	public void init(GL gl,Texture[] textures) {
 		this.textures = textures;
-		float top = textures[textureIndex].getImageTexCoords().top();
-		float bottom = textures[textureIndex].getImageTexCoords().bottom();
-		float left = textures[textureIndex].getImageTexCoords().left();
-		float right = textures[textureIndex].getImageTexCoords().right();
+//		float top = textures[textureIndex].getImageTexCoords().top();
+//		float bottom = textures[textureIndex].getImageTexCoords().bottom();
+//		float left = textures[textureIndex].getImageTexCoords().left();
+//		float right = textures[textureIndex].getImageTexCoords().right();
 		//System.out.println("top:"+top);
-		System.out.println("Top:"+top+" bottom:"+bottom+" left:"+left+" right:"+right);
+//		System.out.println("Top:"+top+" bottom:"+bottom+" left:"+left+" right:"+right);
 //		float[] tVertices = new float[32];
 //		for(int i=0;i<tVertices.length;i+=8){
 //			tVertices[i] = left;
@@ -122,4 +123,55 @@ public class Box {
 		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
 	}
+	
+	public boolean containsPoint(GL2 gl,GLU glu, int mouseX,int mouseY){
+		int[] viewport = new int[4];
+    	double[] modelView = new double[16];
+    	double[] projection = new double[16];
+    	
+    	gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
+    	gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelView, 0);
+    	gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
+    	
+    	double winX = mouseX;
+    	double winY = viewport[3] - mouseY;
+		
+    	double[] start = new double[4];
+    	double[] end = new double[4];
+    	
+    	glu.gluUnProject(winX, winY, 0, 
+    			modelView, 0,
+    			projection, 0, 
+    			viewport, 0, 
+    			start, 0);
+    	
+    	glu.gluUnProject(winX, winY, 1, 
+    			modelView, 0,
+    			projection, 0, 
+    			viewport, 0, 
+    			end, 0);
+		
+    	double[] x1 = {start[0],start[1],start[2]};
+    	double[] x2 = {end[0],end[1],end[2]};
+    	double[] x0 = {x,y,z};
+    	
+    	double[] x2Tox1 = {x2[0]-x1[0],x2[1]-x1[1],x2[2]-x1[2]};
+    	double[] x1Tox0 = {x1[0]-x0[0],x1[1]-x0[1],x1[2]-x0[2]};
+    	
+    	double[] m = cross(x2Tox1,x1Tox0);
+    	
+    	double length = length(m)/length(x2Tox1);
+    	
+    	//compare with the radius
+    	if(length < 1) return true;
+		return false;
+	}
+	
+	public double[] cross(double[] u,double[] v){
+    	return new double[]{(u[1]*v[2]) - (u[2]*v[1]),(u[2]*v[0]) - (u[0]*v[2]),(u[0]*v[1]) - (u[1]*v[0])};
+    }
+    
+    public double length(double[] u){
+    	return  Math.abs(Math.sqrt((u[0] *u[0]) + (u[1] *u[1]) + (u[2] *u[2])));
+    }
 }

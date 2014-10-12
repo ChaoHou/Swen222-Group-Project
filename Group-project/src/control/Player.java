@@ -180,16 +180,17 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	public void run(){
 		try {
 			while(true){
+				//update map
 				this.frame.getMapPanel().getMap().repaint();
 				
+				//pick up containers
 				if(renderer.selected){
 					Room room = game.getRoomContainingPlayer(game.getVamp(uid));
-					for(Container c:room.getContainers()){
-						if(c!=null){
-							frame.showTrade(c);
-							frame.setVisible(true);
-							frame.repaint();
-						}
+					Container container = room.getContainer();
+					if(container != null){
+						frame.showTrade(container);
+						frame.setVisible(true);
+						frame.repaint();
 					}
 					renderer.selected = false;
 				}

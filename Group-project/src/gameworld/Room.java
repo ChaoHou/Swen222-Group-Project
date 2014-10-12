@@ -24,7 +24,8 @@ public class Room {
 
 	private Wall[] walls;
 	private Set<Furniture> furniture=new HashSet<Furniture>();
-	private Set<Container> containers=new HashSet<Container>();
+	//private Set<Container> containers=new HashSet<Container>();
+	private Container container;
 	private Set<Vamp> players = new HashSet<Vamp>();
 	private Werewolf werewolf = null;
 	private String room;
@@ -61,12 +62,20 @@ public class Room {
 		return werewolf;
 	}
 	
-	public void addContainer(Container container){
-		this.containers.add(container);
+//	public void addContainer(Container container){
+//		this.containers.add(container);
+//	}
+//	
+//	public Set<Container> getContainers(){
+//		return containers;
+//	}
+	
+	public void setContainer(Container container){
+		this.container = container;
 	}
 	
-	public Set<Container> getContainers(){
-		return containers;
+	public Container getContainer(){
+		return container;
 	}
 	
 	public void addFurniture(Furniture furniture){
@@ -88,8 +97,11 @@ public class Room {
 		for(Wall wall:walls){
 			wall.draw(gl,dir);
 		}
-		for(Container c:containers){
-			c.draw(gl,dir);
+//		for(Container c:containers){
+//			c.draw(gl,dir);
+//		}
+		if(container != null){
+			container.draw(gl, dir);
 		}
 	}
 	
@@ -97,8 +109,11 @@ public class Room {
 		for(Wall w:walls){
 			w.init(gl,textures);
 		}
-		for(Container c:containers){
-			c.init(gl, textures);
+//		for(Container c:containers){
+//			c.init(gl, textures);
+//		}
+		if(container != null){
+			container.init(gl, textures);
 		}
 	}
 	

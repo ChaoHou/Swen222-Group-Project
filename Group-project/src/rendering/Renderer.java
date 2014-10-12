@@ -1,5 +1,6 @@
 package rendering;
 
+import gameworld.Container;
 import gameworld.Vamp;
 
 import javax.media.opengl.GL;
@@ -110,54 +111,13 @@ public class Renderer implements GLEventListener, KeyListener {
         
         
         if(mouse != null){
-        	int x = mouse.getX();
-        	int y = mouse.getY();
-        	System.out.println("Mouse x:"+x+" y:"+y);
+        	//perform selection
+        	Container container = game.getRoomContainingPlayer(game.getVamp(uid)).getContainer();
         	
-        	int[] viewport = new int[4];
-        	double[] modelView = new double[16];
-        	double[] projection = new double[16];
-        	
-        	gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
-        	gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelView, 0);
-        	gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
-        	
-        	double winX = x;
-        	double winY = viewport[3] - y;
-        	//double winZ = 0;
-        	
-        	double[] start = new double[4];
-        	double[] end = new double[4];
-        	
-        	glu.gluUnProject(winX, winY, 0, 
-        			modelView, 0,
-        			projection, 0, 
-        			viewport, 0, 
-        			start, 0);
-        	
-        	glu.gluUnProject(winX, winY, 1, 
-        			modelView, 0,
-        			projection, 0, 
-        			viewport, 0, 
-        			end, 0);
-        	
-        	System.out.println("coord at z=0 are: ("+start[0]+","+start[1]+","+start[2]+")");
-        	
-        	double[] x1 = {start[0],start[1],start[2]};
-        	double[] x2 = {end[0],end[1],end[2]};
-        	double[] x0 = {4,-5,8};
-        	
-        	double[] x2Tox1 = {x2[0]-x1[0],x2[1]-x1[1],x2[2]-x1[2]};
-        	double[] x1Tox0 = {x1[0]-x0[0],x1[1]-x0[1],x1[2]-x0[2]};
-        	
-        	double[] m = cross(x2Tox1,x1Tox0);
-        	
-        	double length = length(m)/length(x2Tox1);
-        	
-        	System.out.println("length:"+length);
-        	
-        	if(length<1){
-        		selected = true;
+        	if(container != null){
+        		if(container.containsPoint(gl, glu, mouse.getX(), mouse.getY())){
+        			selected = true;
+        		}
         	}
         	
         	mouse = null;
@@ -219,18 +179,6 @@ public class Renderer implements GLEventListener, KeyListener {
     	return gl;
     }
     
-    public double[] cross(double[] u,double[] v){
-    	int X = 0;
-        int Y = 1;
-        int Z = 2;
-    	return new double[]{(u[Y]*v[Z]) - (u[Z]*v[Y]),(u[Z]*v[X]) - (u[X]*v[Z]),(u[X]*v[Y]) - (u[Y]*v[X])};
-    }
-    
-    public double length(double[] u){
-    	int X = 0;
-        int Y = 1;
-        int Z = 2;
-    	return  Math.abs(Math.sqrt((u[X] *u[X]) + (u[Y] *u[Y]) + (u[Z] *u[Z])));
-    }
+   
     
 }

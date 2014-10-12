@@ -266,7 +266,8 @@ public class Main {
 			
 			Room room = new Room(name,walls);
 			
-			while((line = br.readLine()) != null){
+			line = br.readLine();
+			if(line != null){
 				tokens = line.split(" ");
 				int type = Integer.parseInt(tokens[0]);
 				int x = Integer.parseInt(tokens[1]);
@@ -281,7 +282,7 @@ public class Main {
 					container.addItem(orb);
 				}
 				
-				room.addContainer(container);
+				room.setContainer(container);
 			}
 			
 			
