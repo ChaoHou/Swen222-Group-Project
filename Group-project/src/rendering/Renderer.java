@@ -12,6 +12,7 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import rendering.primitive.*;
+import rendering.primitive.Box;
 import ui.Board;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -23,7 +24,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.nio.FloatBuffer;
 
 /**
  * Created by Kyohei Kudo on 25/09/2014.
@@ -40,12 +40,6 @@ public class Renderer implements GLEventListener, KeyListener {
     private GL2 gl;
     private MouseEvent mouse;
     public boolean selected = false;
-    
-    public Renderer(Board game,int uid) {
-        this.game = game;
-        this.uid = uid;
-    }
-    private Room room;
 //    private final Board board;
 //    private final Vamp player;
 
@@ -65,8 +59,9 @@ public class Renderer implements GLEventListener, KeyListener {
     private int height;
 
 
-    public Renderer(Room room) {
-       this.room = room;
+    public Renderer(Board game,int uid) {
+        this.game = game;
+        this.uid = uid;
     }
 
     @Override
@@ -223,7 +218,6 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
 //        board.getRoomContainsPlayer(player).render(gl,texture);
-        room.render(gl);
         Cylinder.render(gl, new Vector3D(0.0, 20.0, 0.0), 2.5, 20.0, 0);
         Sphere.render(gl, new Vector3D(0.0, 20.0, 0.0), 5);
         Cone.render(gl, new Vector3D(0.0, 30.0, 0.0), 5, 30.0, 5);
