@@ -10,6 +10,7 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -105,16 +106,9 @@ public class GameMenu extends JPanel {
 		    bigMap = new JButton();
 			bigMap.setIcon(new ImageIcon(img));			
 			//Action Listeners for buttons
-			ButtonListener b = new ButtonListener();
-			bigMap.addActionListener(b);
+			bigMap.addActionListener(currentGame.getPlayer());
 			//Keep track of every button
-			
-			
-			
 			currentGame.getScreenButtons().put(bigMap, "bigMap");
-
-			
-			
 			
 			this.add(mapName);
 			this.add(bigMap);
@@ -124,17 +118,6 @@ public class GameMenu extends JPanel {
 			getButtons().put(bigMap, "bigMap");
 		}
 		
-		//Actions Listener for the buttons		
-				private class ButtonListener implements ActionListener{
-					public void actionPerformed(ActionEvent event){
-						if(event.getSource() == bigMap){
-						    MapScreen map = new MapScreen("map", currentGame);
- 						    currentGame.showPopUp(map);
-							currentGame.setVisible(true);
-						    updateUI();
-						}						
-					}
-				}	
 	
 	}
 
@@ -175,7 +158,12 @@ public class GameMenu extends JPanel {
 			right.addActionListener(player);
 			changeRoom.addActionListener(player);	
 			
-			
+			left.addKeyListener((KeyListener) currentGame.getPlayer());
+			right.addKeyListener((KeyListener) currentGame.getPlayer());
+
+			//left.setPreferredSize(new Dimension(100,20));
+			//right.setPreferredSize(new Dimension(100,20));
+
 			//left.setIcon(new ImageIcon(img));
 	        //left.setBorder(null);	
 	        //right.setIcon(new ImageIcon(img));

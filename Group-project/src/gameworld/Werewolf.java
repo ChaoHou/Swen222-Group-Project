@@ -29,7 +29,8 @@ public class Werewolf extends GameCharacter{
 	 */
 	public void enterRandomRoom(){
 		while(true){
-			int random=(int)(Math.random()*5);
+			int random=(int)(Math.random()*4);
+//			System.out.println("random:"+random);
 			rotateTo(random);
 			if(enterRoom()){
 				break;

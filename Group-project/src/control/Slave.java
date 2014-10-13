@@ -17,7 +17,6 @@ import java.net.Socket;
 import javax.swing.JOptionPane;
 
 import rendering.Renderer;
-import rendering.RendererTest;
 import ui.Board;
 import ui.GameFrame;
 import ui.TestUI;

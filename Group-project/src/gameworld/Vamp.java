@@ -29,6 +29,18 @@ public class Vamp extends GameCharacter{
 	private boolean isTrading;
 	private List<Collectable> inventory=new ArrayList<Collectable>();
 	
+	//A boolean to check if the player's hidden or not
+	//- John
+	private boolean isHiding =false;
+	public boolean isHiding() {
+		return isHiding;
+	}
+
+	public void setHiding(boolean isHiding) {
+		this.isHiding = isHiding;
+	}
+
+	
 	
 	public Vamp(int uid, Board game){
 		this.uid=uid;
@@ -69,7 +81,7 @@ public class Vamp extends GameCharacter{
 	}
 	
 	public boolean isDead(){
-		return getHealth()<=0;
+		return getHealth()<=0 ;//|| status==Vamp.DEAD;
 	}	
 	
 	public void setStatus(int status){

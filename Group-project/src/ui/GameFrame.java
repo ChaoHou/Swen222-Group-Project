@@ -1,5 +1,6 @@
 package ui;
 import gameworld.Container;
+import gameworld.Furniture;
 import gameworld.HealthPack;
 import gameworld.Orb;
 import control.Player;
@@ -8,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -123,7 +125,7 @@ public class GameFrame extends JFrame {
 			//Initialize all the panels about to be used 
 		    MainMenu MainMenu = new MainMenu(this);	
 			getPanels().put("menu", MainMenu);  
-			GameOverScreen over = new GameOverScreen("over", this);
+			GameOverScreen over = new GameOverScreen("over", this, false);
 			getPanels().put("over", over);
 			
 			
@@ -143,9 +145,18 @@ public class GameFrame extends JFrame {
 		
 		public void showMainMenu(){	
 			this.getPanels().get("menu").setVisible(true);
+			
 		}
 		
+		/**
+		 * This method opens up the instructions (from the main menu, not the game!)
+		 */
 		
+		public void showInstructionsMenu(){	
+			this.getPanels().get("menu").setVisible(false);
+			this.getPanels().get("instructions").setVisible(true);
+			this.repaint();
+		}
 		
 		/**
 		 * This method sets up a new Game:
@@ -169,10 +180,13 @@ public class GameFrame extends JFrame {
 		    JMenu cheats = new JMenu("Cheats");	
 		    JMenuItem instantDeath = new JMenuItem("Commit Suicide");
 		    JMenuItem allItems = new JMenuItem("Give me all Items");
+		    JMenuItem hideNow = new JMenuItem("Hide into Nothingness");
 		    instantDeath.addActionListener(getPlayer());
 		    allItems.addActionListener(getPlayer());
+		    hideNow.addActionListener(getPlayer());
 		    cheats.add(instantDeath);
 		    cheats.add(allItems);
+		    cheats.add(hideNow);
 		    menubar.add(cheats);
 		    
 		    this.setJMenuBar(menubar);
@@ -184,6 +198,7 @@ public class GameFrame extends JFrame {
 	        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 	        final GLCanvas glcanvas = new GLCanvas( glcapabilities );
 	        glcanvas.addGLEventListener(renderer);    
+	        glcanvas.addMouseListener((MouseListener)player);
 	        FPSAnimator animator= new FPSAnimator(glcanvas,60);
 	        animator.start();
 			//Game menu (The Game's interface)
@@ -196,6 +211,7 @@ public class GameFrame extends JFrame {
 			this.getContentPane().add(game, BorderLayout.SOUTH);
 			this.runningGame = true;
 		    this.repaint();
+
 		    map = new MapScreen("map",this);
 		    //Specific ActionListeners and thread stuff will run now
  			((Player) getPlayer()).setFrame(this);
@@ -261,15 +277,41 @@ public class GameFrame extends JFrame {
 		public void showTrade(Container c){		
 			    ContainerScreen CM = new ContainerScreen("container",this, c);
 			    currentScreen = CM;
-				this.getPanels().put("container", CM);
-				
-								
+				this.getPanels().put("container", CM);					
 				this.getContentPane().add(CM);
 				this.canvas.setVisible(false);			
 				((GameMenu) this.getPanels().get("game")).disableButtons();
 			    this.repaint();    
 
 		}
+		
+		/**
+		 * This method opens up a hiding screen.
+		 * This is similar to showPopup, however the passed in furniture will obtain a player now
+		 * 
+		 */
+		public void showHidingScreen(Furniture f){		
+		    HidingScreen CM = new HidingScreen("furniture",this, f);
+		    currentScreen = CM;
+			this.getPanels().put("furniture", CM);						
+			this.getContentPane().add(CM);
+			//Check if the furniture has a player 
+			//If it does, get that player out, mug his stuff, show a surprise panel
+			//for both of you!.
+			if(f.getHidingPlayer() != null){
+								
+			}
+			
+			
+			f.hidePlayer(board.getVamp(uid));
+			board.getVamp(uid).setHiding(true);
+			
+			
+			this.canvas.setVisible(false);			
+			((GameMenu) this.getPanels().get("game")).disableButtons();
+		    this.repaint();    
+
+	}
 		
 		
 		/**

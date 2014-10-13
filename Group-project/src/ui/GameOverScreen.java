@@ -3,8 +3,14 @@ package ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,20 +23,28 @@ public class GameOverScreen extends PopUpScreen {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton backMainMenu;
+	private boolean playerWon = false;
 
-	public GameOverScreen(String name, GameFrame game){	
+
+	public GameOverScreen(String name, GameFrame game, Boolean playerWon){	
 		
 		super(name, game);		
 		//Buttons
 		backMainMenu = new JButton("To Main Menu");
 		//Action Listeners for buttons		
 		//ButtonListener b = new ButtonListener();
-		backMainMenu.addActionListener(getGame().getPlayer());	
-		
-		
+		backMainMenu.addActionListener(getGame().getPlayer());		
 		getGame().getScreenButtons().put(backMainMenu, "backMainMenu");
-
-		
+		try {
+			if(playerWon == true){
+				img = ImageIO.read(new File("src/victory.jpg"));
+			}
+			else{
+				img = ImageIO.read(new File("src/gameover.jpg"));
+			}	
+		} 
+		catch(IOException e) {		
+		}
 		
 		//Setting up the outmost Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -44,31 +58,15 @@ public class GameOverScreen extends PopUpScreen {
 		this.remove(getBackToGame());
 		this.repaint();
 		
+	}
+
+	public boolean isPlayerWon() {
+		return playerWon;
+	}
+
+	public void setPlayerWon(boolean playerWon) {
+		this.playerWon = playerWon;
 	}	
-
-
-	//Actions Listener for the buttons		
-//	private class ButtonListener implements ActionListener{
-//		public void actionPerformed(ActionEvent event){
-//			if(event.getSource() == backMainMenu){
-//
-//				//You're going to need to get rid of all the panels:
-//				getGame().remove(getGame().getPanels().get("game"));
-//				getGame().remove(getGame().getPanels().get("gameover"));
-//				
-//				//Go to Main Menu
-//				getGame().showMainMenu();
-//				getGame().setRunningGame(true);
-//				
-//				getGame().repaint();
-//				getGame().setVisible(true);
-//				
-//			}
-//
-//		}
-//	}	
-
-	
 
 	
 }

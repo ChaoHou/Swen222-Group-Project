@@ -4,7 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
+
+import rendering.Box;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 public class Container {
 	
@@ -15,9 +21,12 @@ public class Container {
 	private int containerType;
 	private List<Collectable> items=new ArrayList<Collectable>();
 	
+	private Box box;
 	
-	public Container(int containerType){
+	public Container(int containerType,int x,int y,int z,int index){
 		this.containerType=containerType;
+		
+		box = new Box(new float[]{x,y,z},new float[]{1f,1f,1f},index);
 	}
 
 	public void addItem(Collectable item){
@@ -40,7 +49,6 @@ public class Container {
 		this.items = items;
 	}
 	
-	
 	public Collectable remove(Collectable c){
 		Collectable temp = null;
 		//We'll need to iterate through the whole container for this...
@@ -61,5 +69,27 @@ public class Container {
 		}
 		return null;
 	}
-
+	
+	public boolean containsPoint(GL2 gl,GLU glu, int x,int y){
+		return box.containsPoint(gl, glu, x, y);
+	}
+	
+	public void init(GL gl,Texture[] textures) {
+		box.init(gl, textures);
+	}
+	
+	public void draw(GL2 gl,int facingDir){
+		
+		switch(containerType){
+		case DRAWER:
+			//drawCube(gl);
+			break;
+		case TREASURE_CHEST:
+			//drawCube(gl);
+			break;
+		}
+		
+		
+		box.draw(gl,facingDir);
+	}
 }
