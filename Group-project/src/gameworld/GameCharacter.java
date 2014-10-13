@@ -17,9 +17,6 @@ public abstract class GameCharacter {
 	//protected Room inRoom; //delete to reduce coupling
 	protected Board game;
 	
-	/*
-	 * Rotate to face one of four directions in a room.
-	 */
 	public abstract void rotateTo(int dir);
 	
 	

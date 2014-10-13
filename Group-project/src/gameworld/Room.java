@@ -47,7 +47,7 @@ public class Room {
 	
 	public Werewolf werewolfLeaveRoom(Werewolf w){
 		Werewolf temp = werewolf;
-		werewolf = null;
+		this.werewolf = null;
 		return temp;
 	}
 	
@@ -60,6 +60,9 @@ public class Room {
 		this.containers.add(container);
 	}
 	
+	public void addFurniture(Furniture furniture){
+		this.furniture.add(furniture);
+	}
 	
 	//returns a set of vamps in this room.
 	//returns an empty set if no vamps in this room.

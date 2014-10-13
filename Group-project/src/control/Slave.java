@@ -22,7 +22,7 @@ import ui.Board;
 import ui.GameFrame;
 import ui.TestUI;
 
-public class Client extends Thread implements MouseListener,KeyListener,ActionListener {
+public class Slave extends Thread implements MouseListener,KeyListener,ActionListener {
 	private final Socket socket;
 	private final DataOutputStream output;
 	private final DataInputStream input;
@@ -35,7 +35,7 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 	
 	private Renderer renderer;
 	
-	public Client(Socket socket,Board game,Renderer renderer) throws IOException{
+	public Slave(Socket socket,Board game,Renderer renderer) throws IOException{
 		this.socket = socket;
 		output = new DataOutputStream(socket.getOutputStream());
 		input = new DataInputStream(socket.getInputStream());
@@ -52,7 +52,7 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 	public void run(){
 		try {
 			boolean exit = false;
-			while (!exit) {
+			while (!exit) 	 {
 				try {
 
 					if (input.available() != 0) {
@@ -147,12 +147,12 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 		//System.out.println(action);
 		try {
 			if(action.equals("Turn Left")){
-				output.writeInt(Server.ACTION.ROTATE_L.ordinal());
+				output.writeInt(Master.ACTION.ROTATE_L.ordinal());
 				renderer.rotateL();
 			}				
 			//When turning right
 			else if(action.equals("Turn Right")){
-				output.writeInt(Server.ACTION.ROTATE_R.ordinal());
+				output.writeInt(Master.ACTION.ROTATE_R.ordinal());
 				renderer.rotateR();
 
 			}

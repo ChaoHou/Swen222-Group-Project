@@ -3,6 +3,7 @@ package ui;
 import gameworld.GameCharacter;
 import gameworld.Room;
 import gameworld.Vamp;
+import gameworld.Werewolf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,8 +17,10 @@ import control.WerewolfThread;
 
 public class Board {
 	
+	
 	 private Set<Vamp> vamps=new HashSet<Vamp>();
 	 private WerewolfThread werewolfThread;
+	 
 	 /* made the rooms contain characters to reduce coupling */
 	 private Room[][] rooms=new Room[4][4];
 	 private Room startRoom;
@@ -40,8 +43,11 @@ public class Board {
 		for(Vamp vamp:vamps){
 			vamp.respawn(startRoom);
 		}
-		this.werewolfThread=new WerewolfThread();
+		Werewolf werewolf=new Werewolf(this);
+		registerWerewolf(werewolf);
+		this.werewolfThread=new WerewolfThread(werewolf);
 		this.werewolfThread.start();
+		
 		
 	}
 	
@@ -108,6 +114,9 @@ public class Board {
 		return uid++;
 	}
 	
+	public synchronized void registerWerewolf(Werewolf werewolf){
+		startRoom.werewolfEnterRoom(werewolf);
+	}
 	
 	public synchronized Vamp getVamp(int uid){
 		//loop through rooms to find the character
