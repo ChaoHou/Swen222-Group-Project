@@ -323,6 +323,7 @@ public class GameFrame extends JFrame {
 		
         public MapScreen getMapPanel(){
         	return this.map;
+//        	return ((GameMenu) this.getPanels().get("game")).getPanels().get("");
         }
 
 		public ActionListener getPlayer() {
