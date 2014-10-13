@@ -102,7 +102,7 @@ public class Main {
 		gg.setVisible(true);
 		game.startGame();
         while(true){
-        	//game running	        	
+        	Thread.yield();      	
         }
 		
 	}
@@ -171,11 +171,10 @@ public class Main {
 		//ClockThread clk = new ClockThread(gameClock);	
 		
 		// Listen for connections
-		System.out.println("CLUEDO SERVER LISTENING ON PORT " + port);
-		System.out.println("CLUEDO SERVER AWAITING " + nplayers + " PLAYERS");
+		System.out.println("SERVER LISTENING ON PORT " + port);
+		System.out.println("SERVER AWAITING " + nplayers + " PLAYERS");
 		try {
 			Board game = createBoardFromFile(filename);
-			//Socket[] sockets = new Socket[nplayers];
 			Master[] connections = new Master[nplayers];
 			// Now, we await connections.
 			ServerSocket ss = new ServerSocket(port);	
@@ -190,7 +189,7 @@ public class Main {
 				
 				connections[--nplayers] = new Master(s,game,uid);
 				connections[nplayers].start();
-				//connections[--nplayers] = new MasterConnection(s,broadcastClock,uid);
+				
 				if(nplayers == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 					multiUserGame(game,connections);
@@ -285,10 +284,6 @@ public class Main {
 				room.setContainer(container);
 			}
 			
-			
-			//Container container = new Container(Container.DRAWER,8,-5,9,3);
-			//return new Room(name,walls);
-			//room.addContainer(container);
 			return room;
 			
 		} catch (FileNotFoundException e) {
