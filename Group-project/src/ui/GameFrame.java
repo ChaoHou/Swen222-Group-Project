@@ -1,29 +1,39 @@
 package ui;
+import gameworld.Container;
+import gameworld.Vamp;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
-import control.Player;
 import rendering.Renderer;
 import rendering.RendererTest;
+//import networking.Player;
 
 
 public class GameFrame extends JFrame {
@@ -44,32 +54,33 @@ public class GameFrame extends JFrame {
 		 * It starts off with one Panel, the GameMenu screen
 		 */
 			
-		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){	
+		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){
+			//Background	
+			this.setLayout(new GridLayout());
+			BufferedImage img3 = null;
+			try {
+				img3 = ImageIO.read(new File("src/wallpaper.jpg"));
+			} catch (IOException e) {
+			}
+			JLabel x = new JLabel();
+			x.setIcon(new ImageIcon (img3));
+			x.setLayout(new FlowLayout());
+			this.setContentPane(x);
 			//Game logic's information
 			this.setBoard(board);
 			this.setUid(uid);			
 			this.player = player;
-			this.renderer = renderer;		
-			//Layout
-			FlowLayout fullMenu = new FlowLayout();
-			fullMenu.setAlignment(100);				
-			fullMenu.setHgap(0);		
-			fullMenu.setAlignment(FlowLayout.CENTER);
-			this.setLayout(fullMenu);	
+			this.renderer = renderer;	
 			//Sets up the menu bar
 		    JMenuBar menubar = new JMenuBar();
 		    JMenu help = new JMenu("Help");
 		    menubar.add(help);
 		    this.setJMenuBar(menubar);
-		    //Set up the instructions and map(while keeping them invisible)
-		    InstructionsMenu menu = new InstructionsMenu(this);	
-		    MapMenu map = new MapMenu(this);
+		    //Set up the instructions 
+		    instructionsMenu menu = new instructionsMenu(this);	
 			this.getPanels().put("instructions", menu);	
-			this.getPanels().put("map", map);
 			this.getContentPane().add(menu);
-			this.getContentPane().add(map);
 		    this.getPanels().get("instructions").setVisible(false);	 
-		    this.getPanels().get("map").setVisible(false);
 			//Opens up the main menu
 			setMainMenu();		
 		}
@@ -86,7 +97,7 @@ public class GameFrame extends JFrame {
 			//Set up the main menu now:
 		    MainMenu MainMenu = new MainMenu(this);	
 			getPanels().put("menu", MainMenu);  
-			this.getContentPane().add(MainMenu);
+			this.getContentPane().add(MainMenu, BorderLayout.LINE_START);
 			this.setTitle("Vampire Mansion");
 			this.setSize(1000,740);
 			this.setResizable(false);
@@ -142,14 +153,13 @@ public class GameFrame extends JFrame {
 		 * @return
 		 */
 		public void showMap(){
-			    MapMenu map = new MapMenu(this);
+			    mapMenu map = new mapMenu(this);
 				this.getPanels().put("map", map);
 				this.getContentPane().add(map);
  				this.canvas.setVisible(false);
-				this.getPanels().get("game").setVisible(false);
-				this.getPanels().get("map").setVisible(true);
+				//this.getPanels().get("game").setVisible(false);
+				//this.getPanels().get("map").setVisible(true);
 				this.repaint();
-				//((mapMenu) this.getPanels().get("map")).redraw(this.getGraphics());
 		}
 		
 		/**
@@ -157,11 +167,30 @@ public class GameFrame extends JFrame {
 		 */
 		
 		public void showGame(){
+			if(this.getPanels().containsKey("map")){
+				this.getPanels().remove("map");		
+			}			
 			if(isRunningGame()){
 				this.canvas.setVisible(true);
+				//this.getPanels().get("game").setEnabled(true);
 				this.getPanels().get("game").setVisible(true);
 			}	
 		}
+		
+		/**
+		 * This method opens up a trade panel, 
+		 * This refers to when a player clicks a container
+		 * 1.) The two fields are two 
+		 */
+		
+		public void showTrade(Container c){
+			this.canvas.setVisible(false);
+			
+			
+			this.getPanels().get("").setVisible(true);
+		}
+		
+		
 
 
 		public Map<String, JPanel> getPanels() {

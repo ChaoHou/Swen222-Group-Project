@@ -3,6 +3,8 @@ package gameworld;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import ui.Board;
 
@@ -23,7 +25,7 @@ public class Vamp extends GameCharacter{
 	private int health;
 	private boolean isFighting;
 	private boolean isTrading;
-	//private Furniture hidingIn;
+	private Set<Collectable> inventory=new HashSet<Collectable>();
 	
 	
 	public Vamp(int uid, Board game){
@@ -91,7 +93,7 @@ public class Vamp extends GameCharacter{
 	}
 	
 	public boolean enterRoom(){
-		Room roomFrom = game.getRoomContainsPlayer(this);
+		Room roomFrom = game.getRoomContainingPlayer(this);
 		Room roomToEnter=game.getRoomAhead(roomFrom, facing);
 		
 		if(roomToEnter==null){
@@ -114,6 +116,19 @@ public class Vamp extends GameCharacter{
 		}else{
 			throw new IllegalArgumentException("invalid direction to face.");
 		}
+	}
+	
+	
+	public Set<Collectable> getInventory(){
+		return this.inventory;
+	}
+	
+	public void collectItem(Collectable item){
+		this.getInventory().add(item);
+	}
+	
+	public void removeItem(Collectable item){
+		this.getInventory().remove(item);
 	}
 	
 	public void toOutputStream(DataOutputStream dout) throws IOException {		

@@ -22,7 +22,7 @@ import ui.Board;
 import ui.GameFrame;
 import ui.TestUI;
 
-public class Client extends Thread implements MouseListener,KeyListener,ActionListener {
+public class Slave extends Thread implements MouseListener,KeyListener,ActionListener {
 	private final Socket socket;
 	private final DataOutputStream output;
 	private final DataInputStream input;
@@ -35,7 +35,7 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 	
 	private Renderer renderer;
 	
-	public Client(Socket socket,Board game,Renderer renderer) throws IOException{
+	public Slave(Socket socket,Board game,Renderer renderer) throws IOException{
 		this.socket = socket;
 		output = new DataOutputStream(socket.getOutputStream());
 		input = new DataInputStream(socket.getInputStream());
@@ -52,7 +52,7 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 	public void run(){
 		try {
 			boolean exit = false;
-			while (!exit) {
+			while (!exit) 	 {
 				try {
 
 					if (input.available() != 0) {
@@ -62,7 +62,7 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 						game.fromByteArray(data);	
 						
 						
-						String facing = game.getCharacter(uid).intDirToString();
+						String facing = game.getVamp(uid).intDirToString();
 						System.out.println("Player:"+uid+" now facing:"+facing);
 					}
 
@@ -116,15 +116,15 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 		int code=e.getKeyCode();
 		
 		if(code==KeyEvent.VK_W){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.NORTH);
+			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
 		}else if(code==KeyEvent.VK_D){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.EAST);
+			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
 		}else if(code==KeyEvent.VK_S){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.SOUTH);
+			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
 		}else if(code==KeyEvent.VK_A){
-			game.getCharacter(this.uid).rotateTo(GameCharacter.WEST);
+			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
 		}else if(code==KeyEvent.VK_E){
-			game.getCharacter(this.uid).enterRoom();
+			game.getVamp(this.uid).enterRoom();
 		}
 		
 	}
@@ -147,12 +147,12 @@ public class Client extends Thread implements MouseListener,KeyListener,ActionLi
 		//System.out.println(action);
 		try {
 			if(action.equals("Turn Left")){
-				output.writeInt(Server.ACTION.ROTATE_L.ordinal());
+				output.writeInt(Master.ACTION.ROTATE_L.ordinal());
 				renderer.rotateL();
 			}				
 			//When turning right
 			else if(action.equals("Turn Right")){
-				output.writeInt(Server.ACTION.ROTATE_R.ordinal());
+				output.writeInt(Master.ACTION.ROTATE_R.ordinal());
 				renderer.rotateR();
 
 			}
