@@ -82,11 +82,12 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glDepthFunc(GL.GL_LEQUAL);               // The Type Of Depth Testing To Do
         gl.glEnable(GL.GL_DEPTH_TEST);              // Enables Depth Testing
 
-        gl.glEnable(GL2.GL_LIGHTING);
-        gl.glEnable(GL2.GL_LIGHT0);
+//        gl.glEnable(GL2.GL_LIGHTING);
+//        gl.glEnable(GL2.GL_LIGHT0);
 //        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT,lightAmb,0);
 
         gl.glEnable(GL.GL_CULL_FACE);
+        gl.glFrontFace(GL2.GL_CW);
 
 //        enableLighting(gl); //for test
 
@@ -132,14 +133,6 @@ public class Renderer implements GLEventListener, KeyListener {
 		System.out.println(Arrays.toString(viewport));
     }
 
-    private void enableLighting(GL2 gl) {
-//        gl.glEnable(GL2.GL_LIGHTING);
-//        gl.glEnable(gl.GL_COLOR_MATERIAL);
-//        gl.glEnable(GL2.GL_NORMALIZE);
-//        gl.glEnable(GL.GL_DEPTH_TEST);
-//        gl.glShadeModel(GL2.GL_FLAT);
-    }
-
     @Override
     public void dispose(GLAutoDrawable drawable) {
 
@@ -147,7 +140,7 @@ public class Renderer implements GLEventListener, KeyListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-    	GL2 gl = drawable.getGL().getGL2();
+        update();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
@@ -172,8 +165,7 @@ public class Renderer implements GLEventListener, KeyListener {
         
         
         gl.glFlush();
-//        update(gl);
-//        render(gl);
+//        render();
     }
 
     @Override
@@ -200,14 +192,14 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glMatrixMode(GL2.GL_PROJECTION);
 
         gl.glLoadIdentity();
-        glu.gluPerspective(35.0f, (float) width / (float) height, 1.0, 300.0);
+        glu.gluPerspective(100.0f, (float) width / (float) height, 1.0, 300.0);
 
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
         glu.gluLookAt(cameraPos.x(), cameraPos.y(), cameraPos.z(), lookAt.x(), lookAt.y(), lookAt.z(), cameraTop.x(), cameraTop.y(), cameraTop.z());
         gl.glRotated(angle, 0, 1, 0);
     }
-    
+
     public void setMouseEvent(MouseEvent e){
     	this.mouse = e;
     }
