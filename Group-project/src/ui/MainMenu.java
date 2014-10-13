@@ -26,26 +26,28 @@ import ui.GameMenu.NavigationPanel;
  * The Main Menu is what first appears when you start the game. It will ask you to:
  * 1.) Start a new Game
  * 2.) See the Instructions
- * -Instructions is an inner class in Main Menu
- * 
  *
  * @author Raul John De Guzman-
  */
 
 public class MainMenu extends JPanel {	 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean isNewGame = false;
 	private boolean isInstructions = false;
 	private boolean isCredits = false;
 	
-	private GameFrame currentGame;
+	private GameFrame game;
 	private MainMenu menu;
 	
 	private Map<String, JButton> buttons = new HashMap<String, JButton>();
 
 	public MainMenu(GameFrame board){	
 		menu = this;
-		this.currentGame= board;
+		this.game= board;
 			
 		BufferedImage img = null;
 		BufferedImage img2 = null;
@@ -76,8 +78,11 @@ public class MainMenu extends JPanel {
 		buttons.put("instructions", instructions);
 		//Action Listeners for buttons		
 		ButtonListener b = new ButtonListener();
+		
 		newGame.addActionListener(b);
 		instructions.addActionListener(b);
+				
+		
 		//Setting up the Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		this.setPreferredSize(new Dimension(200,200));
@@ -92,7 +97,6 @@ public class MainMenu extends JPanel {
 	    x.setLayout(new FlowLayout());
 	    x.setPreferredSize(new Dimension (150, 400));
 		this.add(x, BorderLayout.NORTH);
-		//this.add(instructions, BorderLayout.NORTH);
 		
 	}	
 	
@@ -126,21 +130,19 @@ public class MainMenu extends JPanel {
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent event){
 			if(event.getSource() == buttons.get("newGame")){
-				setNewGame(true);
-				//Starts a new game!
-					currentGame.setGame();
-					currentGame.getBoard().startGame();
-					currentGame.setVisible(true);	
+				    setNewGame(true);
+				    //Starts a new game!
+					game.setGame();
+					game.getBoard().startGame();
+					game.setVisible(true);	
 					updateUI();
 			}
 			else if(event.getSource() == buttons.get("instructions")){
-				System.out.println("You clicked instructions");
-				currentGame.showInstructions();
-				currentGame.setVisible(true);	
+ 				InstructionsScreen temp = new InstructionsScreen("instructions", game);
+				game.showPopUp(temp);
+				game.setVisible(true);	
 				updateUI();
-
 			}
-	
 		
 		}
 	}	
