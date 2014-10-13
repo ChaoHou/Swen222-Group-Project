@@ -3,7 +3,9 @@ package gameworld;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ui.Board;
@@ -25,7 +27,7 @@ public class Vamp extends GameCharacter{
 	private int health;
 	private boolean isFighting;
 	private boolean isTrading;
-	private Set<Collectable> inventory=new HashSet<Collectable>();
+	private List<Collectable> inventory=new ArrayList<Collectable>();
 	
 	
 	public Vamp(int uid, Board game){
@@ -119,16 +121,80 @@ public class Vamp extends GameCharacter{
 	}
 	
 	
-	public Set<Collectable> getInventory(){
+	public List<Collectable> getInventory(){
 		return this.inventory;
 	}
 	
+	
+	
 	public void collectItem(Collectable item){
-		this.getInventory().add(item);
+		if(!inventoryfull())
+		this.getInventory().add(item);	
 	}
+	
+	/**
+	 * Is the inventory full?
+	 * @author - Raul John De Guzman
+	 */
+	public boolean inventoryfull(){
+		return this.getInventory().size() == 5;
+	}
+	
 	
 	public void removeItem(Collectable item){
 		this.getInventory().remove(item);
+	}
+	
+	/**
+	 * This is to remove and return a specific item type 
+	 * @author - Raul John De Guzman
+	 */
+	
+	public Collectable remove(Collectable c){
+		Collectable temp = null;
+		//We'll need to iterate through the whole container for this...
+		for(Collectable l : this.getInventory()){
+			//Is it an Orb? Are they the same kind of Orb?	
+			if((c instanceof Orb && l instanceof Orb) && 
+					((Orb) c).getColor() == ((Orb) l).getColor()){
+				temp = (Orb) l;
+				this.getInventory().remove(l);
+				return temp;
+			}
+			//Is it a HealthPack?
+			else if(c instanceof HealthPack && l instanceof HealthPack){
+				temp = (HealthPack) l;
+				this.getInventory().remove(l);
+				return temp;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * If the player has all 3 of each orb, he may win the game!
+	 * 
+	 */
+	
+	public boolean canWin(){
+		Orb tempBlue = new Orb(0);
+		Orb tempGreen = new Orb(1);
+		Orb tempRed = new Orb(2);
+		Boolean b = false,g = false,r = false;
+		for(Collectable l : this.getInventory()){
+			//Do you have a blue orb?	
+			if((l instanceof Orb) && ((Orb) tempBlue).getColor() == ((Orb) l).getColor()){
+				b = true;
+			}
+			if((l instanceof Orb) && ((Orb) tempGreen).getColor() == ((Orb) l).getColor()){
+				g = true;
+			}
+			if((l instanceof Orb) && ((Orb) tempRed).getColor() == ((Orb) l).getColor()){
+				r = true;
+			}
+		}
+		
+		return b && g && r;
 	}
 	
 	public void toOutputStream(DataOutputStream dout) throws IOException {		
