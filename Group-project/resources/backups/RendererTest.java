@@ -22,10 +22,10 @@ public class RendererTest {
         GLProfile glprofile = GLProfile.get(GLProfile.GL2);
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
         final GLCanvas glcanvas = new GLCanvas( glcapabilities );
-        Renderer renderer = new Renderer(setRoom());
-        glcanvas.addGLEventListener(renderer);
-        glcanvas.addKeyListener(renderer);
-        
+//        Renderer renderer = new Renderer(setRoom());
+//        glcanvas.addGLEventListener(renderer);
+//        glcanvas.addKeyListener(renderer);
+//        
         final JFrame jframe = new JFrame( "Rendering window" );
         jframe.addWindowListener( new WindowAdapter() {
             public void windowClosing( WindowEvent windowevent ) {

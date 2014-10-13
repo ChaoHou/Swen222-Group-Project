@@ -1,24 +1,33 @@
 package control;
 
+import gameworld.Container;
 import gameworld.GameCharacter;
+import gameworld.Room;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Arrays;
 
+import javax.media.opengl.GL2;
 import javax.swing.JOptionPane;
 
 import rendering.Renderer;
 import ui.Board;
 import ui.GameFrame;
+import ui.GameMenu;
+import ui.GameMenu.StatsPanel;
 
 
-public class Player implements KeyListener,ActionListener{
+public class Player extends Thread implements KeyListener,ActionListener,MouseListener{
 
 	private int uid;
 	private Board game;
 	private Renderer renderer;
+	private GameFrame frame;
 	
 	public Player(int uid, Board game,Renderer renderer){	
 		this.uid=uid;
@@ -57,7 +66,7 @@ public class Player implements KeyListener,ActionListener{
 				game.getVamp(uid).rotateTo(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
 				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
-			renderer.rotateL();
+			//renderer.rotateL();
 		}				
 		//When turning right
 		else if(action.equals("Turn Right")){
@@ -69,7 +78,7 @@ public class Player implements KeyListener,ActionListener{
 				game.getVamp(uid).rotateTo(GameCharacter.WEST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
 				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
-			renderer.rotateR();
+			//renderer.rotateR();
 
 		}
 		else if(action.equals("Change Room")){
@@ -80,24 +89,41 @@ public class Player implements KeyListener,ActionListener{
 		else if(action.equals("p1")){
 			
 		}
+		else if(action.equals("HealthPotion")){
+			System.out.println("You Healed up to Max health");
+			game.getVamp(uid).setHealth(5);		
+
+			//Updating the Health Information:
+			StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+			x.updateHealth();
+			
+			frame.getPanels().get("game").repaint();
+			frame.getPanels().get("game").updateUI();
+
+		}
+		//TESTING SOMETHING:
+		else if(action.equals("Orb")){
+			//make a container
+//			Container c = new Container(0);
+//			c.addItem(new Orb(0));
+//			c.addItem(new Orb(1));
+//			c.addItem(new Orb(2));
+//			c.addItem(new HealthPack());
+			//Tell the frame to open the trade menu now:
+//			this.frame.showTrade(c);
+			
+			
+			this.frame.setVisible(true);
+		    this.frame.repaint();
+			
+		}
 		
-//		else if(action.equals("back")){
-//			//Hide the instructions
-//			game.getPanels().get("instructions").setVisible(false);		
-//			//Check if you're in a current game or not
-//			if(game.isRunningGame()){
-//				game.showGame();
-//				game.repaint();
-//				game.setVisible(true);
-//			}
-//			else{	
-//				game.setMainMenu();
-//				game.repaint();
-//				game.setVisible(true);
-//			}	
-//		}
+
 	}
 	
+	public void setFrame(GameFrame g){
+		this.frame = g;
+	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
@@ -110,5 +136,71 @@ public class Player implements KeyListener,ActionListener{
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//int x = e.getX();
+		//int y = e.getY();
+		//System.out.println("x:"+x+" y:"+y);
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		System.out.println("Mouse pressed");
+		
+		renderer.setMouseEvent(e);
+		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void run(){
+		try {
+			while(true){
+				//update map
+				this.frame.getMapPanel().getMap().repaint();
+				
+				//pick up containers
+				if(renderer.selected){
+					Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+					Container container = room.getContainer();
+					if(container != null){
+						frame.showTrade(container);
+						frame.setVisible(true);
+						frame.repaint();
+					}
+					renderer.selected = false;
+				}
+				
+				Thread.sleep(100);
+			}
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

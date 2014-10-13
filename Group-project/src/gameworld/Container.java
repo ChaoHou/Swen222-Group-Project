@@ -1,37 +1,73 @@
 package gameworld;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
+
+import rendering.Box;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 public class Container {
 	
 	public static final int DRAWER=0;
 	public static final int TREASURE_CHEST=1;
 	
-	//type of this container, a drawer or a treasure chest.
+	//type of this containter, a drawer of a treasure chest.
 	private int containerType;
-	private Set<Collectable> items=new HashSet<Collectable>();
+	private List<Collectable> items=new ArrayList<Collectable>();
 	
+	private Box box;
 	
-	public Container(int containerType){
+	public Container(int containerType,int x,int y,int z,int index){
 		this.containerType=containerType;
+		
+		box = new Box(new float[]{x,y,z},new float[]{1f,1f,1f},index);
 	}
 
 	public void addItem(Collectable item){
-		items.add(item);
+		getItems().add(item);
 	}
 	
 	public void removeItem(Collectable item){
-		items.remove(item);
-	}
-	
-	public Set<Collectable> getItems(){
-		return this.items;
+		getItems().remove(item);
 	}
 	
 	public int getContainerType(){
 		return this.containerType;
 	}
+
+	public List<Collectable> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Collectable> items) {
+		this.items = items;
+	}
 	
+	public boolean containsPoint(GL2 gl,GLU glu, int x,int y){
+		return box.containsPoint(gl, glu, x, y);
+	}
 	
+	public void init(GL gl,Texture[] textures) {
+		box.init(gl, textures);
+	}
+	
+	public void draw(GL2 gl,int facingDir){
+		
+		switch(containerType){
+		case DRAWER:
+			//drawCube(gl);
+			break;
+		case TREASURE_CHEST:
+			//drawCube(gl);
+			break;
+		}
+		
+		
+		box.draw(gl,facingDir);
+	}
 }

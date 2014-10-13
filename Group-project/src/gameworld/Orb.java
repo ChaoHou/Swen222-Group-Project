@@ -6,13 +6,13 @@ public class Orb implements Collectable{
 	public static final int RED=2;
 	
 	//colour of the orb.
-	private int orbColour;
+	private int colour;
 	
 	public Orb(int colour){
-		this.orbColour=colour;
+		this.colour=colour;
 	}
 	
-	public int getOrbColour(){
-		return this.orbColour;
+	public int getColor(){
+		return this.colour;
 	}
 }

@@ -1,7 +1,11 @@
+import gameworld.Container;
+import gameworld.Orb;
 import gameworld.Room;
+import gameworld.Wall;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,7 +17,6 @@ import control.Slave;
 import control.Player;
 import control.Master;
 import rendering.Renderer;
-import rendering.RendererTest;
 import ui.Board;
 import ui.GameFrame;
 import ui.GameMenu;
@@ -25,7 +28,7 @@ public class Main {
 	private static final int DEFAULT_CLK_PERIOD = 20;
 	private static final int DEFAULT_BROADCAST_CLK_PERIOD = 5;
 
-	private static String filename="map.txt";
+	private static String filename="resources/maps/map.txt";
 	
 	public static void main(String[] args) {
 
@@ -91,15 +94,15 @@ public class Main {
 	
 	public static void singleUserGame(Board game){
 		//This is for the construction of the game	
-		int uid = game.registerVamp();	
-		//game.startGame();
-		Renderer renderer = new Renderer(RendererTest.setRoom());
-		
-		GameFrame gg = new GameFrame("single user mode", game, uid, new Player(uid, game,renderer),renderer);
+		int uid = game.registerVamp();		
+		System.out.println("uid: "+uid);
+		Renderer renderer = new Renderer(game,uid);
+		Player player = new Player(uid,game,renderer);
+		GameFrame gg = new GameFrame("single user mode", game, uid, player,renderer);
 		gg.setVisible(true);
 		game.startGame();
         while(true){
-        	//game running	        	
+        	Thread.yield();      	
         }
 		
 	}
@@ -146,7 +149,9 @@ public class Main {
 			//slave.start();
 			//actionSlave.run();
 			Board game=createBoardFromFile(filename);
-			Renderer renderer = new Renderer(RendererTest.setRoom());
+			//TODO
+			//need to set the uid to the renderer
+			Renderer renderer = new Renderer(game,0);
 			Slave client = new Slave(s,game,renderer);
 			client.run();
 			
@@ -166,11 +171,10 @@ public class Main {
 		//ClockThread clk = new ClockThread(gameClock);	
 		
 		// Listen for connections
-		System.out.println("CLUEDO SERVER LISTENING ON PORT " + port);
-		System.out.println("CLUEDO SERVER AWAITING " + nplayers + " PLAYERS");
+		System.out.println("SERVER LISTENING ON PORT " + port);
+		System.out.println("SERVER AWAITING " + nplayers + " PLAYERS");
 		try {
 			Board game = createBoardFromFile(filename);
-			//Socket[] sockets = new Socket[nplayers];
 			Master[] connections = new Master[nplayers];
 			// Now, we await connections.
 			ServerSocket ss = new ServerSocket(port);	
@@ -185,7 +189,7 @@ public class Main {
 				
 				connections[--nplayers] = new Master(s,game,uid);
 				connections[nplayers].start();
-				//connections[--nplayers] = new MasterConnection(s,broadcastClock,uid);
+				
 				if(nplayers == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 					multiUserGame(game,connections);
@@ -231,7 +235,7 @@ public class Main {
 					System.out.println("detected a dash");
 					rooms[i][j]=null;
 				}else{
-					rooms[i][j]=new Room(elem);
+					rooms[i][j]=createRoom(elem);
 				}
 			}
 		}
@@ -242,6 +246,51 @@ public class Main {
 		return board;	
 	}
 	
-	
+	private static Room createRoom(String name) throws IOException{
+		String dir = "resources/maps/"+name+".txt";
+		System.out.println("file name:"+name);
+		System.out.println("dir: "+dir);
+		
+		try {
+			FileReader fr = new FileReader(dir);
+			BufferedReader br = new BufferedReader(fr);
+			
+			Wall[] walls = new Wall[4];
+			
+			String line = br.readLine();
+			String[] tokens = line.split(" ");
+			for(int i=0;i<4;i++){
+				walls[i] = new Wall(i,Integer.parseInt(tokens[i]));
+			}
+			
+			Room room = new Room(name,walls);
+			
+			line = br.readLine();
+			if(line != null){
+				tokens = line.split(" ");
+				int type = Integer.parseInt(tokens[0]);
+				int x = Integer.parseInt(tokens[1]);
+				int y = Integer.parseInt(tokens[2]);
+				int z = Integer.parseInt(tokens[3]);
+				int index = Integer.parseInt(tokens[4]);
+				Container container = new Container(type,x,y,z,index);
+				
+				for(int i=5;i<tokens.length;i++){
+					int color = Integer.parseInt(tokens[i]);
+					Orb orb = new Orb(color);
+					container.addItem(orb);
+				}
+				
+				room.setContainer(container);
+			}
+			
+			return room;
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}		
+		
+		return null;
+	}
 }
 
