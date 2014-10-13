@@ -21,23 +21,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class mapMenu extends JPanel {	
-	private JButton backMap;
+public class MapScreen extends PopUpScreen {	
 	private JPanel mapDescription;
-	private GameFrame game;
 	private mapPicture map;
 	//Rooms to draw
 	private Room[][] rooms;
 
-	public mapMenu(GameFrame game){		
+	public MapScreen(String name, GameFrame game){	
+		super(name, game);
 		setMap(new mapPicture());		
-		this.game = game;	
-		rooms = this.game.getBoard().getRooms();	
-		//Buttons
-		backMap = new JButton("Go Back");
-		//Action Listeners for buttons		
-		ButtonListener b = new ButtonListener();
-		backMap.addActionListener(b);	
+		rooms = this.getGame().getBoard().getRooms();	
+		 
 		//Setting up the mapDescription
 		JLabel label1 = new JLabel(
 				"<html>   Legend:"
@@ -49,7 +43,7 @@ public class mapMenu extends JPanel {
 		mapDescription.add(label1);
 		mapDescription.setPreferredSize(new Dimension(200,200));
 		mapDescription.setBackground(Color.gray);
-		mapDescription.add(backMap);
+		mapDescription.add(getBackToGame());
 
 		//Setting up the outmost Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -70,31 +64,10 @@ public class mapMenu extends JPanel {
 		return map;
 	}
 
-
-
-
-
 	public void setMap(mapPicture map) {
 		this.map = map;
 	}
 
-	//Actions Listener for the buttons		
-	private class ButtonListener implements ActionListener{
-		public void actionPerformed(ActionEvent event){
-			if(event.getSource() == backMap){
-				//Remove the map screen
-				game.showGame();
-				game.repaint();
-				game.setVisible(true);
-				
-			}
-
-		}
-	}	
-
-	
-
-	
 	
 	/**
 	 * This class represents the map itself

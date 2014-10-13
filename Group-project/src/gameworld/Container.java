@@ -1,7 +1,10 @@
 package gameworld;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 public class Container {
 	
@@ -38,4 +41,25 @@ public class Container {
 	}
 	
 	
+	public Collectable remove(Collectable c){
+		Collectable temp = null;
+		//We'll need to iterate through the whole container for this...
+		for(Collectable l : this.getItems()){
+			//Is it an Orb? Are they the same kind of Orb?	
+			if((c instanceof Orb && l instanceof Orb) && 
+				((Orb) c).getColor() == ((Orb) l).getColor()){
+				temp = (Orb) l;
+				this.getItems().remove(l);
+				return temp;
+			}
+			//Is it a HealthPack?
+			else if(c instanceof HealthPack && l instanceof HealthPack){
+				temp = (HealthPack) l;
+				this.getItems().remove(l);
+				return temp;
+			}
+		}
+		return null;
+	}
+
 }

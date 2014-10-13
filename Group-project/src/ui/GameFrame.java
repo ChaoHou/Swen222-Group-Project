@@ -3,24 +3,29 @@ import gameworld.Container;
 import gameworld.HealthPack;
 import gameworld.Orb;
 import control.Player;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.jogamp.opengl.util.FPSAnimator;
@@ -34,16 +39,50 @@ public class GameFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
+	private Map<String, JPanel> panels = new HashMap<String, JPanel>();	 
+	//This keeps track on the popups on the frame right now
+ 	private PopUpScreen currentScreen;
+ 	//This keeps track of the buttons on PopUps.
+	private Map<JButton, String> screenButtons = new HashMap<JButton, String>();
+	
+	private Map<JButton, String> mainMenuButtons = new HashMap<JButton, String>();
+  	
+
+	public Map<JButton, String> getMainMenuButtons() {
+		return mainMenuButtons;
+	}
+
+	public void setMainMenuButtons(Map<JButton, String> mainMenuButtons) {
+		this.mainMenuButtons = mainMenuButtons;
+	}
+
+	public Map<JButton, String> getScreenButtons() {
+		return screenButtons;
+	}
+
+	public void setScreenButtons(Map<JButton, String> screenButtons) {
+		this.screenButtons = screenButtons;
+	}
+
+	public PopUpScreen getCurrentScreen() {
+		return currentScreen;
+	}
+
+	public void setCurrentScreen(PopUpScreen currentScreen) {
+		this.currentScreen = currentScreen;
+	}
+
 	//Stuff from gameworld package
 	private Board board;
 	private int uid;
-	private boolean runningGame;
+	public boolean runningGame;
+	public boolean playerAlive;
+	public boolean victory;
  	private ActionListener player;
  	//Stuff from rendering package
 	private Renderer renderer;
 	private GLCanvas canvas;
-	private mapMenu map;
+	private MapScreen map;
 	
 		/**
 		 * This is the constructor for the Actual JFrame
@@ -51,8 +90,9 @@ public class GameFrame extends JFrame {
 		 */
 			
 		public GameFrame(String string, Board board, int uid, ActionListener player,Renderer renderer){
-			 ((Player) player).setFrame(this);
-					 
+ 
+			this.addKeyListener((KeyListener) player);	
+			this.setFocusable(true);
 			//Background	
 			this.setLayout(new GridLayout());
 			BufferedImage img3 = null;
@@ -67,52 +107,76 @@ public class GameFrame extends JFrame {
 			//Game logic's information
 			this.setBoard(board);
 			this.setUid(uid);			
-			this.player = player;
+			this.setPlayer(player);
 			this.renderer = renderer;	
-			//Sets up the menu bar
-		    JMenuBar menubar = new JMenuBar();
-		    JMenu help = new JMenu("Help");
-		    menubar.add(help);
-		    this.setJMenuBar(menubar);
+			 
 		    //Set up the instructions 
-		    instructionsMenu menu = new instructionsMenu(this);	
+		    InstructionsScreen menu = new InstructionsScreen("instructions", this);	
 			this.getPanels().put("instructions", menu);	
 			this.getContentPane().add(menu);
 		    this.getPanels().get("instructions").setVisible(false);	 
 			//Opens up the main menu
-			setMainMenu();		
+		    //Initialize Main menu/Jframe and show only the main menu
+		    this.setRunningGame(false);
+			this.repaint();
+			
+			//Initialize all the panels about to be used 
+		    MainMenu MainMenu = new MainMenu(this);	
+			getPanels().put("menu", MainMenu);  
+			GameOverScreen over = new GameOverScreen("over", this);
+			getPanels().put("over", over);
+			
+			
+			//Set up the JFrame now:
+			this.getContentPane().add(MainMenu, BorderLayout.LINE_START);
+			this.setTitle("Vampire Mansion");
+			this.setSize(1000,740);
+			this.setResizable(false);
+			setLocationRelativeTo(null);
+			setDefaultCloseOperation(EXIT_ON_CLOSE);	
+			
 		}
 		
 		/**
 		 * This method sets up the main menu:
 		 */
 		
-		public void setMainMenu(){
-			//Make sure nothing's in the frame right now...
-			//this.getContentPane().removeAll();		
-			this.setRunningGame(false);
-			this.repaint();
-			//Set up the main menu now:
-		    MainMenu MainMenu = new MainMenu(this);	
-			getPanels().put("menu", MainMenu);  
-			this.getContentPane().add(MainMenu, BorderLayout.LINE_START);
-			this.setTitle("Vampire Mansion");
-			this.setSize(1000,740);
-			this.setResizable(false);
-			setLocationRelativeTo(null);
-			setDefaultCloseOperation(EXIT_ON_CLOSE);
+		public void showMainMenu(){	
+			this.getPanels().get("menu").setVisible(true);
 		}
+		
+		
 		
 		/**
 		 * This method sets up a new Game:
 		 */
 		
 		public void setGame(){
-			//TEMP
+			//TEMPORARY STUFF
 			this.getBoard().getVamp(this.getUid()).setHealth(3);
 			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPack());
-			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));
+			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));	
 
+			//Sets up the menu bar
+		    JMenuBar menubar = new JMenuBar();
+		    JMenu help = new JMenu("Help");	
+		    JMenuItem showInstructions = new JMenuItem("Show Instructions");
+		    showInstructions.addActionListener(getPlayer());
+		    help.add(showInstructions);
+		    menubar.add(help);
+		    
+		    //Sets up the cheat codes
+		    JMenu cheats = new JMenu("Cheats");	
+		    JMenuItem instantDeath = new JMenuItem("Commit Suicide");
+		    JMenuItem allItems = new JMenuItem("Give me all Items");
+		    instantDeath.addActionListener(getPlayer());
+		    allItems.addActionListener(getPlayer());
+		    cheats.add(instantDeath);
+		    cheats.add(allItems);
+		    menubar.add(cheats);
+		    
+		    this.setJMenuBar(menubar);
+			
 			//Layout
 			this.setLayout(new BorderLayout());
 		    //Rendering
@@ -123,83 +187,101 @@ public class GameFrame extends JFrame {
 	        FPSAnimator animator= new FPSAnimator(glcanvas,60);
 	        animator.start();
 			//Game menu (The Game's interface)
-			GameMenu game = new GameMenu(this, player);		
+			GameMenu game = new GameMenu(this, getPlayer());		
 			//Putting everything into the JFrame
 			this.getPanels().put("game", game);			
-			this.getContentPane().remove(getPanels().get("menu"));		
-			this.canvas = glcanvas;
+			this.getPanels().get("menu").setVisible(false);
+ 			this.canvas = glcanvas;
 			this.getContentPane().add(glcanvas, BorderLayout.CENTER);
 			this.getContentPane().add(game, BorderLayout.SOUTH);
 			this.runningGame = true;
 		    this.repaint();
-		    map = new mapMenu(this);
-		   // ((Thread) player).start();
+		    map = new MapScreen("map",this);
+		    //Specific ActionListeners and thread stuff will run now
+ 			((Player) getPlayer()).setFrame(this);
+		    ((Thread) getPlayer()).start();
 
 		}
 		
-		/**
-		 * This method's for showing the instruction menu
-		 * @return
-		 */
-		public void showInstructions(){					
-			if(isRunningGame()){
-				this.canvas.setVisible(false);
-				this.getPanels().get("game").setVisible(false);
-				this.getPanels().get("instructions").setVisible(true);
-			}
-			else{
-				this.getPanels().get("menu").setVisible(false);	
-				this.getPanels().get("instructions").setVisible(true);
-			}
-			
-		}
-		
-		/**
-		 * This method's for a detailed map
-		 * @return
-		 */
-		public void showMap(){
-			    map = new mapMenu(this);
-				this.getPanels().put("map", map);
-				this.getContentPane().add(map);
- 				this.canvas.setVisible(false);			
-				this.repaint();
-		}
-		
-		/**
-		 * This methods shows the game if it's not appearing
-		 */
-		
-		public void showGame(){
-			if(this.getPanels().containsKey("map")){
-				this.getPanels().get("map").setVisible(false);
-				this.getPanels().remove("map");		
 				
-			}	
-			else if(this.getPanels().containsKey("con")){
-				this.getPanels().get("con").setVisible(false);
-				this.getPanels().remove("con");					
-			}			
+		/**
+		 * This method is responsible for initializing the requested pop up.
+		 * It obscures the canvas, and disables the gamemenu's buttons as well.
+		 * 
+		 */
+		
+        public void showPopUp(PopUpScreen screen){ 
+        	currentScreen = screen;
+        	if(runningGame != true){
+    			this.getPanels().get("menu").setVisible(false);
+        		this.getPanels().put(screen.getName(), screen);
+            	this.getContentPane().add(screen);
+    			this.repaint();	
+        	}
+        	else{
+        		this.getPanels().put(screen.getName(), screen);
+        		this.getContentPane().add(screen);
+        		this.canvas.setVisible(false);	
+        		((GameMenu) this.getPanels().get("game")).disableButtons();
+        		this.repaint();					
+        	}
+		}
+        
+    	/**
+		 * This method is responsible for removing a PopUp that is on the frame, 
+		 * It draws the canvas back, and enables the gamemenu's buttons again as well.
+		 * 
+		 */
+		
+		public void showGame(PopUpScreen screen){	
+			currentScreen = null;
+			if(this.getPanels().containsKey(screen.getName())){
+			    this.getPanels().get(screen.getName()).setVisible(false);	
+			    this.getPanels().remove(screen.getName());	
+			}		
 			if(isRunningGame()){
 				this.canvas.setVisible(true);
-				this.getPanels().get("game").setVisible(true);
+				((GameMenu) this.getPanels().get("game")).enableButtons();
+			    this.repaint();		
 			}	
-			this.repaint();
-			
+			else{
+    			this.getPanels().get("menu").setVisible(true);
+				this.showMainMenu();
+			    this.repaint();		
+			}
 		}
 		
+				
 		/**
 		 * This method opens up a trade panel, 
-		 * This refers to when a player clicks a container
-		 * 1.) The two fields are two 
+		 * This is similar to showPopUp, only in that a container is passed within.
+		 * 
 		 */
 		
-		public void showTrade(Container c){			
-			    containerMenu CM = new containerMenu(this, c);
-				this.getPanels().put("con", CM);
+		public void showTrade(Container c){		
+			    ContainerScreen CM = new ContainerScreen("container",this, c);
+			    currentScreen = CM;
+				this.getPanels().put("container", CM);
+				
+								
 				this.getContentPane().add(CM);
+				this.canvas.setVisible(false);			
+				((GameMenu) this.getPanels().get("game")).disableButtons();
+			    this.repaint();    
+
+		}
+		
+		
+		/**
+		 * 
+		 * In a thread this will be called every time.
+		 * 
+		 */
+		
+		public void showGameOver(){
+				this.getContentPane().add(this.getPanels().get("over"));
 				this.canvas.setVisible(false);
-			    this.repaint();
+				this.repaint();	 		
 		}
 		
 
@@ -236,8 +318,18 @@ public class GameFrame extends JFrame {
 			this.runningGame = runningGame;
 		}
 		
-        public mapMenu getMapPanel(){
+        public MapScreen getMapPanel(){
         	return this.map;
         }
+
+		public ActionListener getPlayer() {
+			return player;
+		}
+
+		public void setPlayer(ActionListener player) {
+			this.player = player;
+		}
+
+  
 	
 }
