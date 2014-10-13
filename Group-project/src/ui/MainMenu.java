@@ -31,24 +31,20 @@ import ui.GameMenu.NavigationPanel;
  */
 
 public class MainMenu extends JPanel {	 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private boolean isNewGame = false;
-	private boolean isInstructions = false;
-	private boolean isCredits = false;
-	
+	private instructionScreenMain inst;
 	private GameFrame game;
 	private MainMenu menu;
-	
 	private Map<String, JButton> buttons = new HashMap<String, JButton>();
 
 	public MainMenu(GameFrame board){	
 		menu = this;
 		this.game= board;
-			
+		inst = new instructionScreenMain(game);
 		BufferedImage img = null;
 		BufferedImage img2 = null;
 		BufferedImage img3 = null;	
@@ -60,7 +56,6 @@ public class MainMenu extends JPanel {
 			img4 = ImageIO.read(new File("src/Instructions2.png"));
 		} catch (IOException e) {
 		}
-		
 		//Buttons
 		JButton newGame, instructions;		
 		newGame = new JButton();
@@ -78,10 +73,8 @@ public class MainMenu extends JPanel {
 		buttons.put("instructions", instructions);
 		//Action Listeners for buttons		
 		ButtonListener b = new ButtonListener();
-		
 		newGame.addActionListener(b);
-		instructions.addActionListener(b);
-				
+		instructions.addActionListener(b);			
 		
 		//Setting up the Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -96,8 +89,7 @@ public class MainMenu extends JPanel {
 	    x.add(instructions);
 	    x.setLayout(new FlowLayout());
 	    x.setPreferredSize(new Dimension (150, 400));
-		this.add(x, BorderLayout.NORTH);
-		
+		this.add(x, BorderLayout.NORTH);	
 	}	
 	
 
@@ -107,22 +99,6 @@ public class MainMenu extends JPanel {
 
 	public void setNewGame(boolean isNewGame) {
 		this.isNewGame = isNewGame;
-	}
-
-	public boolean isInstructions() {
-		return isInstructions;
-	}
-
-	public void setInstructions(boolean isInstructions) {
-		this.isInstructions = isInstructions;
-	}
-
-	public boolean isCredits() {
-		return isCredits;
-	}
-
-	public void setCredits(boolean isCredits) {
-		this.isCredits = isCredits;
 	}
 
 
@@ -138,9 +114,10 @@ public class MainMenu extends JPanel {
 					updateUI();
 			}
 			else if(event.getSource() == buttons.get("instructions")){
- 				InstructionsScreen temp = new InstructionsScreen("instructions", game);
-				game.showPopUp(temp);
-				game.setVisible(true);	
+				game.getPanels().put("instructions", inst);
+ 				game.getContentPane().add(inst);
+ 				game.showInstructionsMenu();
+ 				game.setVisible(true);			
 				updateUI();
 			}
 		
