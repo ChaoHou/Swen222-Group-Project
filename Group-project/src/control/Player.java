@@ -47,7 +47,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	private Map<JButton, String> screenButtons;
 	private Room[][] rooms;
 
-	Furniture temp = new Furniture(1);
+	Furniture tempFurniture = new Furniture(1);
 
 	
 	public Player(int uid, Board game,Renderer renderer){	
@@ -55,6 +55,9 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		this.game=game;
 		this.renderer = renderer;
 		this.rooms = game.getRooms();
+		
+		//tempFurniture.hidePlayer(new Vamp(uid+1, this.game));			
+
 	}
 	
 	
@@ -123,7 +126,9 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		}			
 		else if(action.equals("Commit Suicide")){
 			//Game over while doing something (ex. looking at the map)
-			printMessage("You died a horrible death");			
+			printMessage("You killed yourself.");	
+			printMessage("..Idiot");			
+
 			//First, check if there's currently a popup menu
 			if(frame.getCurrentScreen() != null){
 			   //Second, remove that popup, no matter what (The game's over anyway!)
@@ -153,17 +158,19 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		else if(action.equals("Hide into Nothingness")){
 			//You hide into furniture that's not in the game.
-			if(temp.getHidingPlayer() != null){
-				printMessage("Sorry, but another player's hiding already!");
-				//temp.getHidingPlayer();	
+			if(tempFurniture.getHidingPlayer() != null){
+				printMessage("You found another player's hiding already.");
+				printMessage("You attacked him.");
+				Vamp victim = tempFurniture.getHidingPlayer();
+				victim.setFighting(true);
+				tempFurniture.removePlayer(victim);
 				return;
-			}
-			
+			}		
 			printMessage("You hid into the shadows");	
-			frame.showHidingScreen(temp);
-				
-		}
-		
+			frame.showHidingScreen(tempFurniture);
+						
+			
+		}	
 		
 		
 		
@@ -176,20 +183,16 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		    frame.getCurrentScreen().updateUI();
 		}	
 			if(buttons.get(e.getSource()).equals("Orb")){		
-				//Testing Container:
-//				System.out.println("You clicked an Orb");
-//				Container c = new Container(0);
-//				c.addItem(new Orb(0));
-//				c.addItem(new Orb(1));
-//				c.addItem(new Orb(2));
-//				c.addItem(new HealthPack());
-//				//Tell the frame to open the trade menu now:
-//				this.frame.showTrade(c);
-//				//....?
-//				this.frame.setVisible(true);
-//				this.frame.repaint();  			
-			}
-			
+				//Touching an orb hurts you!
+				printMessage("You tried eating the orb.");
+				printMessage("You damaged your teeth by accident...");
+				game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
+				//Updating the Statistics Information:
+				StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+				x.updateHealth();
+				frame.getPanels().get("game").repaint();
+				frame.getPanels().get("game").updateUI();
+			}			
 			if(buttons.get(e.getSource()).equals("HealthPack")){
 				this.printMessage("You Healed up to Max Health!");
 				game.getVamp(uid).setHealth(5);	
@@ -207,13 +210,11 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		//SCREEN BUTTONS
 		screenButtons = frame.getScreenButtons();
-		if(screenButtons.get(e.getSource()) != null){
-			
+		if(screenButtons.get(e.getSource()) != null){			
 			if(screenButtons.get(e.getSource()).equals("backToGame")){
 				frame.showGame(frame.getCurrentScreen());
 				frame.repaint();
 				frame.setVisible(true);	
-				
 			}
 			else if(screenButtons.get(e.getSource()).equals("placeToInventory")){
 				//You'll need the containerScreen
@@ -291,34 +292,13 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		        x.removePlayer();
 				frame.showGame(frame.getCurrentScreen());
 				frame.repaint();
-				frame.setVisible(true);	
-				
+				frame.setVisible(true);		
 			}
-			
-			
 			frame.getPanels().get("game").repaint();
 			frame.getPanels().get("game").updateUI();
-
-		}
-		//TESTING SOMETHING:
-		else if(action.equals("Orb")){
-			//make a container
-//			Container c = new Container(0);
-//			c.addItem(new Orb(0));
-//			c.addItem(new Orb(1));
-//			c.addItem(new Orb(2));
-//			c.addItem(new HealthPack());
-			//Tell the frame to open the trade menu now:
-//			this.frame.showTrade(c);
-			
-			
-			this.frame.setVisible(true);
-		    this.frame.repaint();
-			
-		}
-		
-
+		}		
 	}
+	
 	
 	public void setFrame(GameFrame g){
 		this.frame = g;
@@ -429,6 +409,28 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	 				    frame.setVisible(true);
 	 			        gameover.updateUI(); 				
 					    break;
+				}
+				//What if the player got ambushed?
+				if(game.getVamp(uid).isFighting()){
+	 				printMessage("Another player ambushed you!");
+	 				printMessage("He attacked you without mercy!");				
+	 				//First, remove the hiding screen
+	 				if(frame.getCurrentScreen() != null){
+	 				   //Second, remove that popup, no matter what.
+	 					frame.showGame(frame.getCurrentScreen());
+	 				}			
+	 				//Third, lower that player's health and update information
+	 				game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
+	 				game.getVamp(uid).setFighting(false);
+	 				game.getVamp(uid).setHiding(false);;
+					//Updating the Statistics Information:
+					StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+					x.updateHealth();
+					frame.getPanels().get("game").repaint();
+					frame.getPanels().get("game").updateUI(); 				
+	 				
+
+
 				}
 				
 				//Automatic Victory

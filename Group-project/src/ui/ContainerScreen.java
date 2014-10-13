@@ -61,6 +61,7 @@ public class ContainerScreen extends PopUpScreen {
 		//Draw the container's info into a panel:
 		containerPanel = new JPanel();
 		nameContainer = new JLabel("The container", JLabel.CENTER);
+		nameContainer.setForeground(Color.white);
 		nameContainer.setPreferredSize(new Dimension(300, 50));
 		containerPanel.add(nameContainer);
 		updateContainer();
@@ -68,18 +69,20 @@ public class ContainerScreen extends PopUpScreen {
 		//Draw the player's inventory:
 		inventoryPanel = new JPanel();
 		nameInventory = new JLabel("Your inventory", JLabel.CENTER);
+		nameInventory.setForeground(Color.white);
 		nameInventory.setPreferredSize(new Dimension(300, 50));
 		inventoryPanel.add(nameInventory);
 		updateInventory();
 		
-		//Filler
+		//Filler in the middle of the screen
 		tradingScreen = new JPanel();
 		tradingScreen.setPreferredSize(new Dimension(200, 40));
+		tradingScreen.setBackground(Color.black);
 		tradingScreen.add(getBackToGame());
 		
 		//All into the panel itself
 		this.setPreferredSize(new Dimension(1000, 300));
-		this.setBackground(Color.GRAY);
+		this.setBackground(Color.black);
 		this.add(containerPanel);
 		this.add(tradingScreen);
 		this.add(inventoryPanel);
@@ -90,7 +93,7 @@ public class ContainerScreen extends PopUpScreen {
 		getCheckContainer().clear();
 		containerPanel.removeAll();	
 		containerPanel.setPreferredSize(new Dimension(300,500));
-		containerPanel.setBackground(Color.white);
+		containerPanel.setBackground(Color.black);
 		containerPanel.add(nameContainer); 
 
 		JCheckBox obj = null;
@@ -126,7 +129,7 @@ public class ContainerScreen extends PopUpScreen {
 		getCheckInventory().clear();
 		inventoryPanel.removeAll();
 		inventoryPanel.setPreferredSize(new Dimension(300,500));
-		inventoryPanel.setBackground(Color.white);
+		inventoryPanel.setBackground(Color.black);
 		inventoryPanel.add(nameInventory); 
 		JCheckBox obj = null;
 		for(Collectable c : getGame().getBoard().getVamp(getGame().getUid()).getInventory()){

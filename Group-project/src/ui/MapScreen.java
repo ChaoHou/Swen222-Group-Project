@@ -34,15 +34,16 @@ public class MapScreen extends PopUpScreen {
 		 
 		//Setting up the mapDescription
 		JLabel label1 = new JLabel(
-				"<html>   Legend:"
+				"<html> Legend: <br> "
 				+ " <br> Vampires = Red "
 				+ " <br> Werewolf = Gray"
 				+ " </html>", JLabel.CENTER);
+		label1.setForeground(Color.white);
 		
 		mapDescription = new JPanel();	
 		mapDescription.add(label1);
 		mapDescription.setPreferredSize(new Dimension(200,200));
-		mapDescription.setBackground(Color.gray);
+		mapDescription.setBackground(Color.black);
 		mapDescription.add(getBackToGame());
 
 		//Setting up the outmost Panel

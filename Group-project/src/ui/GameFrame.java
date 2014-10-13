@@ -295,17 +295,9 @@ public class GameFrame extends JFrame {
 		    currentScreen = CM;
 			this.getPanels().put("furniture", CM);						
 			this.getContentPane().add(CM);
-			//Check if the furniture has a player 
-			//If it does, get that player out, mug his stuff, show a surprise panel
-			//for both of you!.
-			if(f.getHidingPlayer() != null){
-								
-			}
-			
 			
 			f.hidePlayer(board.getVamp(uid));
 			board.getVamp(uid).setHiding(true);
-			
 			
 			this.canvas.setVisible(false);			
 			((GameMenu) this.getPanels().get("game")).disableButtons();

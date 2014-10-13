@@ -16,9 +16,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class instructionScreenMain extends JPanel {
+public class InstructionScreenMain extends JPanel {
 
 	/**
+	 * There's a second instruction screen.
+	 * This was made to avoid complications with the networking
 	 * 
 	 */
 		//There's a back button
@@ -29,7 +31,7 @@ public class instructionScreenMain extends JPanel {
 
 
 
-		public instructionScreenMain(GameFrame game){	
+		public InstructionScreenMain(GameFrame game){	
 				this.game = game;	
 				backToMain = new JButton("Go Back to Main Menu");
 				ButtonListener b = new ButtonListener();

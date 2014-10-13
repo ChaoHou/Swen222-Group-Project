@@ -36,7 +36,7 @@ public class MainMenu extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private boolean isNewGame = false;
-	private instructionScreenMain inst;
+	private InstructionScreenMain inst;
 	private GameFrame game;
 	private MainMenu menu;
 	private Map<String, JButton> buttons = new HashMap<String, JButton>();
@@ -44,7 +44,7 @@ public class MainMenu extends JPanel {
 	public MainMenu(GameFrame board){	
 		menu = this;
 		this.game= board;
-		inst = new instructionScreenMain(game);
+		inst = new InstructionScreenMain(game);
 		BufferedImage img = null;
 		BufferedImage img2 = null;
 		BufferedImage img3 = null;	
