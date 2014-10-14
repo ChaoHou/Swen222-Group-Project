@@ -16,18 +16,20 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import ui.GameMenu.NavigationPanel;
 
 /**
  * This Panel represents the "Main Menu" 
  * The Main Menu is what first appears when you start the game. It will ask you to:
  * 1.) Start a new Game
  * 2.) See the Instructions
+ * 
+ * Keep in mind, the game has not started up when navigating this menu. So it gets its own
+ * ActionListeners...
  *
- * @author Raul John De Guzman-
+ * @author Raul John De Guzman
+ * ID: 300269955
  */
 
 public class MainMenu extends JPanel {	 
@@ -38,13 +40,13 @@ public class MainMenu extends JPanel {
 	private boolean isNewGame = false;
 	private InstructionScreenMain inst;
 	private GameFrame game;
-	private MainMenu menu;
 	private Map<String, JButton> buttons = new HashMap<String, JButton>();
 
 	public MainMenu(GameFrame board){	
-		menu = this;
 		this.game= board;
 		inst = new InstructionScreenMain(game);
+		
+		//These Images were made to help make the game look authentic:
 		BufferedImage img = null;
 		BufferedImage img2 = null;
 		BufferedImage img3 = null;	
@@ -97,8 +99,7 @@ public class MainMenu extends JPanel {
 	    x.add(title);
 	    x.add(newGame);
 	    x.setBackground(Color.black);
-	    x.add(instructions);
-	    
+	    x.add(instructions);  
 		this.add(x, BorderLayout.NORTH);	
 	}	
 	

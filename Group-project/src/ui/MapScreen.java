@@ -6,22 +6,32 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * This screen opens up a map that draws information on the location of the player,
+ * and the werewolf as well.
+ * 
+ * @author Raul John Immanuel De Guzman-
+ * ID: 300269955
+ *
+ */
+
 
 public class MapScreen extends PopUpScreen {	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel mapDescription;
 	private mapPicture map;
 	//Rooms to draw
@@ -35,7 +45,7 @@ public class MapScreen extends PopUpScreen {
 		//Setting up the mapDescription
 		JLabel label1 = new JLabel(
 				"<html> Legend: <br> "
-				+ " <br> Vampires = Red "
+				+ " <br> You = Red "
 				+ " <br> Werewolf = Gray"
 				+ " </html>", JLabel.CENTER);
 		label1.setForeground(Color.white);

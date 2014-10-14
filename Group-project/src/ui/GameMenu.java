@@ -26,11 +26,22 @@ import javax.swing.JTextArea;
 
 
 /**
- * Game UI Features:
+ * This class is responsible for the controls and information of the player.
+ * It is split into four specific JPanels that show:
  * 1.) A Map
+ * - This is a small map, you need to click it to "open it up" and see where you are
+ * - Clicking the Map opens up another JPanel, MapScreen 
  * 2.) Navigation
- * 3.) Player's Statistics and Inventory
+ * - This Panel is responsible for turning your character and entering other rooms.
+ * 3.) Player's Statistics 
+ * - This Panel is responsible for presenting a player's information, his health and inventory of items.
  * 4.) Message window
+ * - This Panel is responsible for printing out messages to the player, such as where he's facing,
+ *   If he got mugged by another player, etc.
+ * 
+ * Created by: Raul John Immanuel De Guzman
+ * ID: 300269955
+ * 
  */
 
 public class GameMenu extends JPanel {
@@ -77,12 +88,15 @@ public class GameMenu extends JPanel {
 
 	/**
 	 * This class is for the Map for the player
-	 * @author adreledeguzman-
+	 * 
 	 */
 	
 	public class MapPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JButton bigMap;
-		private MapPanel mapThis = this;
 		
 		public MapPanel(){
 			BufferedImage img = null;
@@ -119,28 +133,29 @@ public class GameMenu extends JPanel {
 	 * 2.) Move right
 	 * 3.) Change Room
 	 * 
-	 * @author Raul John De Guzman
+	 * 
 	 */
 
 	public class NavigationPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JButton left, right, changeRoom;
 		private JPanel directionPanel;
 		private JPanel roomPanel;
-		private NavigationPanel y = this;
 		
 		public NavigationPanel(){			
-			//Custom Buttons...
-			BufferedImage img = null;
-			try {
-				img = ImageIO.read(new File("src/heart.png"));
-			    } catch (IOException e) {
-			}		
+			//Buttons...	
 			
 		    JLabel label1 = new JLabel("Turn Around", JLabel.CENTER);
+		    label1.setPreferredSize(new Dimension(180, 20));
 		    JLabel label2 = new JLabel("Change Room", JLabel.CENTER);
 			//Buttons
-			left = new JButton("Turn Left");
-			right = new JButton("Turn Right");
+			left = new JButton("Left");
+			left.setPreferredSize(new Dimension(50, 50));
+			right = new JButton("Right");
+			right.setPreferredSize(new Dimension(50, 50));
 			changeRoom = new JButton("Change Room");
 			//Action Listeners for buttons		
 			left.addActionListener(player);
@@ -185,11 +200,15 @@ public class GameMenu extends JPanel {
 	
 	/**
 	 * This panel presents all the messages from the game.
-	 * @author adreledeguzman-
+	 * 
 	 *
 	 */
 
 	public class textPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JTextArea messages = new JTextArea();
 		
 		public textPanel(){
@@ -204,12 +223,10 @@ public class GameMenu extends JPanel {
 			this.setBackground(Color.LIGHT_GRAY);
 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 
-
 			//Making messages scrollable:
 			JScrollPane scrollPane = new JScrollPane(messages);
 			scrollPane.setPreferredSize(new Dimension(150,150));
-        	scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);			
-	
+        	scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);				
 			
 			this.add(label1);
 			this.add(scrollPane);
@@ -236,6 +253,10 @@ public class GameMenu extends JPanel {
 	 */
 	
 	public class StatsPanel extends JPanel{		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		//The two Panels:
 		private JPanel Health;
 		private JPanel Inventory;

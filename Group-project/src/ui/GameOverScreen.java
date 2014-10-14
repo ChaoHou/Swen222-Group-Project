@@ -1,21 +1,22 @@
 package ui;
-
-
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 	
+/**
+ * This class is responsible for showing a game over screen.
+ * Depending whether the player won or lost, the information shown will differ.
+ * 
+ * Created by: Raul John Immanuel De Guzman 
+ * ID: 300269955
+ *
+ */
+
 
 public class GameOverScreen extends PopUpScreen {	
 	/**
@@ -49,8 +50,14 @@ public class GameOverScreen extends PopUpScreen {
 		//Setting up the outmost Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		this.setBackground(Color.black);
+		
 		//Game over screen
-		JLabel title = new JLabel("GAME OVER", JLabel.CENTER);
+		String info = "GAME OVER";
+		if(playerWon){
+			info = "You escaped the mansion!";	
+		}
+		
+		JLabel title = new JLabel(info, JLabel.CENTER);
 		title.setPreferredSize(new Dimension(1000, 40));
 		title.setForeground(Color.white);
 		this.add(title);

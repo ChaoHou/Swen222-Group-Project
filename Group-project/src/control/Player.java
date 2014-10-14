@@ -83,7 +83,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		String action = e.getActionCommand();
 		System.out.println(action.toString());
 		//System.out.println(action);
-		if(action.equals("Turn Left")){
+		if(action.equals("Left")){
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
 				game.getVamp(uid).rotateTo(GameCharacter.WEST);
 			
@@ -97,7 +97,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			printMessage("You're facing "+ game.getVamp(uid).intDirToString() );
 		}				
 		//When turning right
-		else if(action.equals("Turn Right")){
+		else if(action.equals("Right")){
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
 				game.getVamp(uid).rotateTo(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)

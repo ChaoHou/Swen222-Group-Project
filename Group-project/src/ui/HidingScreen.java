@@ -1,23 +1,28 @@
 package ui;
 
 import gameworld.Furniture;
-
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+
+/**
+ * This class represents a Jpanel whereby a player is hiding in furniture.
+ * When you click the button getOut, the board's info updates.
+ * -The player is no longer hidden
+ * -The Furniture he was in no longer has anyone
+ * 
+ * 
+ * @author Raul John Immanuel De Guzman-
+ * ID: 300269955
+ *
+ */
 
 public class HidingScreen extends PopUpScreen {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Furniture furniture;
 	private JButton getOut;
 

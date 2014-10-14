@@ -7,20 +7,22 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-
-public class InstructionsScreen extends PopUpScreen{
-	/**
+/**
 	 * This is the instructions menu for the game. It can be opened:
 	 * -Any time playing the game
 	 * -On the main menu 
+	 * 
+	 * Created by: Raul John Immanuel De Guzman
+	 * ID: 300269955
 	 */
+
+public class InstructionsScreen extends PopUpScreen{
+	
+	
 	private static final long serialVersionUID = 1L;
-	private JPanel instructionsPanel;
 	private BufferedImage img;
 
 	
