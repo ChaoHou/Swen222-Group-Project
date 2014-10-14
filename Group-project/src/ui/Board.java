@@ -28,24 +28,29 @@ public class Board {
 	 /* made the rooms contain characters to reduce coupling */
 	 private Room[][] rooms=new Room[4][4];
 	 private Room startRoom;
+	 private Room exit;
+	 private Room respawnRoom;
 	 private int uid=0;
 	 
+	
 	 
 	 
 	
 	public Board(Room[][] rooms){
 		this.setRooms(rooms);
 		startRoom = rooms[0][1];
+		exit=rooms[3][1];
+		respawnRoom=startRoom;
 	}
 	
+
 	
 	/*
 	 * Start game by respawning all vamps in startroom and unleashing the werewolf.
 	 */
 	public void startGame(){
-		System.out.println("isEmpty vamps list: "+vamps.isEmpty());
 		for(Vamp vamp:vamps){
-			vamp.respawn(startRoom);
+			vamp.respawn();
 		}
 		Werewolf werewolf=new Werewolf(this);
 		registerWerewolf(werewolf);
@@ -59,21 +64,30 @@ public class Board {
 	 * Determines if there is a room ahead of this room (facing this particular direction). 
 	 */
 	public synchronized Room getRoomAhead(Room currentRoom, int dir){
+		if(!checkValidDirection(dir) || currentRoom==null){
+			throw new IllegalArgumentException();
+		}
+		
+		Room room=checkForSecretPathway(currentRoom, dir);
+		if(room!=null){
+			return room;
+		}
+		
 		
 		int dx=0;
 		int dy=0;
 		
 		switch (dir){
-			case GameCharacter.NORTH:
+			case Room.NORTH:
 				dy=-1;
 				break;
-			case GameCharacter.EAST:
+			case Room.EAST:
 				dx=1;
 				break;
-			case GameCharacter.SOUTH:
+			case Room.SOUTH:
 				dy=1;
 				break;
-			case GameCharacter.WEST:
+			case Room.WEST:
 				dx=-1;
 				break;
 			default:
@@ -97,10 +111,6 @@ public class Board {
 		
 	}
 	
-	
-	/*
-	 * Determines if rooms[i][j] is actually a Room (that can be entered).
-	 */
 	private boolean canEnter(int i, int j){
 		if(i<0 || i>=getRooms().length || j<0 || j>=getRooms()[0].length ||  getRooms()[i][j]==null){
 			return false;
@@ -109,9 +119,82 @@ public class Board {
 		}
 	}
 	
+	private Room checkForSecretPathway(Room room, int dir){
+		String roomName=room.toString();
+		String roomToEnter=null;
+		
+		if(roomName.equals("bathroom")){
+			if(dir==Room.SOUTH){
+				roomToEnter="exit";
+			}
+		}else if(roomName.equals("exit")){
+			if(dir==Room.WEST){
+				roomToEnter="bathroom";
+			}
+		}else if(roomName.equals("dungeon")){
+			if(dir==Room.SOUTH){
+				roomToEnter="diningarea";
+			}
+		}else if(roomName.equals("diningarea")){
+			if(dir==Room.EAST){
+				roomToEnter="dungeon";
+			}
+		}else{
+			return null;
+		}
+		
+		
+		if(roomToEnter==null){
+			return null;
+		}else{
+			return getRoom(roomToEnter);
+		}
+		
+		
+		
+	}
 	
+	
+	public Room getRoom(String room){
+		if(room==null){
+			throw new IllegalArgumentException();
+		}
+		
+		for(int i=0;i<rooms.length;i++){
+			for(int j=0;j<rooms[0].length;j++){
+				Room currentRoom=rooms[i][j];
+				if(currentRoom!=null && currentRoom.toString().equals(room)){
+					return currentRoom;
+				}
+			}
+		}
+		
+		
+		throw new IllegalArgumentException();
+	}
+	
+	
+	private boolean checkValidDirection(int dir){
+		if(dir!=Room.NORTH && dir!=Room.EAST && 
+				dir!=Room.SOUTH && dir!=Room.WEST){
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
+	
+	
+	//
+	//
+	//
+	// Game characters.
+	//
+	//
+	//
+	//
 	public synchronized int registerVamp(){
-		System.out.println("in registerVamp()");
 		Vamp newVamp=new Vamp(uid, this);
 		startRoom.playerEnterRoom(newVamp);
 		vamps.add(newVamp);
@@ -119,7 +202,7 @@ public class Board {
 	}
 	
 	public synchronized void registerWerewolf(Werewolf werewolf){
-		startRoom.werewolfEnterRoom(werewolf);
+		exit.werewolfEnterRoom(werewolf);
 	}
 	
 	public synchronized Vamp getVamp(int uid){
@@ -134,7 +217,10 @@ public class Board {
 		throw new IllegalArgumentException("invalid uid passed in.");
 	}
 
-	
+	public Set<Vamp> getVamps(){
+		return this.vamps;
+	}
+
 	public synchronized Room getRoomContainingPlayer(Vamp player){
 		for(Room[] row:getRooms()){
 			for(Room r:row){
@@ -150,6 +236,15 @@ public class Board {
 	}
 	
 	
+	
+	//
+	//
+	//
+	// Rooms.s
+	//
+	//
+	//
+	//
 	public Room getRoomContainingWerewolf(){
 		for(Room[] row:getRooms()){
 			for(Room r:row){
@@ -161,11 +256,44 @@ public class Board {
 				}
 			}
 		}
-		throw new IllegalArgumentException("invalid uid passed in.");
+		throw new IllegalArgumentException("no werewolf in the game");
+	}
+	
+	public Room getRespawnRoom(){
+		return this.respawnRoom;
+	}
+	
+	public Room[][] getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(Room[][] rooms) {
+		this.rooms = rooms;
+	}
+	
+	public void initRooms(GL gl,Texture[] textures){
+		for(Room[] row:rooms){
+			for(Room r:row){
+				if(r != null){
+					r.init(gl,textures);
+				}
+			}
+		}
 	}
 	
 	
+	public boolean isGameOver(){
+		return false;
+	}
 	
+	//
+	//
+	//
+	// Networking.
+	//
+	//
+	//
+	//
 	public synchronized byte[] toByteArray() throws IOException{
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		DataOutputStream dout = new DataOutputStream(bout);
@@ -197,25 +325,9 @@ public class Board {
 	}
 
 
-	public Room[][] getRooms() {
-		return rooms;
-	}
-
-	public Set<Vamp> getVamps(){
-		return this.vamps;
-	}
-
-	public void setRooms(Room[][] rooms) {
-		this.rooms = rooms;
-	}
 	
-	public void initRooms(GL gl,Texture[] textures){
-		for(Room[] row:rooms){
-			for(Room r:row){
-				if(r != null){
-					r.init(gl,textures);
-				}
-			}
-		}
-	}
+	
+	
+	
+	
 }

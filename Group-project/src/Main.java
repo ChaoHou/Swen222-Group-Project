@@ -101,7 +101,7 @@ public class Main {
 		GameFrame gg = new GameFrame("single user mode", game, uid, player,renderer);
 		gg.setVisible(true);
 		game.startGame();
-        while(true){
+		while(true){
         	//game running	        	
         }
 		
@@ -211,7 +211,7 @@ public class Main {
 		}
 	}
 
-	private static Board createBoardFromFile(String filename) throws IOException{
+	public static Board createBoardFromFile(String filename) throws IOException{
 		FileReader fr = new FileReader(filename);		
 		BufferedReader br = new BufferedReader(fr);
 		ArrayList<String[]> lines = new ArrayList<String[]>();
@@ -233,7 +233,6 @@ public class Main {
 			for(int j=0;j<width;j++){
 				String elem=lines.get(i)[j];
 				if(elem.equals("-")){
-					System.out.println("detected a dash");
 					rooms[i][j]=null;
 				}else{
 					rooms[i][j]=createRoom(elem);

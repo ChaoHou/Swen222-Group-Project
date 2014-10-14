@@ -2,17 +2,19 @@ package ui;
 import gameworld.Container;
 import gameworld.HealthPack;
 import gameworld.Orb;
-import control.Player;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
@@ -24,9 +26,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
+import rendering.Renderer;
+
 import com.jogamp.opengl.util.FPSAnimator;
 
-import rendering.Renderer;
+import control.Player;
 //import networking.Player;
 
 
@@ -82,6 +86,11 @@ public class GameFrame extends JFrame {
 		    this.getPanels().get("instructions").setVisible(false);	 
 			//Opens up the main menu
 			setMainMenu();		
+			
+			//amon added this 13/10/14.
+			addKeyListener((KeyListener)player);
+			this.setFocusable(true);
+				
 		}
 		
 		/**

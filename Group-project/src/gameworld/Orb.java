@@ -8,11 +8,19 @@ public class Orb implements Collectable{
 	//colour of the orb.
 	private int colour;
 	
+	
+	
 	public Orb(int colour){
-		this.colour=colour;
+		if(colour==Orb.BLUE || colour==Orb.GREEN || colour==Orb.RED){
+			this.colour=colour;
+		}else{
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	public int getColor(){
 		return this.colour;
 	}
+	
+	
 }

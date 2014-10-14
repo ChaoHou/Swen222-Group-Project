@@ -7,9 +7,10 @@ import gameworld.Orb;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -67,6 +68,8 @@ public class GameMenu extends JPanel {
 		
 		
 		this.setAlignmentX(BOTTOM_ALIGNMENT);		
+		
+		
 	}
 	
 
@@ -149,6 +152,13 @@ public class GameMenu extends JPanel {
 			left = new JButton("Turn Left");
 			right = new JButton("Turn Right");
 			changeRoom = new JButton("Change Room");
+			
+			//added by amon 13/10/14.
+			left.setMnemonic(KeyEvent.VK_A);
+			right.setMnemonic(KeyEvent.VK_D);
+			changeRoom.setMnemonic(KeyEvent.VK_W);
+			
+			
 			//Action Listeners for buttons		
 			left.addActionListener(player);
 			right.addActionListener(player);

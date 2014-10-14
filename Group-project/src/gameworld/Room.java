@@ -28,12 +28,12 @@ public class Room {
 	private Container container;
 	private Set<Vamp> players = new HashSet<Vamp>();
 	private Werewolf werewolf = null;
-	private String room;
+	private String roomName;
 	
 	
 	
 	public Room(String room, Wall[] walls) {
-		this.room=room;
+		this.roomName=room;
 		this.walls = walls;
 	}
 	
@@ -90,7 +90,7 @@ public class Room {
 	
 	@Override
 	public String toString(){
-		return this.room;
+		return this.roomName;
 	}
 	
 	public void draw(GL2 gl,int dir){

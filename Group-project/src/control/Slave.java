@@ -1,6 +1,6 @@
 package control;
 
-import gameworld.GameCharacter;
+import gameworld.Room;
 
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -61,7 +61,7 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 						game.fromByteArray(data);	
 						
 						
-						String facing = game.getVamp(uid).intDirToString();
+						String facing = game.getVamp(uid).getDirectionFacingInString();
 						System.out.println("Player:"+uid+" now facing:"+facing);
 					}
 
@@ -115,13 +115,13 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 		int code=e.getKeyCode();
 		
 		if(code==KeyEvent.VK_W){
-			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
+			game.getVamp(this.uid).rotateToFace(Room.NORTH);
 		}else if(code==KeyEvent.VK_D){
-			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
+			game.getVamp(this.uid).rotateToFace(Room.EAST);
 		}else if(code==KeyEvent.VK_S){
-			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
+			game.getVamp(this.uid).rotateToFace(Room.SOUTH);
 		}else if(code==KeyEvent.VK_A){
-			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
+			game.getVamp(this.uid).rotateToFace(Room.WEST);
 		}else if(code==KeyEvent.VK_E){
 			game.getVamp(this.uid).enterRoom();
 		}

@@ -112,13 +112,13 @@ public class Wall {
 
 	public static float getDir(int facingDir) {
 		switch(facingDir){
-		case GameCharacter.NORTH:
+		case Room.NORTH:
 			return 180f;
-		case GameCharacter.EAST:
+		case Room.EAST:
 			return 270.0f;
-		case GameCharacter.SOUTH:
+		case Room.SOUTH:
 			return 0.0f;
-		case GameCharacter.WEST:
+		case Room.WEST:
 			return 90.0f;
 		default:
 			return -1;

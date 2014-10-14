@@ -1,7 +1,7 @@
 package control;
 
 import gameworld.Container;
-import gameworld.GameCharacter;
+import gameworld.Room;
 import gameworld.Room;
 
 import java.awt.event.ActionEvent;
@@ -41,13 +41,13 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		int code=e.getKeyCode();
 		
 		if(code==KeyEvent.VK_W){
-			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
+			game.getVamp(this.uid).rotateToFace(Room.NORTH);
 		}else if(code==KeyEvent.VK_D){
-			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
+			game.getVamp(this.uid).rotateToFace(Room.EAST);
 		}else if(code==KeyEvent.VK_S){
-			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
+			game.getVamp(this.uid).rotateToFace(Room.SOUTH);
 		}else if(code==KeyEvent.VK_A){
-			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
+			game.getVamp(this.uid).rotateToFace(Room.WEST);
 		}else if(code==KeyEvent.VK_E){
 			game.getVamp(this.uid).enterRoom();
 		}
@@ -58,26 +58,26 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		String action = e.getActionCommand();
 		//System.out.println(action);
 		if(action.equals("Turn Left")){
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+			if(game.getVamp(uid).getDirectionFacing() == Room.NORTH)
+				game.getVamp(uid).rotateToFace(Room.WEST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.WEST)
+				game.getVamp(uid).rotateToFace(Room.SOUTH);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.SOUTH)
+				game.getVamp(uid).rotateToFace(Room.EAST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.EAST)
+				game.getVamp(uid).rotateToFace(Room.NORTH);
 			//renderer.rotateL();
 		}				
 		//When turning right
 		else if(action.equals("Turn Right")){
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+			if(game.getVamp(uid).getDirectionFacing() == Room.NORTH)
+				game.getVamp(uid).rotateToFace(Room.EAST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.EAST)
+				game.getVamp(uid).rotateToFace(Room.SOUTH);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.SOUTH)
+				game.getVamp(uid).rotateToFace(Room.WEST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.WEST)
+				game.getVamp(uid).rotateToFace(Room.NORTH);
 			//renderer.rotateR();
 
 		}

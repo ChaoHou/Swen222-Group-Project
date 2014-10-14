@@ -1,6 +1,7 @@
 package control;
 
 import gameworld.GameCharacter;
+import gameworld.Room;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -73,24 +74,24 @@ public class Master extends Thread {
 	public void rotate(ACTION action){
 		if(action.equals(ACTION.ROTATE_L)){
 			
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+			if(game.getVamp(uid).getDirectionFacing() == Room.NORTH)
+				game.getVamp(uid).rotateToFace(Room.WEST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.WEST)
+				game.getVamp(uid).rotateToFace(Room.SOUTH);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.SOUTH)
+				game.getVamp(uid).rotateToFace(Room.EAST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.EAST)
+				game.getVamp(uid).rotateToFace(Room.NORTH);
 		}else if(action.equals(ACTION.ROTATE_R)){
 			
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+			if(game.getVamp(uid).getDirectionFacing() == Room.NORTH)
+				game.getVamp(uid).rotateToFace(Room.EAST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.EAST)
+				game.getVamp(uid).rotateToFace(Room.SOUTH);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.SOUTH)
+				game.getVamp(uid).rotateToFace(Room.WEST);
+			else if(game.getVamp(uid).getDirectionFacing() == Room.WEST)
+				game.getVamp(uid).rotateToFace(Room.NORTH);
 		}
 	}
 }
