@@ -3,7 +3,9 @@ import gameworld.Container;
 import gameworld.Furniture;
 import gameworld.HealthPack;
 import gameworld.Orb;
+import gameworld.Werewolf;
 import control.Player;
+import control.WerewolfThread;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -164,6 +166,7 @@ public class GameFrame extends JFrame {
 		
 		public void setGame(){
 			//TEMPORARY STUFF
+			//TODO
 			this.getBoard().getVamp(this.getUid()).setHealth(3);
 			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPack());
 			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));	
@@ -195,6 +198,7 @@ public class GameFrame extends JFrame {
 			this.setLayout(new BorderLayout());
 		    //Rendering
 			GLProfile glprofile = GLProfile.get(GLProfile.GL2);
+			//System.out.println(glprofile.getDefaultDevice().toString());
 	        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 	        final GLCanvas glcanvas = new GLCanvas( glcapabilities );
 	        glcanvas.addGLEventListener(renderer);    
@@ -214,6 +218,10 @@ public class GameFrame extends JFrame {
 
 		    map = new MapScreen("map",this);
 		    //Specific ActionListeners and thread stuff will run now
+		    Werewolf werewolf=new Werewolf(board);
+			board.registerWerewolf(werewolf);
+			WerewolfThread werewolfThread = new WerewolfThread(werewolf);
+			werewolfThread.start();
  			((Player) getPlayer()).setFrame(this);
 		    ((Thread) getPlayer()).start();
 

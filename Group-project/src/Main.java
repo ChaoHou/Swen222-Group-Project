@@ -101,7 +101,7 @@ public class Main {
 		Player player = new Player(uid,game,renderer);
 		GameFrame gg = new GameFrame("single user mode", game, uid, player,renderer);
 		gg.setVisible(true);
-		game.startGame();
+		//game.startGame();
         while(true){
         	Thread.yield();      	
         }

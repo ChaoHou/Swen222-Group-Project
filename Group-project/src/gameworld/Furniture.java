@@ -1,5 +1,9 @@
 package gameworld;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
@@ -7,6 +11,7 @@ import javax.media.opengl.glu.GLU;
 import com.jogamp.opengl.util.texture.Texture;
 
 import rendering.Box;
+import ui.Board;
 
 public class Furniture {
 
@@ -66,4 +71,20 @@ public class Furniture {
 		return box.containsPoint(gl, glu, x, y,dir);
 	}
 
+	public void toOutputStream(DataOutputStream dout) throws IOException{
+		if(hidingPlayer != null){
+			dout.writeBoolean(true);
+			hidingPlayer.toOutputStream(dout);
+		}else{
+			dout.writeBoolean(false);
+		}
+	}
+	
+	public void fromInputStream(DataInputStream din,Board game) throws IOException {
+		boolean hasPlayer = din.readBoolean();
+		if(hasPlayer){
+			hidingPlayer = Vamp.fromInputStream(din, game);
+		}
+	}
+	
 }

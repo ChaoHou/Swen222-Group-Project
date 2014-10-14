@@ -127,11 +127,20 @@ public class Room {
 		for(Vamp p:players){
 			p.toOutputStream(dout);
 		}
+		
 		if(werewolf != null){
 			dout.writeBoolean(true);
 			werewolf.toOutputStream(dout);
 		}else{
 			dout.writeBoolean(false);
+		}
+		
+		if(furniture != null){
+			furniture.toOutputStream(dout);
+		}
+		
+		if(container != null){
+			
 		}
 	}
 	
@@ -142,9 +151,18 @@ public class Room {
 			Vamp temp = Vamp.fromInputStream(din, game);
 			players.add(temp);
 		}
+		
 		boolean hasNPC = din.readBoolean();
 		if(hasNPC){
 			werewolf = Werewolf.fromInputStream(din, game);
+		}
+		
+		if(furniture != null){
+			furniture.fromInputStream(din, game);
+		}
+		
+		if(container != null){
+			
 		}
 	}
 	

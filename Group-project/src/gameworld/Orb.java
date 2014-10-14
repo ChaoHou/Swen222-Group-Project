@@ -1,5 +1,11 @@
 package gameworld;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import ui.Board;
+
 public class Orb implements Collectable{
 	public static final int BLUE=0;
 	public static final int GREEN=1;
@@ -36,5 +42,13 @@ public class Orb implements Collectable{
 		if (colour != other.colour)
 			return false;
 		return true;
+	}
+	
+	public void toOutputStream(DataOutputStream dout) throws IOException {	
+		dout.writeInt(colour);
+	}
+	
+	public static Orb fromInputStream(DataInputStream din,Board game) throws IOException {
+		return new Orb(din.readInt());
 	}
 }
