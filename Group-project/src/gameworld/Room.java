@@ -93,6 +93,23 @@ public class Room {
 		return players;
 	}
 	
+
+	public void hideInFurniture(Vamp player) {
+		if(furniture != null && players.contains(player)){
+			furniture.hidePlayer(player);
+		}else{
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public void getOutFromFurniture(Vamp player){
+		if(furniture != null){
+			players.add(furniture.getOutFromFurniture());
+		}else{
+			throw new IllegalArgumentException();
+		}
+	}
+	
 	@Override
 	public String toString(){
 		return this.room;
@@ -127,20 +144,11 @@ public class Room {
 		for(Vamp p:players){
 			p.toOutputStream(dout);
 		}
-		
 		if(werewolf != null){
 			dout.writeBoolean(true);
 			werewolf.toOutputStream(dout);
 		}else{
 			dout.writeBoolean(false);
-		}
-		
-		if(furniture != null){
-			furniture.toOutputStream(dout);
-		}
-		
-		if(container != null){
-			
 		}
 	}
 	
@@ -151,20 +159,14 @@ public class Room {
 			Vamp temp = Vamp.fromInputStream(din, game);
 			players.add(temp);
 		}
-		
 		boolean hasNPC = din.readBoolean();
 		if(hasNPC){
 			werewolf = Werewolf.fromInputStream(din, game);
 		}
-		
-		if(furniture != null){
-			furniture.fromInputStream(din, game);
-		}
-		
-		if(container != null){
-			
-		}
 	}
+
+
+
 	
 	
 	

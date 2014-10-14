@@ -292,7 +292,8 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				//TODO
 				//Remove the player from the furniture.
 				HidingScreen x = (HidingScreen) frame.getCurrentScreen();
-		        x.removePlayer();
+		        Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+		        room.getOutFromFurniture(game.getVamp(uid));
 				frame.showGame(frame.getCurrentScreen());
 				frame.repaint();
 				frame.setVisible(true);	
@@ -420,10 +421,14 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 						printMessage("Sorry, but another player's hiding already!");
 						//temp.getHidingPlayer();	
 						return;
+					}else{
+						room.hideInFurniture(game.getVamp(uid));
+						
+						printMessage("You hid into the shadows");	
+						frame.showHidingScreen();
 					}
 					
-					printMessage("You hid into the shadows");	
-					frame.showHidingScreen(furniture);
+					
 					
 					renderer.setFurnitureSelected(false);
 				}

@@ -18,12 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class HidingScreen extends PopUpScreen {
-	private Furniture furniture;
+	//private Furniture furniture;
 	private JButton getOut;
 
-	public HidingScreen(String name, GameFrame game, Furniture furniture) {		
+	public HidingScreen(String name, GameFrame game) {		
 		super(name, game);
-		this.furniture = furniture;		
+		//this.furniture = furniture;		
 
 		getOut = new JButton("Get out");
  		getOut.addActionListener(getGame().getPlayer());	
@@ -40,11 +40,11 @@ public class HidingScreen extends PopUpScreen {
 
 	}
 	
-	public void removePlayer(){
-		furniture.removePlayer(getGame().getBoard().getVamp(getGame().getUid()));
-		getGame().getBoard().getVamp(getGame().getUid()).setHiding(false);
-		
-	}
+//	public void removePlayer(){
+//		furniture.removePlayer(getGame().getBoard().getVamp(getGame().getUid()));
+//		getGame().getBoard().getVamp(getGame().getUid()).setHiding(false);
+//		
+//	}
 	
 	
 

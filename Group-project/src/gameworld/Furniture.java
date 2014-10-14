@@ -38,8 +38,10 @@ public class Furniture {
 		return this.hidingPlayer;
 	}
 	
-	public void removePlayer(Vamp player){
+	public Vamp getOutFromFurniture(){
+		Vamp vamp = hidingPlayer;
 		hidingPlayer=null;
+		return vamp;
 	}
 	
 	public int getFurnitureType(){
