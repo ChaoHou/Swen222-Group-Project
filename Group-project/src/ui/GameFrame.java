@@ -2,8 +2,6 @@ package ui;
 import gameworld.Collectable;
 import gameworld.Container;
 import gameworld.Furniture;
-import gameworld.HealthPack;
-import gameworld.Orb;
 import gameworld.Vamp;
 import control.Player;
 
@@ -25,7 +23,6 @@ import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,11 +30,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-
 import com.jogamp.opengl.util.FPSAnimator;
 
 import rendering.Renderer;
-//import networking.Player;
 import ui.GameMenu.StatsPanel;
 
 
@@ -171,11 +166,9 @@ public class GameFrame extends JFrame {
 		 */
 		
 		public void setGame(){
-			//TEMPORARY STUFF
-			this.getBoard().getVamp(this.getUid()).setHealth(3);
-			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPack());
-			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));	
-
+			//Temp
+			this.board.getVamp(uid).setHealth(5);
+		
 			//Sets up the menu bar
 		    JMenuBar menubar = new JMenuBar();
 		    JMenu help = new JMenu("Help");	

@@ -7,16 +7,11 @@ import gameworld.Orb;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -24,19 +19,15 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.text.DefaultCaret;
 
-//import networking.Player;
 
 /**
  * Game UI Features:
  * 1.) A Map
  * 2.) Navigation
- * 3.) Combat
  * 3.) Player's Statistics and Inventory
  * 4.) Message window
  */
@@ -50,9 +41,6 @@ public class GameMenu extends JPanel {
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
 	//List of all the buttons in GameMenu
 	private Map<JButton, String> buttons = new HashMap<JButton, String>();
-	
-
-	
 	
 	public GameMenu(GameFrame game, ActionListener player){  	
 		this.currentGame = game;
@@ -158,17 +146,6 @@ public class GameMenu extends JPanel {
 			right.addActionListener(player);
 			changeRoom.addActionListener(player);	
 			
-			//left.addKeyListener((KeyListener) currentGame.getPlayer());
-			//right.addKeyListener((KeyListener) currentGame.getPlayer());
-
-			//left.setPreferredSize(new Dimension(100,20));
-			//right.setPreferredSize(new Dimension(100,20));
-
-			//left.setIcon(new ImageIcon(img));
-	        //left.setBorder(null);	
-	        //right.setIcon(new ImageIcon(img));
-	        //right.setBorder(null);	
-			
 			//Setting up the directionalPanel
 			directionPanel = new JPanel();
 			directionPanel.add(label1);
@@ -199,79 +176,6 @@ public class GameMenu extends JPanel {
 		//Actions Listener for the buttons		
 	}
 	
-	
-
-	/**
-	 * This is the Combat panel
-	 * 
-	 */
-	
-//	public class CombatPanel extends JPanel{
-//		private JButton p1, p2, p3, p4;
-//		private JPanel buttonPanel;
-//		private JPanel normalCombat;
-//		private JPanel surpriseCombat;
-//
-//		public CombatPanel(){
-//		    JLabel label1 = new JLabel("Combat", JLabel.CENTER);
-//			//Buttons
-//			p1 = new JButton("P1");			
-//			p2 = new JButton("P2");
-//			p3 = new JButton("P3");
-//			p4 = new JButton("P4");
-//			ButtonListener b = new ButtonListener();
-//			//Action Listeners for buttons
-//			p1.addActionListener(b);
-//			p2.addActionListener(b);
-//			p3.addActionListener(b);
-//			p4.addActionListener(b);
-//			//Setting up the Panel
-//			buttonPanel = new JPanel();
-//			buttonPanel.setPreferredSize(new Dimension(150,150));
-//			buttonPanel.setBackground(Color.black);
-//			buttonPanel.add(p1);
-//			buttonPanel.add(p2);
-//			buttonPanel.add(p3);
-//			buttonPanel.add(p4);
-//			//Setting The outmost stuff
-//			this.setPreferredSize(new Dimension(200,200));
-//			this.setBackground(Color.LIGHT_GRAY);
-//			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-//			this.add(label1);
-//			this.add(buttonPanel);
-//		}	
-//		//Actions Listener for the buttons		
-//		private class ButtonListener implements ActionListener{
-//			@SuppressWarnings("deprecation")
-//			public void actionPerformed(ActionEvent event){
-//				if(event.getSource() == p1){
-//					
-//					String answer = (String) JOptionPane.showInputDialog(null, "You're now facing Player 1", null, 
-//							 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "Fight", "Trade"}, null);
-//					System.out.println("Attack Player 1?");
-//
-//				}
-//				else if(event.getSource() == p2){
-//					System.out.println("Attack Player 2");
-//					p1.setBackground(Color.white);
-//					p1.setLabel("P1 is Occupied");
-//
-//				}
-//				else if(event.getSource() == p3){
-//					//Use room
-//					System.out.println("Attack Player 3");
-//					p1.setLabel("P1");
-//										
-//				}	
-//				else if(event.getSource() == p4){
-//					//Use room
-//				//	currentGame.showInstructions();
-//					currentGame.setVisible(true);					
-//				    updateUI();
-//				}	
-//			}
-//		}	
-//	}
 	
 	
 	/**

@@ -119,6 +119,7 @@ public class MainMenu extends JPanel {
 				    //Starts a new game!
 					game.setGame();
 					game.getBoard().startGame();
+				
 					game.setVisible(true);	
 					updateUI();
 			}
