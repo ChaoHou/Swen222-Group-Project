@@ -86,6 +86,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		if(action.equals("Turn Left")){
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
 				game.getVamp(uid).rotateTo(GameCharacter.WEST);
+			
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
 				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
@@ -93,6 +94,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
 				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
 			//renderer.rotateL();
+			printMessage("You're facing "+ game.getVamp(uid).intDirToString() );
 		}				
 		//When turning right
 		else if(action.equals("Turn Right")){
@@ -105,12 +107,14 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
 				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
 			//renderer.rotateR();
+			printMessage("You're facing "+ game.getVamp(uid).intDirToString() );
 
 		}
 		else if(action.equals("Change Room")){
 			//Use room
 			game.getVamp(uid).enterRoom();
-			
+			printMessage("You've entered the " + game.getRoomContainingPlayer(game.getVamp(uid)));
+
 		
 		}	
 		
@@ -158,17 +162,9 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		else if(action.equals("Hide into Nothingness")){
 			//You hide into furniture that's not in the game.
-			if(tempFurniture.getHidingPlayer() != null){
-				printMessage("You found another player's hiding already.");
-				printMessage("You attacked him.");
-				Vamp victim = tempFurniture.getHidingPlayer();
-				victim.setFighting(true);
-				tempFurniture.removePlayer(victim);
-				return;
-			}		
-			printMessage("You hid into the shadows");	
 			frame.showHidingScreen(tempFurniture);
-						
+			printMessage("You hid into the shadows");	
+	
 			
 		}	
 		
@@ -410,6 +406,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	 			        gameover.updateUI(); 				
 					    break;
 				}
+				
 				//What if the player got ambushed?
 				if(game.getVamp(uid).isFighting()){
 	 				printMessage("Another player ambushed you!");
@@ -422,15 +419,13 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	 				//Third, lower that player's health and update information
 	 				game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
 	 				game.getVamp(uid).setFighting(false);
-	 				game.getVamp(uid).setHiding(false);;
+	 				game.getVamp(uid).setHiding(false);
 					//Updating the Statistics Information:
 					StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 					x.updateHealth();
 					frame.getPanels().get("game").repaint();
 					frame.getPanels().get("game").updateUI(); 				
 	 				
-
-
 				}
 				
 				//Automatic Victory

@@ -1,8 +1,10 @@
 package ui;
+import gameworld.Collectable;
 import gameworld.Container;
 import gameworld.Furniture;
 import gameworld.HealthPack;
 import gameworld.Orb;
+import gameworld.Vamp;
 import control.Player;
 
 import java.awt.BorderLayout;
@@ -36,6 +38,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import rendering.Renderer;
 //import networking.Player;
+import ui.GameMenu.StatsPanel;
 
 
 public class GameFrame extends JFrame {
@@ -215,6 +218,7 @@ public class GameFrame extends JFrame {
 			this.getContentPane().add(glcanvas, BorderLayout.CENTER);
 			this.getContentPane().add(game, BorderLayout.SOUTH);
 			this.runningGame = true;
+			this.setBackground(Color.GRAY);
 		    this.repaint();
 
 		    map = new MapScreen("map",this);
@@ -295,15 +299,32 @@ public class GameFrame extends JFrame {
 		 * This is similar to showPopup, however the passed in furniture will obtain a player now
 		 * 
 		 */
-		public void showHidingScreen(Furniture f){		
+		public void showHidingScreen(Furniture f){				
+			if(f.getHidingPlayer() != null){
+				Vamp victim = f.getHidingPlayer();
+				victim.setFighting(true);
+				f.removePlayer(victim);			
+				//Steal an item...
+				if(!victim.getInventory().isEmpty()){
+					Collectable x = victim.getInventory().get(0);
+					victim.remove(x);
+					this.board.getVamp(uid).collectItem(x);
+					StatsPanel yourInventory = (StatsPanel) ((GameMenu) this.getPanels().get("game")).getPanels().get("stats");
+					yourInventory.updateInventory();
+					this.getPanels().get("game").repaint();
+					this.getPanels().get("game").updateUI(); 					
+				}
+				return;
+			}
+			
+			
 		    HidingScreen CM = new HidingScreen("furniture",this, f);
 		    currentScreen = CM;
 			this.getPanels().put("furniture", CM);						
-			this.getContentPane().add(CM);
-			
+			this.getContentPane().add(CM);		
 			f.hidePlayer(board.getVamp(uid));
 			board.getVamp(uid).setHiding(true);
-			
+	
 			this.canvas.setVisible(false);			
 			((GameMenu) this.getPanels().get("game")).disableButtons();
 		    this.repaint();    

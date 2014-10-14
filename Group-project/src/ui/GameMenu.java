@@ -158,8 +158,8 @@ public class GameMenu extends JPanel {
 			right.addActionListener(player);
 			changeRoom.addActionListener(player);	
 			
-			left.addKeyListener((KeyListener) currentGame.getPlayer());
-			right.addKeyListener((KeyListener) currentGame.getPlayer());
+			//left.addKeyListener((KeyListener) currentGame.getPlayer());
+			//right.addKeyListener((KeyListener) currentGame.getPlayer());
 
 			//left.setPreferredSize(new Dimension(100,20));
 			//right.setPreferredSize(new Dimension(100,20));
