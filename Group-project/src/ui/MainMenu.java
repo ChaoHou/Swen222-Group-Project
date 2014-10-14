@@ -58,6 +58,7 @@ public class MainMenu extends JPanel {
 			img5 = ImageIO.read(new File("src/title.png"));
 		} catch (IOException e) {
 		}
+		
 		//Buttons
 		JButton newGame, instructions;		
 		newGame = new JButton();

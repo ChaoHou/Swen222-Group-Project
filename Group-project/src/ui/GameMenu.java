@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -144,7 +145,11 @@ public class GameMenu extends JPanel {
 			//Action Listeners for buttons		
 			left.addActionListener(player);
 			right.addActionListener(player);
-			changeRoom.addActionListener(player);	
+			changeRoom.addActionListener(player);
+			
+			left.addKeyListener((KeyListener) player);
+			right.addKeyListener((KeyListener) player);
+			changeRoom.addKeyListener((KeyListener) player);
 			
 			//Setting up the directionalPanel
 			directionPanel = new JPanel();
