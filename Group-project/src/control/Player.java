@@ -38,14 +38,13 @@ import ui.InstructionsScreen;
 import ui.MapScreen;
 
 
-public class Player extends Thread implements KeyListener,ActionListener,MouseListener{
+public class Player extends Thread implements KeyListener,ActionListener,MouseListener,PlayerInterface{
 
 	private int uid;
 	private Board game;
 	private Renderer renderer;
 	private GameFrame frame;
 	private Map<JButton, String> buttons;
-	private Map<JButton, String> mainButtons;
 	private Map<JButton, String> screenButtons;
 	private Room[][] rooms;
 

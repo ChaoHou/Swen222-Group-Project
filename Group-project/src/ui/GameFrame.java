@@ -5,6 +5,7 @@ import gameworld.HealthPack;
 import gameworld.Orb;
 import gameworld.Werewolf;
 import control.Player;
+import control.PlayerInterface;
 import control.WerewolfThread;
 
 import java.awt.BorderLayout;
@@ -222,7 +223,7 @@ public class GameFrame extends JFrame {
 			board.registerWerewolf(werewolf);
 			WerewolfThread werewolfThread = new WerewolfThread(werewolf);
 			werewolfThread.start();
- 			((Player) getPlayer()).setFrame(this);
+ 			((PlayerInterface) getPlayer()).setFrame(this);
 		    ((Thread) getPlayer()).start();
 
 		}

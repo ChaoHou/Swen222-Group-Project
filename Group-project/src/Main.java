@@ -5,6 +5,7 @@ import gameworld.Room;
 import gameworld.Wall;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -101,7 +102,6 @@ public class Main {
 		Player player = new Player(uid,game,renderer);
 		GameFrame gg = new GameFrame("single user mode", game, uid, player,renderer);
 		gg.setVisible(true);
-		//game.startGame();
         while(true){
         	Thread.yield();      	
         }
@@ -143,19 +143,21 @@ public class Main {
 		try {
 			Socket s = new Socket(addr,port);
 			System.out.println("CLIENT CONNECTED TO " + addr + ":" + port);			
-			//SlaveConnection slave = new SlaveConnection(s,broadcastClock);
-			//SlaveActionHandler actionSlave = new SlaveActionHandler(slave,gameClock);
-			//slave.setActionHandler(actionSlave);
 			
-			//slave.start();
-			//actionSlave.run();
+			int uid = new DataInputStream(s.getInputStream()).readInt();
+			
 			Board game=createBoardFromFile(filename);
 			//TODO
 			//need to set the uid to the renderer
-			Renderer renderer = new Renderer(game,0);
-			Slave client = new Slave(s,game,renderer);
-			client.run();
+			Renderer renderer = new Renderer(game,uid);
+			Slave client = new Slave(s,game,renderer,uid);
+			GameFrame gg = new GameFrame("single user mode", game, uid, client ,renderer);
+			gg.setVisible(true);
 			
+			//client.run();
+			while(true){
+				Thread.yield();
+			}
 			
 			
 		} catch (UnknownHostException e) {
