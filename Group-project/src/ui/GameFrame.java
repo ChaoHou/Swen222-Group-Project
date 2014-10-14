@@ -6,6 +6,8 @@ import gameworld.Orb;
 import control.Player;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -99,13 +101,15 @@ public class GameFrame extends JFrame {
 			this.setLayout(new GridLayout());
 			BufferedImage img3 = null;
 			try {
-				img3 = ImageIO.read(new File("src/wallpaper.jpg"));
+				img3 = ImageIO.read(new File("src/blur.png"));
 			} catch (IOException e) {
 			}
 			JLabel x = new JLabel();
-			x.setIcon(new ImageIcon (img3));
+			//x.setIcon(new ImageIcon (img3));
 			x.setLayout(new FlowLayout());
+			x.setPreferredSize(new Dimension(600, 600));
 			this.setContentPane(x);
+			this.setBackground(Color.black);
 			//Game logic's information
 			this.setBoard(board);
 			this.setUid(uid);			
@@ -114,6 +118,7 @@ public class GameFrame extends JFrame {
 			 
 		    //Set up the instructions 
 		    InstructionsScreen menu = new InstructionsScreen("instructions", this);	
+		    
 			this.getPanels().put("instructions", menu);	
 			this.getContentPane().add(menu);
 		    this.getPanels().get("instructions").setVisible(false);	 

@@ -49,11 +49,13 @@ public class MainMenu extends JPanel {
 		BufferedImage img2 = null;
 		BufferedImage img3 = null;	
 		BufferedImage img4 = null;
+		BufferedImage img5 = null;
 		try {
 			img = ImageIO.read(new File("src/newgame1.png"));
 			img2 = ImageIO.read(new File("src/newgame2.png"));
 			img3 = ImageIO.read(new File("src/Instructions1.png"));	
 			img4 = ImageIO.read(new File("src/Instructions2.png"));
+			img5 = ImageIO.read(new File("src/title.png"));
 		} catch (IOException e) {
 		}
 		//Buttons
@@ -78,17 +80,24 @@ public class MainMenu extends JPanel {
 		
 		//Setting up the Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		this.setPreferredSize(new Dimension(200,200));
+		this.setPreferredSize(new Dimension(800,705));
 		this.setBackground(Color.black);
 	    this.setLayout(new FlowLayout());
 	    
+	    JLabel title = new JLabel();
+		title.setIcon(new ImageIcon (img5));
+		title.setLayout(new FlowLayout());
+	    		
+	    
 	    //Adding the buttons
 	    JPanel x = new JPanel();
+	    x.setLayout(new FlowLayout());
+	    x.setPreferredSize(new Dimension (700, 700));
+	    x.add(title);
 	    x.add(newGame);
 	    x.setBackground(Color.black);
 	    x.add(instructions);
-	    x.setLayout(new FlowLayout());
-	    x.setPreferredSize(new Dimension (150, 400));
+	    
 		this.add(x, BorderLayout.NORTH);	
 	}	
 	
