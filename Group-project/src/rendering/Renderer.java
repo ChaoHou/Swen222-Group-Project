@@ -120,17 +120,17 @@ public class Renderer implements GLEventListener, KeyListener {
         
         game.initRooms(gl,textures);
         
-        double[] modelView = new double[16];
-		double[] projection = new double[16];
-		int[] viewport = new int[4];
-		
-		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelView,0);
-		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
-		gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
-		
-		System.out.println(Arrays.toString(modelView));
-		System.out.println(Arrays.toString(projection));
-		System.out.println(Arrays.toString(viewport));
+//        double[] modelView = new double[16];
+//		double[] projection = new double[16];
+//		int[] viewport = new int[4];
+//		
+//		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelView,0);
+//		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
+//		gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
+//		
+//		System.out.println(Arrays.toString(modelView));
+//		System.out.println(Arrays.toString(projection));
+//		System.out.println(Arrays.toString(viewport));
     }
 
     @Override
