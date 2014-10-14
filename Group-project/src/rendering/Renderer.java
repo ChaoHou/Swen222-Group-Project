@@ -3,6 +3,7 @@ package rendering;
 import javax.media.opengl.*;
 
 import gameworld.Container;
+import gameworld.Furniture;
 import gameworld.Vamp;
 
 import javax.media.opengl.GL;
@@ -40,7 +41,8 @@ public class Renderer implements GLEventListener, KeyListener {
     private GLU glu = new GLU();
     private GL2 gl;
     private MouseEvent mouse;
-    public boolean selected = false;
+    private boolean containerSelected = false;
+    private boolean furnitureSelected = false;
 //    private final Board board;
 //    private final Vamp player;
 
@@ -120,18 +122,7 @@ public class Renderer implements GLEventListener, KeyListener {
         System.out.println("Texture Initialized");
         
         game.initRooms(gl,textures);
-        
-//        double[] modelView = new double[16];
-//		double[] projection = new double[16];
-//		int[] viewport = new int[4];
-//		
-//		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelView,0);
-//		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
-//		gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
-//		
-//		System.out.println(Arrays.toString(modelView));
-//		System.out.println(Arrays.toString(projection));
-//		System.out.println(Arrays.toString(viewport));
+      
     }
 
     @Override
@@ -141,7 +132,7 @@ public class Renderer implements GLEventListener, KeyListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-        update();
+        //update();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
@@ -154,10 +145,22 @@ public class Renderer implements GLEventListener, KeyListener {
         if(mouse != null){
         	//perform selection
         	Container container = game.getRoomContainingPlayer(game.getVamp(uid)).getContainer();
-        	
         	if(container != null){
-        		if(container.containsPoint(gl, glu, mouse.getX(), mouse.getY())){
-        			selected = true;
+        		if(container.containsPoint(gl, glu, mouse.getX(), mouse.getY(),player.getDirectionFacing())){
+        			System.out.println("Mouse point: x:"+mouse.getX()+" y:"+mouse.getY());
+        			setContainerSelected(true);
+        		}else{
+        			setContainerSelected(false);
+        		}
+        	}
+        	
+        	Furniture furniture = game.getRoomContainingPlayer(game.getVamp(uid)).getFurniture();
+        	
+        	if(furniture != null){
+        		if(furniture.containsPoint(gl, glu, mouse.getX(), mouse.getY(),player.getDirectionFacing())){
+        			setFurnitureSelected(true);
+        		}else{
+        			setFurnitureSelected(false);
         		}
         	}
         	
@@ -179,7 +182,7 @@ public class Renderer implements GLEventListener, KeyListener {
         gl.glViewport(0, 0, width, height);
         gl.glLoadIdentity();
 
-
+        setCamera(gl);
     }
 
     private void update() {
@@ -252,6 +255,22 @@ public class Renderer implements GLEventListener, KeyListener {
     public GL2 getGL(){
     	return gl;
     }
+
+	public boolean isContainerSelected() {
+		return containerSelected;
+	}
+
+	public void setContainerSelected(boolean containerSelected) {
+		this.containerSelected = containerSelected;
+	}
+
+	public boolean isFurnitureSelected() {
+		return furnitureSelected;
+	}
+
+	public void setFurnitureSelected(boolean furnitureSelected) {
+		this.furnitureSelected = furnitureSelected;
+	}
     
    
     

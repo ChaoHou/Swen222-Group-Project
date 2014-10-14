@@ -1,4 +1,5 @@
 import gameworld.Container;
+import gameworld.Furniture;
 import gameworld.Orb;
 import gameworld.Room;
 import gameworld.Wall;
@@ -246,10 +247,24 @@ public class Main {
 		return board;	
 	}
 	
+	/**
+	 * Room file format:
+	 *   name: roomName.txt
+	 *   content:
+	 *   line 1: wall texture index
+	 *     format: north east south west
+	 *   line 2: container info
+	 *     format: 0 type x y z index orb...
+	 *   line 3: furniture info
+	 *     format: 1 type x y z index
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
 	private static Room createRoom(String name) throws IOException{
 		String dir = "resources/maps/"+name+".txt";
-		System.out.println("file name:"+name);
-		System.out.println("dir: "+dir);
+//		System.out.println("file name:"+name);
+//		System.out.println("dir: "+dir);
 		
 		try {
 			FileReader fr = new FileReader(dir);
@@ -265,23 +280,38 @@ public class Main {
 			
 			Room room = new Room(name,walls);
 			
-			line = br.readLine();
-			if(line != null){
+			final int typeContainer = 0;
+			final int typeFurniture = 1; 
+			
+			//line = br.readLine();
+			while((line = br.readLine()) != null){
 				tokens = line.split(" ");
-				int type = Integer.parseInt(tokens[0]);
-				int x = Integer.parseInt(tokens[1]);
-				int y = Integer.parseInt(tokens[2]);
-				int z = Integer.parseInt(tokens[3]);
-				int index = Integer.parseInt(tokens[4]);
-				Container container = new Container(type,x,y,z,index);
+				int objectType = Integer.parseInt(tokens[0]);
+				int type = Integer.parseInt(tokens[1]);
+				int x = Integer.parseInt(tokens[2]);
+				int y = Integer.parseInt(tokens[3]);
+				int z = Integer.parseInt(tokens[4]);
+				int index = Integer.parseInt(tokens[5]);
 				
-				for(int i=5;i<tokens.length;i++){
-					int color = Integer.parseInt(tokens[i]);
-					Orb orb = new Orb(color);
-					container.addItem(orb);
+				if(objectType == typeContainer){
+					Container container = new Container(type,x,y,z,index);
+					
+					for(int i=6;i<tokens.length;i++){
+						int color = Integer.parseInt(tokens[i]);
+						Orb orb = new Orb(color);
+						container.addItem(orb);
+					}
+					
+					room.setContainer(container);
+				}else if(objectType == typeFurniture){
+					System.out.println("get furniture");
+					Furniture furniture = new Furniture(type, x, y, z, index);
+					
+					room.setFurniture(furniture);
 				}
 				
-				room.setContainer(container);
+				
+				
 			}
 			
 			return room;

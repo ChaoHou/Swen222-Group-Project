@@ -70,8 +70,8 @@ public class Container {
 		return null;
 	}
 	
-	public boolean containsPoint(GL2 gl,GLU glu, int x,int y){
-		return box.containsPoint(gl, glu, x, y);
+	public boolean containsPoint(GL2 gl,GLU glu, int x,int y,int dir){
+		return box.containsPoint(gl, glu, x, y,dir);
 	}
 	
 	public void init(GL gl,Texture[] textures) {

@@ -23,9 +23,10 @@ public class Room {
 	public static final int WEST=3;
 
 	private Wall[] walls;
-	private Set<Furniture> furniture=new HashSet<Furniture>();
+//	private Set<Furniture> furniture=new HashSet<Furniture>();
 	//private Set<Container> containers=new HashSet<Container>();
 	private Container container;
+	private Furniture furniture;
 	private Set<Vamp> players = new HashSet<Vamp>();
 	private Werewolf werewolf = null;
 	private String room;
@@ -78,8 +79,12 @@ public class Room {
 		return container;
 	}
 	
-	public void addFurniture(Furniture furniture){
-		this.furniture.add(furniture);
+	public void setFurniture(Furniture furniture){
+		this.furniture = furniture;
+	}
+
+	public Furniture getFurniture(){
+		return furniture;
 	}
 	
 	//returns a set of vamps in this room.
@@ -97,11 +102,11 @@ public class Room {
 		for(Wall wall:walls){
 			wall.draw(gl,dir);
 		}
-//		for(Container c:containers){
-//			c.draw(gl,dir);
-//		}
 		if(container != null){
 			container.draw(gl, dir);
+		}
+		if(furniture != null){
+			furniture.draw(gl, dir);
 		}
 	}
 	
@@ -109,11 +114,11 @@ public class Room {
 		for(Wall w:walls){
 			w.init(gl,textures);
 		}
-//		for(Container c:containers){
-//			c.init(gl, textures);
-//		}
 		if(container != null){
 			container.init(gl, textures);
+		}
+		if(furniture != null){
+			furniture.init(gl, textures);
 		}
 	}
 	

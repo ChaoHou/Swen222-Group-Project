@@ -49,7 +49,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	private Map<JButton, String> screenButtons;
 	private Room[][] rooms;
 
-	Furniture temp = new Furniture(1);
+	//Furniture temp = new Furniture(1,0,0,0,1);
 
 	
 	public Player(int uid, Board game,Renderer renderer){	
@@ -155,14 +155,14 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		else if(action.equals("Hide into Nothingness")){
 			//You hide into furniture that's not in the game.
-			if(temp.getHidingPlayer() != null){
-				printMessage("Sorry, but another player's hiding already!");
-				//temp.getHidingPlayer();	
-				return;
-			}
-			
-			printMessage("You hid into the shadows");	
-			frame.showHidingScreen(temp);
+//			if(temp.getHidingPlayer() != null){
+//				printMessage("Sorry, but another player's hiding already!");
+//				//temp.getHidingPlayer();	
+//				return;
+//			}
+//			
+//			printMessage("You hid into the shadows");	
+//			frame.showHidingScreen(temp);
 				
 		}
 		
@@ -289,6 +289,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			}
 			//Remove the player from the furniture and set the player visible.
 			else if(screenButtons.get(e.getSource()).equals("getOut")){
+				//TODO
 				//Remove the player from the furniture.
 				HidingScreen x = (HidingScreen) frame.getCurrentScreen();
 		        x.removePlayer();
@@ -335,15 +336,11 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -358,21 +355,17 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("Mouse pressed");
+//		System.out.println("Mouse pressed");
 		
 		renderer.setMouseEvent(e);
 		
@@ -381,7 +374,6 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -411,7 +403,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				frame.repaint();
 				
 				//pick up containers
-				if(renderer.selected){
+				if(renderer.isContainerSelected()){
 					Room room = game.getRoomContainingPlayer(game.getVamp(uid));
 					Container container = room.getContainer();
 					if(container != null){
@@ -419,7 +411,21 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 						frame.setVisible(true);
 						frame.repaint();
 					}
-					renderer.selected = false;
+					renderer.setContainerSelected(false);
+				}else if(renderer.isFurnitureSelected()){
+					Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+					Furniture furniture = room.getFurniture();
+					
+					if(furniture.getHidingPlayer() != null){
+						printMessage("Sorry, but another player's hiding already!");
+						//temp.getHidingPlayer();	
+						return;
+					}
+					
+					printMessage("You hid into the shadows");	
+					frame.showHidingScreen(furniture);
+					
+					renderer.setFurnitureSelected(false);
 				}
 				
 				if(game.getVamp(uid).isDead()){
@@ -456,7 +462,6 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			}
 			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
