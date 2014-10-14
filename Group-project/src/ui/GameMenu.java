@@ -14,9 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -24,21 +22,28 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.text.DefaultCaret;
 
-//import networking.Player;
 
 /**
- * Game UI Features:
+ * This class is responsible for the controls and information of the player.
+ * It is split into four specific JPanels that show:
  * 1.) A Map
+ * - This is a small map, you need to click it to "open it up" and see where you are
+ * - Clicking the Map opens up another JPanel, MapScreen 
  * 2.) Navigation
- * 3.) Combat
- * 3.) Player's Statistics and Inventory
+ * - This Panel is responsible for turning your character and entering other rooms.
+ * 3.) Player's Statistics 
+ * - This Panel is responsible for presenting a player's information, his health and inventory of items.
  * 4.) Message window
+ * - This Panel is responsible for printing out messages to the player, such as where he's facing,
+ *   If he got mugged by another player, etc.
+ * 
+ * Created by: Raul John Immanuel De Guzman
+ * ID: 300269955
+ * 
  */
 
 public class GameMenu extends JPanel {
@@ -50,9 +55,6 @@ public class GameMenu extends JPanel {
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
 	//List of all the buttons in GameMenu
 	private Map<JButton, String> buttons = new HashMap<JButton, String>();
-	
-
-	
 	
 	public GameMenu(GameFrame game, ActionListener player){  	
 		this.currentGame = game;
@@ -88,12 +90,15 @@ public class GameMenu extends JPanel {
 
 	/**
 	 * This class is for the Map for the player
-	 * @author adreledeguzman-
+	 * 
 	 */
 	
 	public class MapPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JButton bigMap;
-		private MapPanel mapThis = this;
 		
 		public MapPanel(){
 			BufferedImage img = null;
@@ -130,44 +135,38 @@ public class GameMenu extends JPanel {
 	 * 2.) Move right
 	 * 3.) Change Room
 	 * 
-	 * @author Raul John De Guzman
+	 * 
 	 */
 
 	public class NavigationPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JButton left, right, changeRoom;
 		private JPanel directionPanel;
 		private JPanel roomPanel;
-		private NavigationPanel y = this;
 		
 		public NavigationPanel(){			
-			//Custom Buttons...
-			BufferedImage img = null;
-			try {
-				img = ImageIO.read(new File("src/heart.png"));
-			    } catch (IOException e) {
-			}		
+			//Buttons...	
 			
 		    JLabel label1 = new JLabel("Turn Around", JLabel.CENTER);
+		    label1.setPreferredSize(new Dimension(180, 20));
 		    JLabel label2 = new JLabel("Change Room", JLabel.CENTER);
 			//Buttons
-			left = new JButton("Turn Left");
-			right = new JButton("Turn Right");
+			left = new JButton("Left");
+			left.setPreferredSize(new Dimension(50, 50));
+			right = new JButton("Right");
+			right.setPreferredSize(new Dimension(50, 50));
 			changeRoom = new JButton("Change Room");
 			//Action Listeners for buttons		
 			left.addActionListener(player);
 			right.addActionListener(player);
-			changeRoom.addActionListener(player);	
+			changeRoom.addActionListener(player);
 			
-			left.addKeyListener((KeyListener) currentGame.getPlayer());
-			right.addKeyListener((KeyListener) currentGame.getPlayer());
-
-			//left.setPreferredSize(new Dimension(100,20));
-			//right.setPreferredSize(new Dimension(100,20));
-
-			//left.setIcon(new ImageIcon(img));
-	        //left.setBorder(null);	
-	        //right.setIcon(new ImageIcon(img));
-	        //right.setBorder(null);	
+			left.addKeyListener((KeyListener) player);
+			right.addKeyListener((KeyListener) player);
+			changeRoom.addKeyListener((KeyListener) player);
 			
 			//Setting up the directionalPanel
 			directionPanel = new JPanel();
@@ -200,87 +199,18 @@ public class GameMenu extends JPanel {
 	}
 	
 	
-
-	/**
-	 * This is the Combat panel
-	 * 
-	 */
-	
-//	public class CombatPanel extends JPanel{
-//		private JButton p1, p2, p3, p4;
-//		private JPanel buttonPanel;
-//		private JPanel normalCombat;
-//		private JPanel surpriseCombat;
-//
-//		public CombatPanel(){
-//		    JLabel label1 = new JLabel("Combat", JLabel.CENTER);
-//			//Buttons
-//			p1 = new JButton("P1");			
-//			p2 = new JButton("P2");
-//			p3 = new JButton("P3");
-//			p4 = new JButton("P4");
-//			ButtonListener b = new ButtonListener();
-//			//Action Listeners for buttons
-//			p1.addActionListener(b);
-//			p2.addActionListener(b);
-//			p3.addActionListener(b);
-//			p4.addActionListener(b);
-//			//Setting up the Panel
-//			buttonPanel = new JPanel();
-//			buttonPanel.setPreferredSize(new Dimension(150,150));
-//			buttonPanel.setBackground(Color.black);
-//			buttonPanel.add(p1);
-//			buttonPanel.add(p2);
-//			buttonPanel.add(p3);
-//			buttonPanel.add(p4);
-//			//Setting The outmost stuff
-//			this.setPreferredSize(new Dimension(200,200));
-//			this.setBackground(Color.LIGHT_GRAY);
-//			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-//			this.add(label1);
-//			this.add(buttonPanel);
-//		}	
-//		//Actions Listener for the buttons		
-//		private class ButtonListener implements ActionListener{
-//			@SuppressWarnings("deprecation")
-//			public void actionPerformed(ActionEvent event){
-//				if(event.getSource() == p1){
-//					
-//					String answer = (String) JOptionPane.showInputDialog(null, "You're now facing Player 1", null, 
-//							 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "Fight", "Trade"}, null);
-//					System.out.println("Attack Player 1?");
-//
-//				}
-//				else if(event.getSource() == p2){
-//					System.out.println("Attack Player 2");
-//					p1.setBackground(Color.white);
-//					p1.setLabel("P1 is Occupied");
-//
-//				}
-//				else if(event.getSource() == p3){
-//					//Use room
-//					System.out.println("Attack Player 3");
-//					p1.setLabel("P1");
-//										
-//				}	
-//				else if(event.getSource() == p4){
-//					//Use room
-//				//	currentGame.showInstructions();
-//					currentGame.setVisible(true);					
-//				    updateUI();
-//				}	
-//			}
-//		}	
-//	}
-	
 	
 	/**
 	 * This panel presents all the messages from the game.
-	 * @author adreledeguzman-
+	 * 
 	 *
 	 */
 
 	public class textPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JTextArea messages = new JTextArea();
 		
 		public textPanel(){
@@ -295,12 +225,10 @@ public class GameMenu extends JPanel {
 			this.setBackground(Color.LIGHT_GRAY);
 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 
-
 			//Making messages scrollable:
 			JScrollPane scrollPane = new JScrollPane(messages);
 			scrollPane.setPreferredSize(new Dimension(150,150));
-        	scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);			
-	
+        	scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);				
 			
 			this.add(label1);
 			this.add(scrollPane);
@@ -327,6 +255,10 @@ public class GameMenu extends JPanel {
 	 */
 	
 	public class StatsPanel extends JPanel{		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		//The two Panels:
 		private JPanel Health;
 		private JPanel Inventory;

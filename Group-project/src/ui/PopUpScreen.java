@@ -21,17 +21,22 @@ import javax.swing.JPanel;
  * 1.) Disable the gamemenu's buttons
  * 2.) Hide the rendering screen (The "view" of the player in the room) 
  * 
- * @author John De Guzman-
+ * @author Raul John Immanuel De Guzman-
+ * ID: 300269955
  *
  */
 
 public abstract class PopUpScreen extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//There's a back button
 	private JButton backToGame;
 	//You will always to use the GameFrame
 	private GameFrame game;
 	private String name;
-	private PopUpScreen tmp = this;
+	//private PopUpScreen tmp = this;
 	//
 	protected BufferedImage img;	 
 
@@ -40,15 +45,15 @@ public abstract class PopUpScreen extends JPanel{
 			this.name = name;
 			this.game = game;	
 			setBackToGame(new JButton("Go Back"));
-			//ButtonListener b = new ButtonListener();
-			getBackToGame().addActionListener(getGame().getPlayer());		
-			
+			getBackToGame().addActionListener(getGame().getPlayer());				
 			game.getScreenButtons().put(backToGame, "backToGame");
-			
+
+			//For making the panel look nice..
 			try {
 				img = ImageIO.read(new File("src/blur.png"));
 			} catch(IOException e) {		
 			}
+			
 			
 			this.setPreferredSize(new Dimension(1000, 500));
 			this.setBackground(Color.white);

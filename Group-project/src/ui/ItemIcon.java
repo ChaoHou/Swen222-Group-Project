@@ -20,6 +20,8 @@ public class ItemIcon extends ImageIcon {
 	 * - Orbs and "Checked" Orbs
 	 * - Health Potions and "Checked" Health Potions
 	 * 
+	 * Created by: Raul John Immanuel De Guzman
+	 * ID: 300269955
 	 */
 	
 	private static final long serialVersionUID = 1L;
