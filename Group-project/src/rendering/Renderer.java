@@ -147,22 +147,24 @@ public class Renderer implements GLEventListener, KeyListener {
         	Container container = game.getRoomContainingPlayer(game.getVamp(uid)).getContainer();
         	if(container != null){
         		if(container.containsPoint(gl, glu, mouse.getX(), mouse.getY(),player.getDirectionFacing())){
-        			System.out.println("Mouse point: x:"+mouse.getX()+" y:"+mouse.getY());
+        			//System.out.println("Mouse point: x:"+mouse.getX()+" y:"+mouse.getY());
         			setContainerSelected(true);
         		}else{
         			setContainerSelected(false);
+        			
+        			//if the container is not selected, check the furniture
+        			Furniture furniture = game.getRoomContainingPlayer(game.getVamp(uid)).getFurniture();
+                	if(furniture != null){
+                		if(furniture.containsPoint(gl, glu, mouse.getX(), mouse.getY(),player.getDirectionFacing())){
+                			setFurnitureSelected(true);
+                		}else{
+                			setFurnitureSelected(false);
+                		}
+                	}
         		}
         	}
         	
-        	Furniture furniture = game.getRoomContainingPlayer(game.getVamp(uid)).getFurniture();
         	
-        	if(furniture != null){
-        		if(furniture.containsPoint(gl, glu, mouse.getX(), mouse.getY(),player.getDirectionFacing())){
-        			setFurnitureSelected(true);
-        		}else{
-        			setFurnitureSelected(false);
-        		}
-        	}
         	
         	mouse = null;
         }

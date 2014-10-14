@@ -167,9 +167,9 @@ public class GameFrame extends JFrame {
 		public void setGame(){
 			//TEMPORARY STUFF
 			//TODO
-			this.getBoard().getVamp(this.getUid()).setHealth(3);
-			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPack());
-			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));	
+//			this.getBoard().getVamp(this.getUid()).setHealth(3);
+//			this.getBoard().getVamp(this.getUid()).getInventory().add(new HealthPack());
+//			this.getBoard().getVamp(this.getUid()).getInventory().add(new Orb(1));	
 
 			//Sets up the menu bar
 		    JMenuBar menubar = new JMenuBar();

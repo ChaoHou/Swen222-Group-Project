@@ -55,7 +55,7 @@ public class Werewolf extends GameCharacter{
 			System.out.println("entering "+roomToEnter+" from "+roomFrom);
 			Werewolf temp = roomFrom.werewolfLeaveRoom(this);
 			roomToEnter.werewolfEnterRoom(temp);
-			System.out.println("entered "+roomToEnter);
+			//System.out.println("entered "+roomToEnter);
 			return true;
 		}
 	}

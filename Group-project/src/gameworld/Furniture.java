@@ -68,7 +68,7 @@ public class Furniture {
 	}
 	
 	public boolean containsPoint(GL2 gl,GLU glu, int x,int y,int dir){
-		System.out.println("selecting furniture");
+		//System.out.println("selecting furniture");
 //		System.out.println(box.containsPoint(gl, glu, x,y));
 		return box.containsPoint(gl, glu, x, y,dir);
 	}

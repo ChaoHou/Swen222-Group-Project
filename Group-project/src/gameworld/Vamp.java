@@ -32,6 +32,15 @@ public class Vamp extends GameCharacter{
 	//A boolean to check if the player's hidden or not
 	//- John
 	private boolean isHiding =false;
+	public Vamp(int uid, Board game){
+		this.uid=uid;
+		this.game=game;
+		
+		health = 3;
+		inventory.add(new HealthPack());
+		inventory.add(new Orb(Orb.BLUE));
+	}
+
 	public boolean isHiding() {
 		return isHiding;
 	}
@@ -42,11 +51,6 @@ public class Vamp extends GameCharacter{
 
 	
 	
-	public Vamp(int uid, Board game){
-		this.uid=uid;
-		this.game=game;
-	}
-
 	public void collect(Collectable collectable){
 		
 		
@@ -56,11 +60,6 @@ public class Vamp extends GameCharacter{
 	
 	public void fight(Vamp player){
 		
-	}
-	
-	public void hideIn(Furniture furniture){
-		furniture.hidePlayer(this);
-		//this.hidingIn=furniture;
 	}
 	
 	

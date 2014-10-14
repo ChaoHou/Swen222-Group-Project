@@ -221,6 +221,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			else if(screenButtons.get(e.getSource()).equals("placeToInventory")){
 				//You'll need the containerScreen
 				Collectable temp = null;
+				System.out.println(frame.getCurrentScreen().getClass());
 				ContainerScreen currentScreen = (ContainerScreen) frame.getCurrentScreen();
 				for (JCheckBox checkBox : currentScreen.getCheckContainer()) {
 					if(checkBox.isSelected()) {
@@ -251,6 +252,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			else if(screenButtons.get(e.getSource()).equals("placeToContainer")){
 				//You'll need the containerScreen
 				Collectable temp = null;
+				System.out.println(frame.getCurrentScreen().getClass());
 				ContainerScreen currentScreen = (ContainerScreen) frame.getCurrentScreen();
 				for (JCheckBox checkBox : currentScreen.getCheckInventory()) {
 					if(checkBox.isSelected()) {
@@ -414,6 +416,8 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 					}
 					renderer.setContainerSelected(false);
 				}else if(renderer.isFurnitureSelected()){
+					System.out.println("Furniture selected");
+					
 					Room room = game.getRoomContainingPlayer(game.getVamp(uid));
 					Furniture furniture = room.getFurniture();
 					
