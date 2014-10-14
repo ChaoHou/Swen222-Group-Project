@@ -2,10 +2,13 @@ package control;
 
 import gameworld.Collectable;
 import gameworld.Container;
+import gameworld.Furniture;
 import gameworld.GameCharacter;
 import gameworld.HealthPack;
 import gameworld.Orb;
 import gameworld.Room;
+
+import gameworld.Vamp;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +32,10 @@ import ui.GameMenu;
 import ui.GameMenu.StatsPanel;
 import ui.GameMenu.textPanel;
 import ui.GameOverScreen;
+import ui.HidingScreen;
 import ui.InstructionsScreen;
+
+import ui.MapScreen;
 
 
 public class Player extends Thread implements KeyListener,ActionListener,MouseListener{
@@ -43,7 +49,8 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	private Map<JButton, String> screenButtons;
 	private Room[][] rooms;
 
-	
+	Furniture temp = new Furniture(1);
+
 	
 	public Player(int uid, Board game,Renderer renderer){	
 		this.uid=uid;
@@ -125,7 +132,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				frame.showGame(frame.getCurrentScreen());
 			}			
 			//Third, show the gameover screen.
-			    GameOverScreen gameover = new GameOverScreen("gameover", frame);
+			    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
 			    frame.showPopUp(gameover);
 			    frame.setVisible(true);
 		        gameover.updateUI();
@@ -145,10 +152,18 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			((StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats")).updateInventory();
 		}
 		
+		
 		else if(action.equals("Hide into Nothingness")){
 			//You hide into furniture that's not in the game.
-			printMessage("You hid into the shadows");			
+			if(temp.getHidingPlayer() != null){
+				printMessage("Sorry, but another player's hiding already!");
+				//temp.getHidingPlayer();	
+				return;
+			}
 			
+			printMessage("You hid into the shadows");	
+			frame.showHidingScreen(temp);
+				
 		}
 		
 		
@@ -156,6 +171,12 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		//GAME MENU BUTTONS				
 		if(buttons.get(e.getSource()) != null){
+			if(buttons.get(e.getSource()).equals("bigMap")){
+		    MapScreen map = new MapScreen("map", frame);
+			frame.showPopUp(map);
+			frame.setVisible(true);
+		    frame.getCurrentScreen().updateUI();
+		}	
 			if(buttons.get(e.getSource()).equals("Orb")){		
 				//Testing Container:
 //				System.out.println("You clicked an Orb");
@@ -171,6 +192,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 //				this.frame.repaint();  
 				
 			}
+			
 			if(buttons.get(e.getSource()).equals("HealthPack")){
 				this.printMessage("You Healed up to Max Health!");
 				game.getVamp(uid).setHealth(5);	
@@ -265,6 +287,17 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				frame.setVisible(true);
 				
 			}
+			//Remove the player from the furniture and set the player visible.
+			else if(screenButtons.get(e.getSource()).equals("getOut")){
+				//Remove the player from the furniture.
+				HidingScreen x = (HidingScreen) frame.getCurrentScreen();
+		        x.removePlayer();
+				frame.showGame(frame.getCurrentScreen());
+				frame.repaint();
+				frame.setVisible(true);	
+				
+			}
+			
 			
 			
 			
@@ -368,10 +401,14 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		try {
 			while(true){
 				
+			
 				Thread.sleep(100);
 				//update map
 				
 				this.frame.getMapPanel().getMap().repaint();
+				//this.frame.getMapPanel().getMap().updateUI();
+				frame.setVisible(true);
+				frame.repaint();
 				
 				//pick up containers
 				if(renderer.selected){
@@ -385,7 +422,20 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 					renderer.selected = false;
 				}
 				
-				
+				if(game.getVamp(uid).isDead()){
+	 				printMessage("You got killed");
+	 				//First, check if there's currently a popup menu
+	 				if(frame.getCurrentScreen() != null){
+	 				   //Second, remove that popup, no matter what (The game's over anyway!)
+	 					frame.showGame(frame.getCurrentScreen());
+	 				}			
+	 				//Third, show the gameover screen.
+	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
+	 				    frame.showPopUp(gameover);
+	 				    frame.setVisible(true);
+	 			        gameover.updateUI(); 				
+					    break;
+				}
 				
 				//Automatic Victory
 				if(!rooms[3][1].getVamps().isEmpty() && game.getVamp(uid).canWin()){
@@ -396,10 +446,10 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	 					frame.showGame(frame.getCurrentScreen());
 	 				}			
 	 				//Third, show the gameover screen.
-	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame);
+	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, true);
 	 				    frame.showPopUp(gameover);
 	 				    frame.setVisible(true);
-	 			        gameover.updateUI(); 				
+	 			        gameover.updateUI(); 		 			        
 					    break;
 				}
 			

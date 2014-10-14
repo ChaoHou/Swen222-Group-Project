@@ -1,6 +1,7 @@
 package rendering;
 
 import javax.media.opengl.*;
+
 import gameworld.Container;
 import gameworld.Vamp;
 

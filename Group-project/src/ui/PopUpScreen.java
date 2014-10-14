@@ -2,9 +2,14 @@ package ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -27,7 +32,9 @@ public abstract class PopUpScreen extends JPanel{
 	private GameFrame game;
 	private String name;
 	private PopUpScreen tmp = this;
-	
+	//
+	protected BufferedImage img;	 
+
 
 	public PopUpScreen(String name, GameFrame game){	
 			this.name = name;
@@ -37,8 +44,11 @@ public abstract class PopUpScreen extends JPanel{
 			getBackToGame().addActionListener(getGame().getPlayer());		
 			
 			game.getScreenButtons().put(backToGame, "backToGame");
-
 			
+			try {
+				img = ImageIO.read(new File("src/blur.png"));
+			} catch(IOException e) {		
+			}
 			
 			this.setPreferredSize(new Dimension(1000, 500));
 			this.setBackground(Color.white);
@@ -71,17 +81,10 @@ public abstract class PopUpScreen extends JPanel{
 			this.name = name;
 		}
 		
-		//Actions Listener for the buttons		
-//		private class ButtonListener implements ActionListener{
-//			public void actionPerformed(ActionEvent event){
-//				if(event.getSource() == getBackToGame()){	    			
-//					game.showGame(tmp);
-//					game.repaint();
-//					game.setVisible(true);	
-//				}
-//				
-//			}
-//		}	
-	
+
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+		}
 
 }

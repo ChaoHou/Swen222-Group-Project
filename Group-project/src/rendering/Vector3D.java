@@ -5,9 +5,11 @@ package rendering;
  * Created by Kyohei Kudo.
  */
 public class Vector3D {
-    public final double x;
+
+	public final double x;
     public final double y;
     public final double z;
+
     public Vector3D(double x, double y, double z) {
         this.x = x;
         this.y = y;
