@@ -161,20 +161,25 @@ public class Box {
         gl.glPushMatrix();
         gl.glTranslatef(x, y, z);
 
+        //enable and bind the texture to the object drawn next.
         textures[textureIndex].enable(gl);
         textures[textureIndex].bind(gl);
 
+        //enable the feature drawing objects by FloatBuffer
         gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
         gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 
+        //give the coordinates infromation to the openGL
         gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertices);
         gl.glNormalPointer(GL2.GL_FLOAT,0, normal);
         gl.glTexCoordPointer(2, GL2.GL_FLOAT, 0, textureV);
 
+        //renders by the given FloatBuffer
         //use glDrawArrays instead of glDrawElements. it is simpler and easier.
         gl.glDrawArrays(GL2.GL_QUADS,0,4*6);
 
+        //disable rendering feature. otherwise it affects next rendering process.
         gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
         gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
         gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
@@ -193,22 +198,25 @@ public class Box {
      */
     public boolean containsPoint(GL2 gl, GLU glu, int mouseX, int mouseY){
 
-        gl.glPushMatrix();
-
+        //create containers for storing current information of rendering matrix.
         int[] viewport = new int[4];
         double[] modelView = new double[16];
         double[] projection = new double[16];
 
+        //store matrix into each container
         gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
         gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelView, 0);
         gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
 
+        //invert Y coordinate because JFrame Y coordinate and OpenGL Y coodinate is up side down.
         double winX = mouseX;
         double winY = viewport[3] - mouseY;
 
+        //create containers for the vector which connects screen clicked(start) and render world(end) pointed by clicked pos
         double[] start = new double[4];
         double[] end = new double[4];
 
+        //store points into storage.
         glu.gluUnProject(winX, winY, 0,
                 modelView, 0,
                 projection, 0,
@@ -222,18 +230,20 @@ public class Box {
                 viewport, 0,
                 end, 0);
 
+        //restore it into new storage has 3 elements. we don't need 4th elements for calculating.
         double[] x1 = {start[0],start[1],start[2]};
         double[] x2 = {end[0],end[1],end[2]};
         double[] x0 = {x,y,z};
 
+        //get two vectors from vertices
         double[] x2Tox1 = {x2[0]-x1[0],x2[1]-x1[1],x2[2]-x1[2]};
         double[] x1Tox0 = {x1[0]-x0[0],x1[1]-x0[1],x1[2]-x0[2]};
 
+        //get cross product
         double[] m = cross(x2Tox1,x1Tox0);
 
-
+        //get the length of the vector
         double length = length(m)/length(x2Tox1);
-        gl.glPopMatrix();
 
         //compare with the radius
         if(length < size[0]) return true;
