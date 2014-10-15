@@ -28,7 +28,11 @@ public class Board {
 	 /* made the rooms contain characters to reduce coupling */
 	 private Room[][] rooms=new Room[4][4];
 	 private Room startRoom;
+	 private Room exit;
+	 private Room respawnRoom;
+	 
 	 private int uid=0;
+	 private boolean isGameOver;
 	 
 	 
 	 
@@ -36,6 +40,8 @@ public class Board {
 	public Board(Room[][] rooms){
 		this.setRooms(rooms);
 		startRoom = rooms[0][1];
+		exit=rooms[3][1];
+		respawnRoom=startRoom;
 	}
 	
 	
@@ -43,10 +49,6 @@ public class Board {
 	 * Start game by respawning all vamps in startroom and unleashing the werewolf.
 	 */
 	public void startGame(){
-		System.out.println("isEmpty vamps list: "+vamps.isEmpty());
-		for(Vamp vamp:vamps){
-			vamp.respawn(startRoom);
-		}
 		Werewolf werewolf=new Werewolf(this);
 		registerWerewolf(werewolf);
 		this.werewolfThread=new WerewolfThread(werewolf);
@@ -54,6 +56,21 @@ public class Board {
 		
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
+	//---------------------------Moving----------------------------//
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
+	
 	
 	/*
 	 * Determines if there is a room ahead of this room (facing this particular direction). 
@@ -153,6 +170,30 @@ public class Board {
 	}
 	
 	
+	
+	private boolean checkValidDirection(int dir){
+		if(dir!=Room.NORTH && dir!=Room.EAST && 
+				dir!=Room.SOUTH && dir!=Room.WEST){
+			return false;
+		}
+		return true;
+	}
+	
+
+	//-------------------------------------------------------------//
+	
+	
+	
+	
+	
+	
+	
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
+	//----------------------Managing Room--------------------------//
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
+	
 	public Room getRoom(String room){
 		if(room==null){
 			throw new IllegalArgumentException();
@@ -169,39 +210,6 @@ public class Board {
 		
 		
 		throw new IllegalArgumentException();
-	}
-	
-	
-	private boolean checkValidDirection(int dir){
-		if(dir!=Room.NORTH && dir!=Room.EAST && 
-				dir!=Room.SOUTH && dir!=Room.WEST){
-			return false;
-		}
-		return true;
-	}
-	
-	public synchronized int registerVamp(){
-		System.out.println("in registerVamp()");
-		Vamp newVamp=new Vamp(uid, this);
-		startRoom.playerEnterRoom(newVamp);
-		vamps.add(newVamp);
-		return uid++;
-	}
-	
-	public synchronized void registerWerewolf(Werewolf werewolf){
-		startRoom.werewolfEnterRoom(werewolf);
-	}
-	
-	public synchronized Vamp getVamp(int uid){
-		//loop through rooms to find the character
-		for(Vamp vamp:getVamps()){
-			if(vamp.getUid()==uid){
-				return vamp;
-			}
-		}
-		
-		
-		throw new IllegalArgumentException("invalid uid passed in.");
 	}
 
 	
@@ -235,7 +243,98 @@ public class Board {
 	}
 	
 	
+	public Room getRespawnRoom(){
+		return this.respawnRoom;
+	}
+
+	public Room[][] getRooms() {
+		return rooms;
+	}
+
+
+	public void setRooms(Room[][] rooms) {
+		this.rooms = rooms;
+	}
 	
+	public void initRooms(GL gl,Texture[] textures){
+		for(Room[] row:rooms){
+			for(Room r:row){
+				if(r != null){
+					r.init(gl,textures);
+				}
+			}
+		}
+	}
+	
+	//-------------------------------------------------------------//
+
+
+	
+	
+
+	
+	
+	
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
+	//-------------------Managing Characters-----------------------//
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
+	
+	
+	public synchronized int registerVamp(){
+		System.out.println("in registerVamp()");
+		Vamp newVamp=new Vamp(uid, this);
+		startRoom.playerEnterRoom(newVamp);
+		vamps.add(newVamp);
+		return uid++;
+	}
+	
+	public synchronized void registerWerewolf(Werewolf werewolf){
+		exit.werewolfEnterRoom(werewolf);
+	}
+	
+	public synchronized Vamp getVamp(int uid){
+		//loop through rooms to find the character
+		for(Vamp vamp:getVamps()){
+			if(vamp.getUid()==uid){
+				return vamp;
+			}
+		}
+		
+		
+		throw new IllegalArgumentException("invalid uid passed in.");
+	}
+
+	
+	public Set<Vamp> getVamps(){
+		return this.vamps;
+	}
+
+	//-------------------------------------------------------------//
+	
+	
+	
+	
+	
+	public void setGameOver(boolean b){
+		this.isGameOver=b;
+	}
+	
+	public boolean isGameOver(){
+		return this.isGameOver;
+	}
+	
+	
+	
+	
+	
+	
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
+	//-------------------------Networking--------------------------//
+	//-------------------------------------------------------------//
+	//-------------------------------------------------------------//
 	public synchronized byte[] toByteArray() throws IOException{
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		DataOutputStream dout = new DataOutputStream(bout);
@@ -265,27 +364,6 @@ public class Board {
 			}
 		}
 	}
-
-
-	public Room[][] getRooms() {
-		return rooms;
-	}
-
-	public Set<Vamp> getVamps(){
-		return this.vamps;
-	}
-
-	public void setRooms(Room[][] rooms) {
-		this.rooms = rooms;
-	}
 	
-	public void initRooms(GL gl,Texture[] textures){
-		for(Room[] row:rooms){
-			for(Room r:row){
-				if(r != null){
-					r.init(gl,textures);
-				}
-			}
-		}
-	}
+	//-------------------------------------------------------------//
 }
