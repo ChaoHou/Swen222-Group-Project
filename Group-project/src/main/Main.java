@@ -30,7 +30,6 @@ import ui.MainMenu;
 
 
 public class Main {
-
 	private static final int DEFAULT_CLK_PERIOD = 20;
 	private static final int DEFAULT_BROADCAST_CLK_PERIOD = 5;
 

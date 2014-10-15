@@ -18,16 +18,23 @@ import com.jogamp.opengl.util.texture.Texture;
  * ID:300280258
  * 
  * 
-
  *
- *  modified by Chao, Kyohei
+ * base of rendering part made by Chao
+ * established by Kyohei
  */
 public class Wall {
 
     private static final int BYTES_PER_FLOAT = 4;
 
+    /**
+     *indicates height and width of walls
+     */
     private static final float WIDTH = 10.0f;
     private static final float HEIGHT = 7.5f;
+
+    /**
+     * vertices of the wall. It is unti-clock wise.
+     */
     private static final float[][] WALLS = {
             //[0]north wall
             {
@@ -59,7 +66,9 @@ public class Wall {
             },
     };
 
-
+    /**
+     *normals for each walls
+     */
     private static final float[][] NORMALS = {
             //north[0] nomarl
             {0.0f,0.0f,1.0f},
@@ -71,17 +80,27 @@ public class Wall {
             {-1.0f,0.0f,0.0f},
     };
 
+    /**
+     * Buffer for vertices, normals, textures
+     */
     private FloatBuffer vertices;
     private FloatBuffer normal;
     private FloatBuffer textureV;
 
-    private int dir;
-
+    /**
+     * stores textures. textureIndex is a state of the wall. e.g. door, brick wall, etc...
+     */
     private Texture[] textures;
     private int textureIndex;
 
+    /**
+     * constructor dir is for direction 0=north,1=west,2=south,3=east
+     * index is condition of the wall.
+     * @param dir
+     * @param index
+     * By Chao.
+     */
     public Wall(int dir, int index) {
-        this.dir = dir;
         this.textureIndex = index;
 
         float[] wall = WALLS[dir];
@@ -116,29 +135,44 @@ public class Wall {
     }
 
     /**
+<<<<<<< HEAD
      * @author Chao
+=======
+     * render the walls by given information when they initialized.
+>>>>>>> branch 'master' of https://github.com/ChaoHou/Swen222-Group-Project
      * @param gl
      */
     public void render(GL2 gl) {
 
+        //enable textures and bind it.
         textures[textureIndex].enable(gl);
         textures[textureIndex].bind(gl);
 
+        //enable rendering by FloatBuffer
         gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY); // added normal
         gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 
+        //give the data to the OpenGL
         gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertices);
         gl.glNormalPointer(GL2.GL_FLOAT, 0, normal);
         gl.glTexCoordPointer(2, GL2.GL_FLOAT, 0, textureV);
 
+        //render it!
         gl.glDrawArrays(GL2.GL_QUADS, 0, 4);
 
+        //disable rendering method.
         gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
         gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
         gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
     }
 
+    /**
+     * return a radius by direction. 0 = north, 1 = west, 2 = south, 3 = east.
+     * south is the default (zero radius) direction.
+     * @param facingDir
+     * @return
+     */
     public static float getDir(int facingDir) {
         switch(facingDir){
             case GameCharacter.NORTH:
