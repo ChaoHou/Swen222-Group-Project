@@ -6,6 +6,18 @@ import java.io.IOException;
 
 import ui.Board;
 
+/**
+ * 
+ * 
+ * GameCharacter represents a character in the game.
+ * Superclass of Vamp and Werewolf.
+ *  
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public abstract class GameCharacter {
 	public static final int NORTH=0;
 	public static final int EAST=1;
