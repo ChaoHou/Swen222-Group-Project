@@ -144,7 +144,7 @@ public class Room {
 	public void init(GL gl,Texture[] textures){
 
 		for(Wall w:walls){
-			w.init(textures);
+			w.init(gl,textures);
 		}
 		if(container != null){
 			container.init(gl, textures);
