@@ -2,7 +2,6 @@ package gameworld;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import rendering.Box;
+import rendering.primitive.Box;
 import ui.Board;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -90,14 +89,15 @@ public class Container {
 	}
 	
 	public boolean containsPoint(GL2 gl,GLU glu, int x,int y,int dir){
-		return box.containsPoint(gl, glu, x, y,dir);
+		return box.containsPoint(gl, glu, x, y);
 	}
 	
 	public void init(GL gl,Texture[] textures) {
-		box.init(gl, textures);
+		box.init(textures);
 	}
-	
-	public void draw(GL2 gl,int facingDir){
+
+    //done by Chao
+	public void render(GL2 gl, int facingDir){
 		
 		switch(containerType){
 		case DRAWER:
@@ -108,8 +108,8 @@ public class Container {
 			break;
 		}
 		
-		
-		box.draw(gl,facingDir);
+
+		box.render(gl);
 	}
 	
 	public void toOutputStream(DataOutputStream dout) throws IOException {	

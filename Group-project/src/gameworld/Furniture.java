@@ -10,7 +10,7 @@ import javax.media.opengl.glu.GLU;
 
 import com.jogamp.opengl.util.texture.Texture;
 
-import rendering.Box;
+import rendering.primitive.Box;
 import ui.Board;
 
 
@@ -59,8 +59,14 @@ public class Furniture {
 	public int getFurnitureType(){
 		return this.furnitureType;
 	}
-	
-	public void draw(GL2 gl,int facingDir){
+
+    /**
+     *
+     * @param gl
+     * @param facingDir
+     * done by Chao
+     */
+	public void render(GL2 gl, int facingDir){
 		
 		switch(furnitureType){
 		case CLOSET:
@@ -72,17 +78,17 @@ public class Furniture {
 		}
 		
 		
-		box.draw(gl,facingDir);
+		box.render(gl);
 	}
 	 
 	public void init(GL gl,Texture[] textures) {
-		box.init(gl, textures);
+		box.init(textures);
 	}
 	
 	public boolean containsPoint(GL2 gl,GLU glu, int x,int y,int dir){
 		//System.out.println("selecting furniture");
 //		System.out.println(box.containsPoint(gl, glu, x,y));
-		return box.containsPoint(gl, glu, x, y,dir);
+		return box.containsPoint(gl, glu, x, y);
 	}
 
 	public void toOutputStream(DataOutputStream dout) throws IOException{
