@@ -1,24 +1,19 @@
 package gameworld;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLException;
 
 import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureIO;
 
+/**
+ *
+ * created by Chao, modified by Kyohei
+ */
 public class Wall {
-//	public static final int NORTH_WALL = 0;
-//	public static final int WEST_WALL = 1;
-//	public static final int SOUTH_WALL = 2;
-//	public static final int EAST_WALL = 3;
 
     private static final int BYTES_PER_FLOAT = 4;
 
@@ -55,12 +50,6 @@ public class Wall {
             },
     };
 
-//    private static final float[] floor = {
-//      WIDTH,-HEIGHT,-WIDTH,
-//            -WIDTH,-HEIGHT,-WIDTH,
-//            -WIDTH,-HEIGHT,WIDTH,
-//            WIDTH,-HEIGHT,WIDTH,
-//    };
 
     private static final float[][] NORMALS = {
             //north[0] nomarl
@@ -112,10 +101,7 @@ public class Wall {
         textureV.put(tVertices).position(0);
     }
 
-    public void draw(GL2 gl,int facingDir) {
-//		gl.glLoadIdentity();
-        gl.glPushMatrix();
-//		gl.glRotatef(getDir(facingDir), 0.0f, 1.0f, 0.0f);
+    public void render(GL2 gl) {
 
         textures[textureIndex].enable(gl);
         textures[textureIndex].bind(gl);
@@ -133,7 +119,6 @@ public class Wall {
         gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
         gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
         gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
-        gl.glPopMatrix();
     }
 
     public static float getDir(int facingDir) {

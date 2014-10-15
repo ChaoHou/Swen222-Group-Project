@@ -34,7 +34,7 @@ public class MapScreen extends PopUpScreen {
 	private static final long serialVersionUID = 1L;
 	private JPanel mapDescription;
 	private mapPicture map;
-	//Rooms to draw
+	//Rooms to render
 	private Room[][] rooms;
 
 	public MapScreen(String name, GameFrame game){	
@@ -117,7 +117,7 @@ public class MapScreen extends PopUpScreen {
 			for(int i =1; i< 5; i++){
 				for(int j=1; j<5; j++){
 					if(rooms[j-1][i-1] !=null){
-						//If a room has a vampire, draw him
+						//If a room has a vampire, render him
 						if(!rooms[j-1][i-1].getVamps().isEmpty()){		
 							g.setColor(Color.red);
 							g.fillOval(i*100-40, j*100-50, 20, 20);

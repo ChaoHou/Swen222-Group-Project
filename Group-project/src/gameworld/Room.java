@@ -3,9 +3,7 @@ package gameworld;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.media.opengl.GL;
@@ -107,16 +105,22 @@ public class Room {
 	public String toString(){
 		return this.room;
 	}
-	
-	public void draw(GL2 gl,int dir){
+
+    /**
+     *
+     * @param gl
+     * @param dir
+     * Done by Chao
+     */
+	public void render(GL2 gl, int dir){
 		for(Wall wall:walls){
-			wall.draw(gl,dir);
+			wall.render(gl);
 		}
 		if(container != null){
-			container.draw(gl, dir);
+			container.render(gl, dir);
 		}
 		if(furniture != null){
-			furniture.draw(gl, dir);
+			furniture.render(gl, dir);
 		}
 	}
 	
