@@ -27,10 +27,10 @@ public class Wall {
 	private static final float[][] WALLS = {
 		//[0]north wall
 		{
-			WIDTH,HEIGHT,-WIDTH, //top right
-			-WIDTH,HEIGHT,-WIDTH, //top left
-			-WIDTH,-HEIGHT,-WIDTH, //bottom left
-			WIDTH,-HEIGHT,-WIDTH , //bottom right
+                -WIDTH,HEIGHT,WIDTH, //top left
+                WIDTH,HEIGHT,WIDTH , //top right
+                WIDTH,-HEIGHT,WIDTH, //bottom right
+                -WIDTH,-HEIGHT,WIDTH, //bottom left
 		},
 		//[1]west wall
 		{
@@ -41,10 +41,10 @@ public class Wall {
 		},
 		//[2]south wall
 		{
-			-WIDTH,HEIGHT,WIDTH, //top left
-			WIDTH,HEIGHT,WIDTH , //top right
-                WIDTH,-HEIGHT,WIDTH, //bottom right
-                -WIDTH,-HEIGHT,WIDTH, //bottom left
+                WIDTH,HEIGHT,-WIDTH, //top right
+                -WIDTH,HEIGHT,-WIDTH, //top left
+                -WIDTH,-HEIGHT,-WIDTH, //bottom left
+                WIDTH,-HEIGHT,-WIDTH , //bottom right
 		},
 		//[3]east wall
 		{
@@ -132,13 +132,13 @@ public class Wall {
 	public static float getDir(int facingDir) {
 		switch(facingDir){
 		case GameCharacter.NORTH:
-			return 0.0f;
-		case GameCharacter.EAST:
-			return 90.0f;
-		case GameCharacter.SOUTH:
 			return 180.0f;
-		case GameCharacter.WEST:
+		case GameCharacter.EAST:
 			return 270.0f;
+		case GameCharacter.SOUTH:
+			return 0.0f;
+		case GameCharacter.WEST:
+			return 90.0f;
 		default:
 			return -1;
 		}
