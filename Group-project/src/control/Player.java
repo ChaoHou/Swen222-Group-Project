@@ -62,58 +62,39 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code=e.getKeyCode();
+		Vamp vamp=game.getVamp(this.uid);
 		
 		if(code==KeyEvent.VK_W){
-			game.getVamp(this.uid).rotateToFace(GameCharacter.NORTH);
+			vamp.enterRoom();
 		}else if(code==KeyEvent.VK_D){
-			game.getVamp(this.uid).rotateToFace(GameCharacter.EAST);
-		}else if(code==KeyEvent.VK_S){
-			game.getVamp(this.uid).rotateToFace(GameCharacter.SOUTH);
+			vamp.rotateToFace((vamp.getDirectionFacing()+1)%4);
 		}else if(code==KeyEvent.VK_A){
-			game.getVamp(this.uid).rotateToFace(GameCharacter.WEST);
-		}else if(code==KeyEvent.VK_E){
-			game.getVamp(this.uid).enterRoom();
+			int toFace=(vamp.getDirectionFacing()-1)%4;
+			if(toFace<0){
+				toFace=Vamp.WEST;
+			}
+			vamp.rotateToFace(toFace);
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		System.out.println(action.toString());
-		//System.out.println(action);
-		if(action.equals("Left")){
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateToFace(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateToFace(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateToFace(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateToFace(GameCharacter.NORTH);
-			//renderer.rotateL();
-			printMessage("You're facing "+ game.getVamp(uid).intDirToString() );
-		}				
-		//When turning right
-		else if(action.equals("Right")){
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateToFace(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateToFace(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateToFace(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateToFace(GameCharacter.NORTH);
-			//renderer.rotateR();
-			printMessage("You're facing "+ game.getVamp(uid).intDirToString() );
-
+		Vamp vamp=game.getVamp(this.uid);
+		
+		if(action.equals("Change Room")){
+			vamp.enterRoom();
+		}else if(action.equals("Right")){
+			vamp.rotateToFace((vamp.getDirectionFacing()+1)%4);
+		}else if(action.equals("Left")){
+			int toFace=(vamp.getDirectionFacing()-1)%4;
+			if(toFace<0){
+				toFace=Vamp.WEST;
+			}
+			vamp.rotateToFace(toFace);
 		}
-		else if(action.equals("Change Room")){
-			//Use room
-			game.getVamp(uid).enterRoom();
-			printMessage("You've entered the " + game.getRoomContainingPlayer(game.getVamp(uid)));
 
 		
-		}	
 		
 		//HELP AND CHEATS BAR
 		if(action.equals("Show Instructions")){	
@@ -455,18 +436,17 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			
 				//What if the player died?
 				if(game.getVamp(uid).isDead()){
-	 				printMessage("You got killed");
 	 				//First, check if there's currently a popup menu
 	 				if(frame.getCurrentScreen() != null){
 	 				   //Second, remove that popup, no matter what (The game's over anyway!)
 	 					frame.showGame(frame.getCurrentScreen());
 	 				}			
-	 				//Third, show the gameover screen.
-	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
-	 				    frame.showPopUp(gameover);
-	 				    frame.setVisible(true);
-	 			        gameover.updateUI(); 				
-					    break;
+//	 				//Third, show the gameover screen.
+//	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
+//	 				    frame.showPopUp(gameover);
+//	 				    frame.setVisible(true);
+//	 			        gameover.updateUI(); 				
+//					    break;
 				}
 				
 				//What if the player got ambushed?

@@ -1,6 +1,9 @@
 package ui;
 
+import gameworld.Container;
 import gameworld.GameCharacter;
+import gameworld.HealthPack;
+import gameworld.Orb;
 import gameworld.Room;
 import gameworld.Vamp;
 import gameworld.Werewolf;
@@ -10,7 +13,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import javax.media.opengl.GL;
@@ -32,6 +37,9 @@ public class Board {
 	 
 	 private int uid=0;
 	 private boolean isGameOver;
+	 
+	 public static final int orbs=12;
+	 public static final int healthpack=4;
 	 
 	 
 	 

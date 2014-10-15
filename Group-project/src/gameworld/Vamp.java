@@ -91,13 +91,15 @@ public class Vamp extends GameCharacter{
 	
 	public void setStatus(int status){
 		if(status==Vamp.DEAD){
-			System.out.println("----------Vamp"+getUid()+" is dead-------------");
 			health=0;
 			this.status=status;
 			respawn();
-		}else if(status==Vamp.ALIVE || status==Vamp.PARALYSED || status==Vamp.RECOVERING){
+		}else if(status==Vamp.ALIVE || status==Vamp.PARALYSED){
 			this.status=status;
+		}else if(status==Vamp.RECOVERING){
+			this.health=FULL_HEALTH/2;
 		}else{
+		
 			throw new IllegalArgumentException("invalid status to set for Vamp.");
 		}
 	}
@@ -175,7 +177,7 @@ public class Vamp extends GameCharacter{
 	}
 	
 	public boolean enterRoom(){
-		if(isRecovering()){
+		if(isRecovering() || isDead()){
 			System.out.println("cant move----------you'are recovering!!!");
 			return false;
 		}	
@@ -194,7 +196,7 @@ public class Vamp extends GameCharacter{
 	}
 	
 	public void rotateToFace(int dir){
-		if(isRecovering()){
+		if(isRecovering() || isDead()){
 			System.out.println("cant move----------you'are recovering!!!");
 			return;
 		}
@@ -206,6 +208,8 @@ public class Vamp extends GameCharacter{
 			throw new IllegalArgumentException("invalid direction to face.");
 		}
 	}
+	
+	
 	
 	public void fight(Vamp player){
 	}

@@ -38,6 +38,7 @@ public class Room {
 	
 	
 
+	
 	public void playerLeaveRoom(Vamp c){
 		this.players.remove(c);
 	}
@@ -61,13 +62,7 @@ public class Room {
 		return werewolf;
 	}
 	
-//	public void addContainer(Container container){
-//		this.containers.add(container);
-//	}
-//	
-//	public Set<Container> getContainers(){
-//		return containers;
-//	}
+
 	
 	public void setContainer(Container container){
 		this.container = container;
