@@ -31,7 +31,7 @@ public class Board {
 	 private Room exit;
 	 private Room respawnRoom;
 	 private int uid=0;
-	 
+	 private boolean gameOver;
 	
 	 
 	 
