@@ -92,11 +92,21 @@ public class Werewolf extends GameCharacter{
 	}
 	
 	
+	/**
+	 * @author Chao
+	 */
 	@Override
 	public void toOutputStream(DataOutputStream dout) throws IOException {
 		dout.writeInt(facing);
 	}
 
+	/**
+	 * @author Chao
+	 * @param din
+	 * @param game
+	 * @return
+	 * @throws IOException
+	 */
 	public static Werewolf fromInputStream(DataInputStream din,Board game) throws IOException {
 		int facing = din.readInt();
 		Werewolf temp = new Werewolf(game);

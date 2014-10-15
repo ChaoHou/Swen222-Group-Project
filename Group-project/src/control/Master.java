@@ -15,8 +15,19 @@ import java.net.Socket;
 
 import ui.Board;
 
+/**
+ * Class to handle the slave's request
+ * 
+ * @author Chao
+ *
+ */
 public class Master extends Thread {
 	
+	/**
+	 * Action enum
+	 * @author C
+	 *
+	 */
 	public enum ACTION{
 		ROTATE_R,
 		ROTATE_L,
@@ -52,6 +63,11 @@ public class Master extends Thread {
 		output.writeInt(uid);
 	}
 
+	/**
+	 * Main loop:
+	 * 		1.Handle client's request
+	 * 		2.broadcast the board state
+	 */
 	public void run() {
 
 		try {
@@ -93,6 +109,11 @@ public class Master extends Thread {
 		}
 	}
 
+	/**
+	 * Execute the actions base on the type
+	 * @param action
+	 * @throws IOException
+	 */
 	private void executeAction(ACTION action) throws IOException {
 		if(action.equals(ACTION.ROTATE_L) || action.equals(ACTION.ROTATE_R)){
 			rotate(action);
@@ -113,10 +134,16 @@ public class Master extends Thread {
 		}
 	}
 
+	/**
+	 * Player get hurts
+	 */
 	private void getHurt() {
 		game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
 	}
 
+	/**
+	 * Rotate the player
+	 */
 	private void rotate(ACTION action){
 		//System.out.println("Actions");
 		if(action.equals(ACTION.ROTATE_L)){
@@ -142,17 +169,24 @@ public class Master extends Thread {
 		}
 	}
 
+	/**
+	 * Change room for the player
+	 */
 	private void changeRoom() {
-		// TODO Auto-generated method stub
 		game.getVamp(uid).enterRoom();
 	}
 
+	/**
+	 * Player hide in the furniture
+	 */
 	private void hideIn() {
-		// TODO Auto-generated method stub
 		Room room = game.getRoomContainingPlayer(game.getVamp(uid));
 		room.hideInFurniture(game.getVamp(uid));
 	}
 
+	/**
+	 * Player get out of the furniture
+	 */
 	private void getOut() {
 		Room room = game.getRoomContainingPlayer(game.getVamp(uid));
         room.getOutFromFurniture(game.getVamp(uid));
@@ -174,6 +208,10 @@ public class Master extends Thread {
 		container.addItem(vamp.removeItem(obj));
 	}
 
+	/**
+	 * Player request to place the object to inventory
+	 * @throws IOException
+	 */
 	private void placeToInventory() throws IOException {
 		int type = input.readInt();
 		Collectable obj = null;
@@ -194,6 +232,9 @@ public class Master extends Thread {
 		
 	}
 
+	/**
+	 * Player get healed
+	 */
 	private void healPlayer() {
 		game.getVamp(uid).setHealth(5);	
 		HealthPack temp = new HealthPack();

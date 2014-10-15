@@ -150,8 +150,6 @@ public class Main {
 			int uid = new DataInputStream(s.getInputStream()).readInt();
 			
 			Board game=createBoardFromFile(filename);
-			//TODO
-			//need to set the uid to the renderer
 			Renderer renderer = new Renderer(game,uid);
 			Slave client = new Slave(s,game,renderer,uid);
 			
@@ -225,30 +223,6 @@ public class Main {
 			
 			Thread.yield();
 			
-//			try {
-//				//broadcast
-//				System.out.println("Player:0 facing:"+game.getVamp(0).getDirectionFacing());
-//				
-//				byte[] bytes = game.toByteArray();
-//				
-//				for(Master master:connections){
-//					if(master.getSocket().isClosed()){
-//						break;
-//					}
-//					DataOutputStream output = master.getOutputStream();
-//					output.writeInt(bytes.length);
-//					output.write(bytes);
-//				}
-//				
-//				Thread.sleep(DEFAULT_BROADCAST_CLK_PERIOD);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//				break;
-//			} 
 		}
 	}
 	

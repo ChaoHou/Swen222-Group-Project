@@ -35,10 +35,20 @@ public class HealthPack implements Collectable{
 		return true;
 	}
 
+	/**
+	 * @author Chao
+	 */
 	public void toOutputStream(DataOutputStream dout) throws IOException {	
 		//do nothing
 	}
 	
+	/**
+	 * @author Chao
+	 * @param din
+	 * @param game
+	 * @return
+	 * @throws IOException
+	 */
 	public static HealthPack fromInputStream(DataInputStream din,Board game) throws IOException {
 		return new HealthPack();
 	}

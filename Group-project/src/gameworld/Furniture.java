@@ -41,7 +41,7 @@ public class Furniture {
 	public Furniture(int furnitureType,int x,int y,int z,int index) {
 		this.furnitureType=furnitureType;
 		
-		box = new Box(new float[]{x,y,z},new float[]{2f,2f,2f},index);
+		box = new Box(new float[]{x,y,z},new float[]{3f,3f,3f},index);
 	}
 	
 	public void hidePlayer(Vamp player){
@@ -63,7 +63,7 @@ public class Furniture {
 	}
 
     /**
-     *
+     *@author Chao
      * @param gl
      * @param facingDir
      * done by Chao
@@ -82,17 +82,35 @@ public class Furniture {
 		
 		box.render(gl);
 	}
-	 
+	 /**
+	  * @author Chao
+	  * @param gl
+	  * @param textures
+	  */
 	public void init(GL gl,Texture[] textures) {
 		box.init(textures);
 	}
 	
+	/**
+	 * @author Chao
+	 * 
+	 * @param gl
+	 * @param glu
+	 * @param x
+	 * @param y
+	 * @param dir
+	 * @return
+	 */
 	public boolean containsPoint(GL2 gl,GLU glu, int x,int y,int dir){
 		//System.out.println("selecting furniture");
 //		System.out.println(box.containsPoint(gl, glu, x,y));
 		return box.containsPoint(gl, glu, x, y);
 	}
-
+	/**
+	 * @author Chao
+	 * @param dout
+	 * @throws IOException
+	 */
 	public void toOutputStream(DataOutputStream dout) throws IOException{
 		if(hidingPlayer != null){
 			dout.writeBoolean(true);
@@ -101,7 +119,12 @@ public class Furniture {
 			dout.writeBoolean(false);
 		}
 	}
-	
+	/**
+	 * @author Chao
+	 * @param din
+	 * @param game
+	 * @throws IOException
+	 */
 	public void fromInputStream(DataInputStream din,Board game) throws IOException {
 		boolean hasPlayer = din.readBoolean();
 		if(hasPlayer){
