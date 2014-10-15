@@ -11,9 +11,9 @@ import javax.media.opengl.GLAutoDrawable;
 public class Wall {
     private final DIRECTION dir;
     private float rquad = 0.0f;
-    private float x = 10.0f;
-    private float y = 10.0f;
-    private float z = 10.0f;
+    private float x = 64.0f;
+    private float y = 96.0f;
+    private float z = 64.0f;
 
     public Wall(DIRECTION dir) {
         this.dir = dir;
@@ -27,44 +27,44 @@ public class Wall {
     }
 
     public void render(GL2 gl) {
-        gl.glLoadIdentity();
-        gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+//        gl.glLoadIdentity();
         gl.glBegin(GL2.GL_QUADS);            // Draw A Quad
 
         switch (dir) {
             case NORTH:
+                gl.glNormal3f(0.0f, 0.0f, 1.0f);
                 gl.glColor3f(1.0f, 0.0f, 0.0f);     // Set The Color To Red
-                gl.glVertex3f(x, y, z);    // Top Right Of The Quad (Front)
-                gl.glVertex3f(-x, y, z);   // Top Left Of The Quad (Front)
-                gl.glVertex3f(-x, -y, z);  // Bottom Left Of The Quad (Front)
-                gl.glVertex3f(x, -y, z);   // Bottom Right Of The Quad (Front)
+                gl.glVertex3f(x, y, -z);    // Top Right Of The Quad (Front)
+                gl.glVertex3f(-x, y, -z);   // Top Left Of The Quad (Front)
+                gl.glVertex3f(-x, 0f, -z);  // Bottom Left Of The Quad (Front)
+                gl.glVertex3f(x, 0f, -z);   // Bottom Right Of The Quad (Front)
                 break;
 
             case SOUTH:
-                gl.glNormal3f(-1.0f, 0.0f, 0.0f);
+                gl.glNormal3f(0.0f, 0.0f, -1.0f);
                 gl.glColor3f(1.0f, 1.0f, 0.0f);     // Set The Color To Yellow
-                gl.glVertex3f(x, -y, -z);  // Bottom Left Of The Quad (Back)
-                gl.glVertex3f(-x, -y, -z); // Bottom Right Of The Quad (Back)
-                gl.glVertex3f(-x, y, -z);  // Top Right Of The Quad (Back)
-                gl.glVertex3f(x, y, -z);   // Top Left Of The Quad (Back)
+                gl.glVertex3f(x, 0f, z);  // Bottom Left Of The Quad (Back)
+                gl.glVertex3f(-x, 0f, z); // Bottom Right Of The Quad (Back)
+                gl.glVertex3f(-x, y, z);  // Top Right Of The Quad (Back)
+                gl.glVertex3f(x, y, z);   // Top Left Of The Quad (Back)
                 break;
 
             case WEST:
-                gl.glNormal3f(-1.0f, 0.0f, 0.0f);
+                gl.glNormal3f(1.0f, 0.0f, 0.0f);
                 gl.glColor3f(0.0f, 0.0f, 1.0f);     // Set The Color To Blue
-                gl.glVertex3f(-x, y, z);   // Top Right Of The Quad (Left)
-                gl.glVertex3f(-x, y, -z);  // Top Left Of The Quad (Left)
-                gl.glVertex3f(-x, -y, -z); // Bottom Left Of The Quad (Left)
-                gl.glVertex3f(-x, -y, z);  // Bottom Right Of The Quad (Left)
+                gl.glVertex3f(-x, y, -z);  // Top Left Of The Quad (Left
+                gl.glVertex3f(-x, y, z);   // Top Right Of The Quad (Left))
+                gl.glVertex3f(-x, 0f, z);  // Bottom Right Of The Quad (Left)
+                gl.glVertex3f(-x, 0f, -z); // Bottom Left Of The Quad (Left)
                 break;
 
             case EAST:
                 gl.glNormal3f(-1.0f, 0.0f, 0.0f);
                 gl.glColor3f(1.0f, 0.0f, 1.0f);     // Set The Color To Violet
-                gl.glVertex3f(x, y, -z);   // Top Right Of The Quad (Right)
                 gl.glVertex3f(x, y, z);    // Top Left Of The Quad (Right)
-                gl.glVertex3f(x, -y, z);   // Bottom Left Of The Quad (Right)
-                gl.glVertex3f(x, -y, -z);  // Bottom Right Of The Quad (Right)
+                gl.glVertex3f(x, y, -z);   // Top Right Of The Quad (Right)
+                gl.glVertex3f(x, 0f, -z);  // Bottom Right Of The Quad (Right)
+                gl.glVertex3f(x, 0f, z);   // Bottom Left Of The Quad (Right)
                 break;
         }
         gl.glEnd();                         // Done Drawing The Quad
@@ -77,15 +77,5 @@ public class Wall {
 //        gl.glVertex3d(0.9,0.9,-10.0);
 //        gl.glVertex3d(0.9,0.1,-10.0);
 //        gl.glEnd();
-    }
-
-    public void rotateR() {
-        rquad += 90.0;
-
-    }
-
-    public void rotateL() {
-        rquad -= 90.0;
-
     }
 }

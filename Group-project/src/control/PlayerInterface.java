@@ -1,8 +1,9 @@
 package control;
 
+import ui.GameFrame;
+
 public interface PlayerInterface {
 
-	public void rotateTo(int dir);
-	public boolean enterRoom();
+	public void setFrame(GameFrame g);
 	
 }

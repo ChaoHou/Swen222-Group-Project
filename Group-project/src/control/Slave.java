@@ -13,15 +13,18 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import rendering.Renderer;
 import ui.Board;
 import ui.GameFrame;
+import ui.GameMenu;
 import ui.TestUI;
 
-public class Slave extends Thread implements MouseListener,KeyListener,ActionListener {
+public class Slave extends Thread implements MouseListener,KeyListener,ActionListener,PlayerInterface {
 	private final Socket socket;
 	private final DataOutputStream output;
 	private final DataInputStream input;
@@ -30,22 +33,23 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 	
 	private Board game;
 	
-	private GameFrame gameFrame;
+	private GameFrame frame;
+	private Map<JButton, String> buttons;
 	
 	private Renderer renderer;
 	
-	public Slave(Socket socket,Board game,Renderer renderer) throws IOException{
+	public Slave(Socket socket,Board game,Renderer renderer,int uid) throws IOException{
 		this.socket = socket;
 		output = new DataOutputStream(socket.getOutputStream());
 		input = new DataInputStream(socket.getInputStream());
 		
-		uid = input.readInt();
+		this.uid = uid;
 		this.renderer = renderer;
 		this.game = game;
 		//new TestUI(this);
-		gameFrame = new GameFrame("multi user mode", game, uid, this,renderer);
-		gameFrame.setVisible(true);    
-		gameFrame.repaint();
+		//frame = new GameFrame("multi user mode", game, uid, this,renderer);
+		//frame.setVisible(true);    
+		//frame.repaint();
 	}
 	
 	public void run(){
@@ -65,7 +69,7 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 						System.out.println("Player:"+uid+" now facing:"+facing);
 					}
 
-					Thread.sleep(50);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 
 				}
@@ -143,29 +147,30 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		//System.out.println(action);
 		try {
 			if(action.equals("Turn Left")){
 				output.writeInt(Master.ACTION.ROTATE_L.ordinal());
-				renderer.rotateL();
 			}				
-			//When turning right
 			else if(action.equals("Turn Right")){
 				output.writeInt(Master.ACTION.ROTATE_R.ordinal());
-				renderer.rotateR();
 
 			}
 			else if(action.equals("Change Room")){
-				//Use room
-				String answer = (String) JOptionPane.showInputDialog(null, "Which Room would you like to go to?", null, 
-						 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "d", "dd"}, null);
-			
-				System.out.println("You moved to Room: " + answer );
+				
 			}
+			
 		
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}
+	}
+	
+	public void setFrame(GameFrame g){
+		this.frame = g;
+		if(((GameMenu) frame.getPanels().get("game")).getButtons() != null){
+					this.buttons = ((GameMenu) frame.getPanels().get("game")).getButtons();
+
 		}
 	}
 }

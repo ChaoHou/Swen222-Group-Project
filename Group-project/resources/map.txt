@@ -1,0 +1,4 @@
+- startroom - -
+bathroom hallway library dungeon
+- plaza diningarea -
+- exit - -

@@ -24,6 +24,45 @@ public class Werewolf extends GameCharacter{
 		kill();
 	}
 	
+<<<<<<< HEAD
+=======
+	
+	/*
+	 * Randomly enters a room.
+	 */
+	public void enterRandomRoom(){
+		while(true){
+			int random=(int)(Math.random()*4);
+//			System.out.println("random:"+random);
+			rotateTo(random);
+			if(enterRoom()){
+				break;
+			}
+		}	
+	}
+	
+	
+	/*
+	 * Called by enterRandomRoom() to enter a room.
+	 * Returns true if entered the room.
+	 */
+	@Override
+	public boolean enterRoom() {
+		Room roomFrom = game.getRoomContainingWerewolf();
+		Room roomToEnter=game.getRoomAhead(roomFrom, facing);
+		
+		if(roomToEnter==null){
+			System.out.println("no room ahead");
+			return false;
+		}else{
+			System.out.println("entering "+roomToEnter+" from "+roomFrom);
+			Werewolf temp = roomFrom.werewolfLeaveRoom(this);
+			roomToEnter.werewolfEnterRoom(temp);
+			//System.out.println("entered "+roomToEnter);
+			return true;
+		}
+	}
+>>>>>>> refs/remotes/origin/master
 
 	
 	/*

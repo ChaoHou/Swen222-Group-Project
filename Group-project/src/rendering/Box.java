@@ -124,7 +124,13 @@ public class Box {
 		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
 	}
 	
-	public boolean containsPoint(GL2 gl,GLU glu, int mouseX,int mouseY){
+	public boolean containsPoint(GL2 gl,GLU glu, int mouseX,int mouseY,int dir){
+		gl.glLoadIdentity();
+		
+		float rquad = Wall.getDir(dir);
+		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+		gl.glTranslatef(x, y, z);
+		
 		int[] viewport = new int[4];
     	double[] modelView = new double[16];
     	double[] projection = new double[16];
@@ -163,7 +169,7 @@ public class Box {
     	double length = length(m)/length(x2Tox1);
     	
     	//compare with the radius
-    	if(length < 1) return true;
+    	if(length < size[0]) return true;
 		return false;
 	}
 	

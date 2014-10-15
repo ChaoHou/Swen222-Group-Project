@@ -23,7 +23,7 @@ public class Board {
 	
 	
 	 private Set<Vamp> vamps=new HashSet<Vamp>();
-	 private WerewolfThread werewolfThread;
+	 //private WerewolfThread werewolfThread;
 	 
 	 /* made the rooms contain characters to reduce coupling */
 	 private Room[][] rooms=new Room[4][4];
@@ -52,10 +52,7 @@ public class Board {
 		for(Vamp vamp:vamps){
 			vamp.respawn();
 		}
-		Werewolf werewolf=new Werewolf(this);
-		registerWerewolf(werewolf);
-		this.werewolfThread=new WerewolfThread(werewolf);
-		this.werewolfThread.start();
+		
 		
 		
 	}

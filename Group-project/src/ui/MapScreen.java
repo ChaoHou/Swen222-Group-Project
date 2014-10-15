@@ -6,50 +6,55 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * This screen opens up a map that draws information on the location of the player,
+ * and the werewolf as well.
+ * 
+ * @author Raul John Immanuel De Guzman-
+ * ID: 300269955
+ *
+ */
 
-public class mapMenu extends JPanel {	
-	private JButton backMap;
+
+public class MapScreen extends PopUpScreen {	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel mapDescription;
-	private GameFrame game;
 	private mapPicture map;
 	//Rooms to draw
 	private Room[][] rooms;
 
-	public mapMenu(GameFrame game){		
+	public MapScreen(String name, GameFrame game){	
+		super(name, game);
 		setMap(new mapPicture());		
-		this.game = game;	
-		rooms = this.game.getBoard().getRooms();	
-		//Buttons
-		backMap = new JButton("Go Back");
-		//Action Listeners for buttons		
-		ButtonListener b = new ButtonListener();
-		backMap.addActionListener(b);	
+		rooms = this.getGame().getBoard().getRooms();	
+		 
 		//Setting up the mapDescription
 		JLabel label1 = new JLabel(
-				"<html>   Legend:"
-				+ " <br> Vampires = Red "
+				"<html> Legend: <br> "
+				+ " <br> You = Red "
 				+ " <br> Werewolf = Gray"
 				+ " </html>", JLabel.CENTER);
+		label1.setForeground(Color.white);
 		
 		mapDescription = new JPanel();	
 		mapDescription.add(label1);
 		mapDescription.setPreferredSize(new Dimension(200,200));
-		mapDescription.setBackground(Color.gray);
-		mapDescription.add(backMap);
+		mapDescription.setBackground(Color.black);
+		mapDescription.add(getBackToGame());
 
 		//Setting up the outmost Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -70,31 +75,10 @@ public class mapMenu extends JPanel {
 		return map;
 	}
 
-
-
-
-
 	public void setMap(mapPicture map) {
 		this.map = map;
 	}
 
-	//Actions Listener for the buttons		
-	private class ButtonListener implements ActionListener{
-		public void actionPerformed(ActionEvent event){
-			if(event.getSource() == backMap){
-				//Remove the map screen
-				game.showGame();
-				game.repaint();
-				game.setVisible(true);
-				
-			}
-
-		}
-	}	
-
-	
-
-	
 	
 	/**
 	 * This class represents the map itself

@@ -26,36 +26,40 @@ import ui.GameMenu.NavigationPanel;
  * The Main Menu is what first appears when you start the game. It will ask you to:
  * 1.) Start a new Game
  * 2.) See the Instructions
- * -Instructions is an inner class in Main Menu
  * 
+ * Keep in mind, the game has not started up when navigating this menu. So it gets its own
+ * ActionListeners...
  *
- * @author Raul John De Guzman-
+ * @author Raul John De Guzman
+ * ID: 300269955
  */
 
 public class MainMenu extends JPanel {	 
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean isNewGame = false;
-	private boolean isInstructions = false;
-	private boolean isCredits = false;
-	
-	private GameFrame currentGame;
-	private MainMenu menu;
-	
+	private InstructionScreenMain inst;
+	private GameFrame game;
 	private Map<String, JButton> buttons = new HashMap<String, JButton>();
 
 	public MainMenu(GameFrame board){	
-		menu = this;
-		this.currentGame= board;
-			
+		this.game= board;
+		inst = new InstructionScreenMain(game);
+		
+		//These Images were made to help make the game look authentic:
 		BufferedImage img = null;
 		BufferedImage img2 = null;
 		BufferedImage img3 = null;	
 		BufferedImage img4 = null;
+		BufferedImage img5 = null;
 		try {
 			img = ImageIO.read(new File("src/newgame1.png"));
 			img2 = ImageIO.read(new File("src/newgame2.png"));
 			img3 = ImageIO.read(new File("src/Instructions1.png"));	
 			img4 = ImageIO.read(new File("src/Instructions2.png"));
+			img5 = ImageIO.read(new File("src/title.png"));
 		} catch (IOException e) {
 		}
 		
@@ -77,23 +81,28 @@ public class MainMenu extends JPanel {
 		//Action Listeners for buttons		
 		ButtonListener b = new ButtonListener();
 		newGame.addActionListener(b);
-		instructions.addActionListener(b);
+		instructions.addActionListener(b);			
+		
 		//Setting up the Panel
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		this.setPreferredSize(new Dimension(200,200));
+		this.setPreferredSize(new Dimension(800,705));
 		this.setBackground(Color.black);
 	    this.setLayout(new FlowLayout());
 	    
+	    JLabel title = new JLabel();
+		title.setIcon(new ImageIcon (img5));
+		title.setLayout(new FlowLayout());
+	    		
+	    
 	    //Adding the buttons
 	    JPanel x = new JPanel();
+	    x.setLayout(new FlowLayout());
+	    x.setPreferredSize(new Dimension (700, 700));
+	    x.add(title);
 	    x.add(newGame);
 	    x.setBackground(Color.black);
-	    x.add(instructions);
-	    x.setLayout(new FlowLayout());
-	    x.setPreferredSize(new Dimension (150, 400));
-		this.add(x, BorderLayout.NORTH);
-		//this.add(instructions, BorderLayout.NORTH);
-		
+	    x.add(instructions);  
+		this.add(x, BorderLayout.NORTH);	
 	}	
 	
 
@@ -105,42 +114,26 @@ public class MainMenu extends JPanel {
 		this.isNewGame = isNewGame;
 	}
 
-	public boolean isInstructions() {
-		return isInstructions;
-	}
-
-	public void setInstructions(boolean isInstructions) {
-		this.isInstructions = isInstructions;
-	}
-
-	public boolean isCredits() {
-		return isCredits;
-	}
-
-	public void setCredits(boolean isCredits) {
-		this.isCredits = isCredits;
-	}
-
 
 	//Actions Listener for the buttons		
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent event){
 			if(event.getSource() == buttons.get("newGame")){
-				setNewGame(true);
-				//Starts a new game!
-					currentGame.setGame();
-					currentGame.getBoard().startGame();
-					currentGame.setVisible(true);	
+				    setNewGame(true);
+				    //Starts a new game!
+					game.setGame();
+					game.getBoard().startGame();
+				
+					game.setVisible(true);	
 					updateUI();
 			}
 			else if(event.getSource() == buttons.get("instructions")){
-				System.out.println("You clicked instructions");
-				currentGame.showInstructions();
-				currentGame.setVisible(true);	
+				game.getPanels().put("instructions", inst);
+ 				game.getContentPane().add(inst);
+ 				game.showInstructionsMenu();
+ 				game.setVisible(true);			
 				updateUI();
-
 			}
-	
 		
 		}
 	}	

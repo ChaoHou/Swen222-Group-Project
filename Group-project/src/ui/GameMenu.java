@@ -9,7 +9,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< HEAD
 import java.awt.event.KeyEvent;
+=======
+>>>>>>> refs/remotes/origin/master
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -22,76 +25,84 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-//import networking.Player;
 
 /**
- * Game UI Features:
+ * This class is responsible for the controls and information of the player.
+ * It is split into four specific JPanels that show:
  * 1.) A Map
+ * - This is a small map, you need to click it to "open it up" and see where you are
+ * - Clicking the Map opens up another JPanel, MapScreen 
  * 2.) Navigation
- * 3.) Combat
- * 4.) Player's Statistics and Inventory
+ * - This Panel is responsible for turning your character and entering other rooms.
+ * 3.) Player's Statistics 
+ * - This Panel is responsible for presenting a player's information, his health and inventory of items.
+ * 4.) Message window
+ * - This Panel is responsible for printing out messages to the player, such as where he's facing,
+ *   If he got mugged by another player, etc.
+ * 
+ * Created by: Raul John Immanuel De Guzman
+ * ID: 300269955
+ * 
  */
-
 
 public class GameMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private GameFrame currentGame;	
 	private ActionListener player; 
 	
-	
+	//List of panels that see constant change 
 	private Map<String, JPanel> panels = new HashMap<String, JPanel>();
-
+	//List of all the buttons in GameMenu
+	private Map<JButton, String> buttons = new HashMap<JButton, String>();
 	
 	public GameMenu(GameFrame game, ActionListener player){  	
 		this.currentGame = game;
-		this.player = player;
-		
+		this.player = player;	
         //FlowLayout 
 		FlowLayout fullMenu = new FlowLayout();
 		fullMenu.setAlignment(100);				
 		fullMenu.setHgap(0);		
 		fullMenu.setAlignment(FlowLayout.CENTER);
-		
 		//Everything is placed inside here
 		this.setLayout(fullMenu);	
 		this.setPreferredSize(new Dimension(1000, 200));	
-		
+		//These stuff change constantly, so it's important to keep track of them
 		StatsPanel x = new StatsPanel();
+		textPanel y = new textPanel();
 		this.getPanels().put("stats", x);
+		this.getPanels().put("messages", y);
 		this.add(new MapPanel());
 		this.add(new NavigationPanel());
-		this.add(new CombatPanel());
+		//this.add(new CombatPanel());
 		this.add(x);	
-		
-		
+		this.add(y);	
 		this.setAlignmentX(BOTTOM_ALIGNMENT);		
 		
 		
 	}
 	
-
 	public Map<String, JPanel> getPanels() {
 		return panels;
 	}
-
-
-
-
 
 	public void setPanels(Map<String, JPanel> panels) {
 		this.panels = panels;
 	}
 
-
 	/**
 	 * This class is for the Map for the player
-	 * @author adreledeguzman-
+	 * 
 	 */
 	
 	public class MapPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JButton bigMap;
 		
 		public MapPanel(){
@@ -104,26 +115,19 @@ public class GameMenu extends JPanel {
 		    JLabel mapName = new JLabel("Map", JLabel.CENTER);
 		    bigMap = new JButton();
 			bigMap.setIcon(new ImageIcon(img));			
-			ButtonListener b = new ButtonListener();
 			//Action Listeners for buttons
-			bigMap.addActionListener(b);
+			bigMap.addActionListener(currentGame.getPlayer());
+			//Keep track of every button
+			currentGame.getScreenButtons().put(bigMap, "bigMap");
+			
 			this.add(mapName);
 			this.add(bigMap);
 			this.setBackground(Color.LIGHT_GRAY);
 			this.setPreferredSize(new Dimension(200,200));
- 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+ 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));	
+			getButtons().put(bigMap, "bigMap");
 		}
 		
-		//Actions Listener for the buttons		
-				private class ButtonListener implements ActionListener{
-					public void actionPerformed(ActionEvent event){
-						if(event.getSource() == bigMap){
-							currentGame.showMap();
-							currentGame.setVisible(true);
-						    updateUI();
-						}						
-					}
-				}	
 	
 	}
 
@@ -136,21 +140,29 @@ public class GameMenu extends JPanel {
 	 * 2.) Move right
 	 * 3.) Change Room
 	 * 
-	 * @author Raul John De Guzman
+	 * 
 	 */
 
 	public class NavigationPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JButton left, right, changeRoom;
 		private JPanel directionPanel;
 		private JPanel roomPanel;
-		private NavigationPanel y = this;
 		
 		public NavigationPanel(){			
+			//Buttons...	
+			
 		    JLabel label1 = new JLabel("Turn Around", JLabel.CENTER);
+		    label1.setPreferredSize(new Dimension(180, 20));
 		    JLabel label2 = new JLabel("Change Room", JLabel.CENTER);
 			//Buttons
-			left = new JButton("Turn Left");
-			right = new JButton("Turn Right");
+			left = new JButton("Left");
+			left.setPreferredSize(new Dimension(50, 50));
+			right = new JButton("Right");
+			right.setPreferredSize(new Dimension(50, 50));
 			changeRoom = new JButton("Change Room");
 			
 			//added by amon 13/10/14.
@@ -162,7 +174,12 @@ public class GameMenu extends JPanel {
 			//Action Listeners for buttons		
 			left.addActionListener(player);
 			right.addActionListener(player);
-			changeRoom.addActionListener(player);			
+			changeRoom.addActionListener(player);
+			
+			left.addKeyListener((KeyListener) player);
+			right.addKeyListener((KeyListener) player);
+			changeRoom.addKeyListener((KeyListener) player);
+			
 			//Setting up the directionalPanel
 			directionPanel = new JPanel();
 			directionPanel.add(label1);
@@ -182,84 +199,66 @@ public class GameMenu extends JPanel {
 			this.setBackground(Color.LIGHT_GRAY);
 			this.add(directionPanel);
 			this.add(roomPanel);
+			
+			getButtons().put(left, "left");
+			getButtons().put(right, "right");
+			getButtons().put(changeRoom, "changeRoom");
+
+
+
 		}	
 		//Actions Listener for the buttons		
 	}
 	
 	
-
-	/**
-	 * This is the Combat panel
-	 * 
-	 */
 	
-	public class CombatPanel extends JPanel{
-		private JButton p1, p2, p3, p4;
-		private JPanel buttonPanel;
-		private JPanel normalCombat;
-		private JPanel surpriseCombat;
+	/**
+	 * This panel presents all the messages from the game.
+	 * 
+	 *
+	 */
 
-		public CombatPanel(){
-		    JLabel label1 = new JLabel("Combat", JLabel.CENTER);
-			//Buttons
-			p1 = new JButton("P1");			
-			p2 = new JButton("P2");
-			p3 = new JButton("P3");
-			p4 = new JButton("P4");
-			ButtonListener b = new ButtonListener();
-			//Action Listeners for buttons
-			p1.addActionListener(b);
-			p2.addActionListener(b);
-			p3.addActionListener(b);
-			p4.addActionListener(b);
-			//Setting up the Panel
-			buttonPanel = new JPanel();
-			buttonPanel.setPreferredSize(new Dimension(150,150));
-			buttonPanel.setBackground(Color.black);
-			buttonPanel.add(p1);
-			buttonPanel.add(p2);
-			buttonPanel.add(p3);
-			buttonPanel.add(p4);
+	public class textPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private JTextArea messages = new JTextArea();
+		
+		public textPanel(){
+		    JLabel label1 = new JLabel("Messages", JLabel.CENTER);
+	     
+	       	messages.setLineWrap(true);
+	       	messages.setWrapStyleWord(true);
+	       	messages.setEditable(false);    	
+	       	
 			//Setting The outmost stuff
 			this.setPreferredSize(new Dimension(200,200));
 			this.setBackground(Color.LIGHT_GRAY);
 			this.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+
+			//Making messages scrollable:
+			JScrollPane scrollPane = new JScrollPane(messages);
+			scrollPane.setPreferredSize(new Dimension(150,150));
+        	scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);				
+			
 			this.add(label1);
-			this.add(buttonPanel);
-		}	
-		//Actions Listener for the buttons		
-		private class ButtonListener implements ActionListener{
-			@SuppressWarnings("deprecation")
-			public void actionPerformed(ActionEvent event){
-				if(event.getSource() == p1){
-					String answer = (String) JOptionPane.showInputDialog(null, "You're now facing Player 1", null, 
-							 JOptionPane.PLAIN_MESSAGE, null, new String[]{ "Fight", "Trade"}, null);
-					System.out.println("Attack Player 1?");
+			this.add(scrollPane);
 
-				}
-				else if(event.getSource() == p2){
-					System.out.println("Attack Player 2");
-					p1.setBackground(Color.white);
-					p1.setLabel("P1 is Occupied");
+			
+		}
 
-				}
-				else if(event.getSource() == p3){
-					//Use room
-					System.out.println("Attack Player 3");
-					p1.setLabel("P1");
-				}	
-				else if(event.getSource() == p4){
-					//Use room
-					currentGame.showInstructions();
-					currentGame.setVisible(true);					
-				    updateUI();
-				}	
-			}
+		public JTextArea getMessages() {
+			return messages;
+		}
+
+		public void setMessages(JTextArea messages) {
+			this.messages = messages;
 		}	
+		
+		
+		
 	}
-	
-
-	
 	
 	
 	/**
@@ -268,15 +267,16 @@ public class GameMenu extends JPanel {
 	 */
 	
 	public class StatsPanel extends JPanel{		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		//The two Panels:
 		private JPanel Health;
 		private JPanel Inventory;
-		
-		//Health:
+		//Health Icon:
 		BufferedImage img = null;
 		
-		//Inventory:
-				
 		public StatsPanel(){
 			//Hearth image
 			try {
@@ -325,37 +325,55 @@ public class GameMenu extends JPanel {
 			for(Collectable c : currentGame.getBoard().getVamp(currentGame.getUid()).getInventory()){
 				//If Orb:
 				if(c instanceof Orb){
-					JButton item = new JButton("Orb");
-					item.setIcon(new itemIcon(c));
+					JButton item = new JButton();
+					item.setIcon(new ItemIcon(c, false));
 					item.addActionListener(player);
 			        item.setBorder(null);	
 					Inventory.add(item);
-				}
+					getButtons().put(item, "Orb");
+   				}
 				//If healthpack:
 				else if (c instanceof HealthPack){
-					JButton item = new JButton("healthpack");
-					item.setIcon(new itemIcon(c));
+					JButton item = new JButton();
+					item.setIcon(new ItemIcon(c, false));
 					//temp
 					item.addActionListener(player);
 			        item.setBorder(null);	
 					Inventory.add(item);
+					getButtons().put(item, "HealthPack");
+
 				}
 			}		
-		}
-		
-		
-		
-		
+		}	
 	}
 	
+	/**
+	 * These methods enable and disable the buttons
+	 */
 	
 	public void enableButtons(){
+		for(JButton b : getButtons().keySet()){
+			b.setEnabled(true);		
+		}
 		
 	}
 	public void disableButtons(){
-		
+		for(JButton b : getButtons().keySet()){
+			b.setEnabled(false);		
+		}
 	}
 
+	public Map<JButton, String> getButtons() {
+		return buttons;
+	}
+	
+
+	public void setButtons(Map<JButton, String> buttons) {
+		this.buttons = buttons;
+	}
+
+
+	
 
 	
 

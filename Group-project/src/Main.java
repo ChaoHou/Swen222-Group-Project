@@ -1,9 +1,11 @@
 import gameworld.Container;
+import gameworld.Furniture;
 import gameworld.Orb;
 import gameworld.Room;
 import gameworld.Wall;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -100,12 +102,13 @@ public class Main {
 		Player player = new Player(uid,game,renderer);
 		GameFrame gg = new GameFrame("single user mode", game, uid, player,renderer);
 		gg.setVisible(true);
-		game.startGame();
-		while(true){
-        	//game running	        	
+
+        while(true){
+        	Thread.yield();      	
         }
 		
 	}
+		
 	
 	private static void usage() {
 		String[][] info = {
@@ -142,19 +145,21 @@ public class Main {
 		try {
 			Socket s = new Socket(addr,port);
 			System.out.println("CLIENT CONNECTED TO " + addr + ":" + port);			
-			//SlaveConnection slave = new SlaveConnection(s,broadcastClock);
-			//SlaveActionHandler actionSlave = new SlaveActionHandler(slave,gameClock);
-			//slave.setActionHandler(actionSlave);
 			
-			//slave.start();
-			//actionSlave.run();
+			int uid = new DataInputStream(s.getInputStream()).readInt();
+			
 			Board game=createBoardFromFile(filename);
 			//TODO
 			//need to set the uid to the renderer
-			Renderer renderer = new Renderer(game,0);
-			Slave client = new Slave(s,game,renderer);
-			client.run();
+			Renderer renderer = new Renderer(game,uid);
+			Slave client = new Slave(s,game,renderer,uid);
+			GameFrame gg = new GameFrame("single user mode", game, uid, client ,renderer);
+			gg.setVisible(true);
 			
+			//client.run();
+			while(true){
+				Thread.yield();
+			}
 			
 			
 		} catch (UnknownHostException e) {
@@ -171,11 +176,10 @@ public class Main {
 		//ClockThread clk = new ClockThread(gameClock);	
 		
 		// Listen for connections
-		System.out.println("CLUEDO SERVER LISTENING ON PORT " + port);
-		System.out.println("CLUEDO SERVER AWAITING " + nplayers + " PLAYERS");
+		System.out.println("SERVER LISTENING ON PORT " + port);
+		System.out.println("SERVER AWAITING " + nplayers + " PLAYERS");
 		try {
 			Board game = createBoardFromFile(filename);
-			//Socket[] sockets = new Socket[nplayers];
 			Master[] connections = new Master[nplayers];
 			// Now, we await connections.
 			ServerSocket ss = new ServerSocket(port);	
@@ -190,7 +194,7 @@ public class Main {
 				
 				connections[--nplayers] = new Master(s,game,uid);
 				connections[nplayers].start();
-				//connections[--nplayers] = new MasterConnection(s,broadcastClock,uid);
+				
 				if(nplayers == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 					multiUserGame(game,connections);
@@ -246,10 +250,24 @@ public class Main {
 		return board;	
 	}
 	
+	/**
+	 * Room file format:
+	 *   name: roomName.txt
+	 *   content:
+	 *   line 1: wall texture index
+	 *     format: north east south west
+	 *   line 2: container info
+	 *     format: 0 type x y z index orb...
+	 *   line 3: furniture info
+	 *     format: 1 type x y z index
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
 	private static Room createRoom(String name) throws IOException{
 		String dir = "resources/maps/"+name+".txt";
-		System.out.println("file name:"+name);
-		System.out.println("dir: "+dir);
+//		System.out.println("file name:"+name);
+//		System.out.println("dir: "+dir);
 		
 		try {
 			FileReader fr = new FileReader(dir);
@@ -265,29 +283,40 @@ public class Main {
 			
 			Room room = new Room(name,walls);
 			
-			line = br.readLine();
-			if(line != null){
+			final int typeContainer = 0;
+			final int typeFurniture = 1; 
+			
+			//line = br.readLine();
+			while((line = br.readLine()) != null){
 				tokens = line.split(" ");
-				int type = Integer.parseInt(tokens[0]);
-				int x = Integer.parseInt(tokens[1]);
-				int y = Integer.parseInt(tokens[2]);
-				int z = Integer.parseInt(tokens[3]);
-				int index = Integer.parseInt(tokens[4]);
-				Container container = new Container(type,x,y,z,index);
+				int objectType = Integer.parseInt(tokens[0]);
+				int type = Integer.parseInt(tokens[1]);
+				int x = Integer.parseInt(tokens[2]);
+				int y = Integer.parseInt(tokens[3]);
+				int z = Integer.parseInt(tokens[4]);
+				int index = Integer.parseInt(tokens[5]);
 				
-				for(int i=5;i<tokens.length;i++){
-					int color = Integer.parseInt(tokens[i]);
-					Orb orb = new Orb(color);
-					container.addItem(orb);
+				if(objectType == typeContainer){
+					Container container = new Container(type,x,y,z,index);
+					
+					for(int i=6;i<tokens.length;i++){
+						int color = Integer.parseInt(tokens[i]);
+						Orb orb = new Orb(color);
+						container.addItem(orb);
+					}
+					
+					room.setContainer(container);
+				}else if(objectType == typeFurniture){
+					System.out.println("get furniture");
+					Furniture furniture = new Furniture(type, x, y, z, index);
+					
+					room.setFurniture(furniture);
 				}
 				
-				room.setContainer(container);
+				
+				
 			}
 			
-			
-			//Container container = new Container(Container.DRAWER,8,-5,9,3);
-			//return new Room(name,walls);
-			//room.addContainer(container);
 			return room;
 			
 		} catch (FileNotFoundException e) {

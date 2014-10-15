@@ -15,6 +15,11 @@ public class Master extends Thread {
 	public enum ACTION{
 		ROTATE_R,
 		ROTATE_L,
+		CHANGE_ROOM,
+		HIDE_IN,
+		GET_OUT,
+		PLACE_TO_CONTAINER,
+		PLACE_TO_INVENTORY,
 	}
 	
 	private final Socket socket;
@@ -46,7 +51,7 @@ public class Master extends Thread {
 
 					if (input.available() != 0) {
 						ACTION action = ACTION.values()[input.readInt()];
-						rotate(action);
+						executeAction(action);
 						
 						
 						// broadcast the state of the board to client
@@ -71,7 +76,23 @@ public class Master extends Thread {
 		}
 	}
 
-	public void rotate(ACTION action){
+	private void executeAction(ACTION action) {
+		if(action.equals(ACTION.ROTATE_L) || action.equals(ACTION.ROTATE_R)){
+			rotate(action);
+		}else if(action.equals(ACTION.CHANGE_ROOM)){
+			changeRoom();
+		}else if(action.equals(ACTION.HIDE_IN)){
+			hideIn();
+		}else if(action.equals(ACTION.GET_OUT)){
+			getOut();
+		}else if(action.equals(ACTION.PLACE_TO_CONTAINER)){
+			placeToContainer();
+		}else if(action.equals(ACTION.PLACE_TO_INVENTORY)){
+			placeToInventory();
+		}
+	}
+
+	private void rotate(ACTION action){
 		if(action.equals(ACTION.ROTATE_L)){
 			
 			if(game.getVamp(uid).getDirectionFacing() == Room.NORTH)
@@ -93,5 +114,30 @@ public class Master extends Thread {
 			else if(game.getVamp(uid).getDirectionFacing() == Room.WEST)
 				game.getVamp(uid).rotateToFace(Room.NORTH);
 		}
+	}
+
+	private void changeRoom() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void hideIn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void getOut() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void placeToContainer() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void placeToInventory() {
+		// TODO Auto-generated method stub
+		
 	}
 }
