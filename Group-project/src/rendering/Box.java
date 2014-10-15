@@ -23,11 +23,28 @@ public class Box {
 	float[] size;
 	
 	private FloatBuffer vertices;
+    private FloatBuffer normal;
 	private ByteBuffer indices;
 	private FloatBuffer textureV;
 	private int indexCount;
 	private Texture[] textures;
 	private int textureIndex;
+
+
+    private static final float[] NORMALS = {
+            //top nomarl
+            0.0f,1.0f,0.0f,
+            //bottom nomarl
+            0.0f,-1.0f,0.0f,
+            //north[0] nomarl
+            0.0f,0.0f,-1.0f,
+            //west[1] nomarl
+            -1.0f,0.0f,0.0f,
+            //south[2] nomarl
+            0.0f,0.0f,1.0f,
+            //east[3] nomarl
+            1.0f,0.0f,0.0f,
+    };
 	
 	
 	
@@ -43,33 +60,46 @@ public class Box {
 		float yC = size[1]/2;
 		float zC = size[2]/2;
 		
-		float[] verFloat = {	
-				-xC,-yC,zC,
-				xC,-yC,zC,
-				xC,yC,zC,
-				-xC,yC,zC,
-				-xC,yC,-zC,
-				xC,yC,-zC,
-				xC,-yC,-zC,
-				-xC,-yC,-zC,
-				xC,-yC,zC,
-				xC,-yC,-zC,
-				xC,yC,-zC,
-				xC,yC,zC,
-				-xC,-yC,-zC,
-				-xC,-yC,zC,
-				-xC,yC,zC,
-				-xC,yC,-zC,
+		float[] verFloat = {
+                xC,yC,-zC, // top starts
+                -xC,yC,-zC,
+                -xC,yC,zC,
+                xC,yC,zC, // top ends
+                xC,yC,-zC, // bottom starts
+                xC,yC,zC,
+                -xC,yC,zC,
+                -xC,yC,-zC, // bottom ends
+                xC,yC,-zC, // north starts
+                xC,-yC,-zC,
+                -xC,-yC,-zC,
+                -xC,yC,-zC, // north ends
+                -xC,yC,zC, // west starts
+                -xC,yC,-zC,
+                -xC,-yC,-zC,
+                -xC,-yC,zC, // west ends
+                xC,yC,zC, // south starts
+                -xC,yC,zC,
+                -xC,-yC,zC,
+                xC,-yC,zC, // south ends
+                xC,yC,-zC, // east starts
+                xC,yC,zC,
+                xC,-yC,zC,
+                xC,-yC,-zC, // east ends
 		};
+
+
 		vertices = ByteBuffer.allocateDirect(verFloat.length*BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
 		vertices.put(verFloat).position(0);
-		
-		byte[] indByte = {
-				15,14,13,12, 11,10,9,8, 0,1,6,7, 4,5,2,3, 7,6,5,4, 3,2,1,0
-		};
-		indexCount = indByte.length;
-		this.indices = ByteBuffer.allocateDirect(indByte.length);
-		this.indices.put(indByte).position(0);
+
+        normal = ByteBuffer.allocateDirect(NORMALS.length*BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        normal.put(NORMALS).position(0);
+
+//		byte[] indByte = {
+//				15,14,13,12, 11,10,9,8, 0,1,6,7, 4,5,2,3, 7,6,5,4, 3,2,1,0
+//		};
+//		indexCount = indByte.length;
+//		this.indices = ByteBuffer.allocateDirect(indByte.length);
+//		this.indices.put(indByte).position(0);
 	}
 	
 	
@@ -105,27 +135,32 @@ public class Box {
 	
 	public void draw(GL2 gl,int dir) {
 //		gl.glLoadIdentity();
-        gl.glPushMatrix();
-		float rquad = Wall.getDir(dir);
+            gl.glPushMatrix();
+            float rquad = Wall.getDir(dir);
 //		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
-		gl.glTranslatef(x, y, z);
-		
-		textures[textureIndex].enable(gl);
-		textures[textureIndex].bind(gl);
+            gl.glTranslatef(x, y, z);
 
-		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
-		
-		gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertices);
-		gl.glTexCoordPointer(2, GL2.GL_FLOAT, 0, textureV);
-		
-		gl.glDrawElements(GL2.GL_QUADS, indexCount, GL.GL_UNSIGNED_BYTE, indices);
-		
-		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
-        gl.glPopMatrix();
+            textures[textureIndex].enable(gl);
+            textures[textureIndex].bind(gl);
+
+            gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+            gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+
+            gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertices);
+        gl.glNormalPointer(GL2.GL_FLOAT,0, normal);
+            gl.glTexCoordPointer(2, GL2.GL_FLOAT, 0, textureV);
+
+//            gl.glDrawElements(GL2.GL_QUADS, indexCount, GL.GL_UNSIGNED_BYTE, indices);
+        gl.glDrawArrays(GL2.GL_QUADS,0,4*6);
+
+            gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+        gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+            gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+            gl.glPopMatrix();
 	}
-	
+
+    //Chao's work
 	public boolean containsPoint(GL2 gl,GLU glu, int mouseX,int mouseY,int dir){
 
         gl.glPushMatrix();

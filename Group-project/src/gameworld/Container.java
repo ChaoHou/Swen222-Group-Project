@@ -96,7 +96,7 @@ public class Container {
 			break;
 		}
 		
-		
+
 		box.draw(gl,facingDir);
 	}
 	

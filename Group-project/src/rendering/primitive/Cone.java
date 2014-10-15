@@ -11,9 +11,7 @@ import javax.media.opengl.glu.GLUquadric;
  * Created by innocence on 07/10/2014.
  */
 public class Cone {
-    public static void render(GL2 gl, Vector3D pos, double rad, double height, int axis) {
-        GLUT glut = new GLUT();
-        GLU glu = new GLU();
+    public static void render(GL2 gl, GLU glu, GLUT glut, Vector3D pos, double rad, double height, int axis) {
         GLUquadric quadric = glu.gluNewQuadric();
         gl.glPushMatrix();
         gl.glTranslated(pos.x(), pos.y(), pos.z());
