@@ -10,7 +10,19 @@ import java.util.Set;
 
 import ui.Board;
 
-
+/**
+ * 
+ * 
+ * Player plays a Vamp.
+ * Player respawns when they meet the werewolf in the same room.
+ * Player collects 3 orbs of different colours and makes their way to exit to win the game.
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Vamp extends GameCharacter{
 	
 	

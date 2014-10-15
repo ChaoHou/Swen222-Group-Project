@@ -15,6 +15,17 @@ import com.jogamp.opengl.util.texture.Texture;
 
 import ui.Board;
 
+/**
+ * 
+ * 
+ * Room holds either a container or a furniture.
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Room {
 
 	public static final int NORTH=0;

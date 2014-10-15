@@ -13,6 +13,18 @@ import com.jogamp.opengl.util.texture.Texture;
 import rendering.Box;
 import ui.Board;
 
+
+/**
+ * 
+ * 
+ * Vamps are able to hide in this class.
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Furniture {
 
 	public static final int BED=0;

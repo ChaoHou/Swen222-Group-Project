@@ -6,6 +6,19 @@ import java.io.IOException;
 
 import ui.Board;
 
+
+/**
+ * 
+ * 
+ * 3 Orbs of different colours must be collected by a player to win the game/beat other players.
+ * There are 4 sets of orbs in the mansion. (red+blue+green).
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Orb implements Collectable{
 	public static final int BLUE=0;
 	public static final int GREEN=1;

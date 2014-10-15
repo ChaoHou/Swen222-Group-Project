@@ -435,6 +435,22 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				}
 			
 				//What if the player died?
+				if(game.getVamp(uid).getHealth()<=0){
+	 				//First, check if there's currently a popup menu
+	 				if(frame.getCurrentScreen() != null){
+	 				   //Second, remove that popup, no matter what (The game's over anyway!)
+	 					frame.showGame(frame.getCurrentScreen());
+	 				}			
+	 				//Third, show the gameover screen.
+	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
+	 				    frame.showPopUp(gameover);
+	 				    frame.setVisible(true);
+	 			        gameover.updateUI(); 				
+					    break;
+				}
+				
+
+				//What if the player died?
 				if(game.getVamp(uid).isDead()){
 	 				//First, check if there's currently a popup menu
 	 				if(frame.getCurrentScreen() != null){

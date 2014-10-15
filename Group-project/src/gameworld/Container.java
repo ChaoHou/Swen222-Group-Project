@@ -16,6 +16,18 @@ import ui.Board;
 
 import com.jogamp.opengl.util.texture.Texture;
 
+/**
+ * 
+ * 
+ * Holds items.
+ * Can be opened by players.
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Container {
 	
 	public static final int DRAWER=0;

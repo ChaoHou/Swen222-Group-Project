@@ -24,6 +24,18 @@ import com.jogamp.opengl.util.texture.Texture;
 
 import control.WerewolfThread;
 
+
+/**
+ * 
+ * 
+ * This class represents the model of the gamme.
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Board {
 	
 	

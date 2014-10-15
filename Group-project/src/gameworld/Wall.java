@@ -14,6 +14,17 @@ import javax.media.opengl.GLException;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 
+
+/**
+ * 
+ * 
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Wall {
 	public static final int NORTH_WALL = 0;
 	public static final int WEST_WALL = 1;
