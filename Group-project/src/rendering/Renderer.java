@@ -1,7 +1,5 @@
 package rendering;
 
-import javax.media.opengl.*;
-
 import com.jogamp.opengl.util.gl2.GLUT;
 import gameworld.Container;
 import gameworld.Furniture;
@@ -22,12 +20,9 @@ import ui.Board;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Created by Kyohei Kudo on 25/09/2014.
@@ -56,8 +51,8 @@ public class Renderer implements GLEventListener{
     private Vector3D cameraTop = new Vector3D(0.0,1.0,0.0);
 
     private float[] lightPos = new float[]{0.0f,100.0f,0.0f,1.0f};
-    private float[] lightStr = new float[]{1.0f,1.0f,1.0f,1.0f};
-    private float[] lightAmb = new float[]{0.1f,0.1f,0.1f,1.0f};
+    private float[] lightStr = new float[]{0.5f,0.5f,0.5f,1.0f};
+    private float[] lightColor = new float[]{0.1f,0.1f,0.1f,1.0f}; // color of light
 
     private double angle = 0;
     private int width;
@@ -72,36 +67,34 @@ public class Renderer implements GLEventListener{
     @Override
     public void init(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
+        this.gl = gl;
 
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
 
         gl.glShadeModel(GL2.GL_SMOOTH);              // Enable Smooth Shading
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);    // Black Background
+        gl.glClearColor(0.2f, 0.2f, 0.5f, 0.5f);    // Black Background
         gl.glColor4d(1.0,1.0,1.0,1.0);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 
         gl.glClearDepth(1.0f);                      // Depth Buffer Setup
-        this.gl = gl;
         gl.glShadeModel(GL2.GL_SMOOTH);              // Enable Smooth Shading
         gl.glDepthFunc(GL.GL_LEQUAL);               // The Type Of Depth Testing To Do
         gl.glEnable(GL.GL_DEPTH_TEST);              // Enables Depth Testing
 
-        gl.glEnable(GL2.GL_LIGHTING);
-        gl.glEnable(GL2.GL_LIGHT0);
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT,lightAmb,0);
-
         gl.glEnable(GL.GL_CULL_FACE);
-        gl.glFrontFace(GL2.GL_CW);
+//        gl.glFrontFace(GL2.GL_CW);
         gl.glCullFace(GL.GL_BACK);
 
+        setLighting();
 
-        gl.glColorMaterial(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE);
+
+//        gl.glColorMaterial(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE);
 //        gl.glEnable(GL2.GL_COLOR_MATERIAL);
 
-        float[] white = new float[]{1.0f,1.0f,1.0f,1.0f};
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, white, 0);
-        gl.glMaterialf(GL2.GL_FRONT, GL2.GL_SHININESS, 16.0f);
+//        float[] white = new float[]{1.0f,1.0f,1.0f,1.0f};
+//        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, white, 0);
+//        gl.glMaterialf(GL2.GL_FRONT, GL2.GL_SHININESS, 16.0f);
 
         try {
 			
@@ -112,7 +105,7 @@ public class Renderer implements GLEventListener{
 				//gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,GL.GL_LINEAR);
 				//gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,GL.GL_LINEAR);
 				textures[i].setTexParameterf(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST); 
-				textures[i].setTexParameterf(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST); 
+				textures[i].setTexParameterf(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
 			}
 			
 		} catch (GLException e) {
@@ -136,11 +129,13 @@ public class Renderer implements GLEventListener{
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
+        setLighting();
+
         //render a avator
         Cone.render(gl,glu,glut, new Vector3D(0.0, 0.0, 0.0), 1, 7.5, 0);
         Sphere.render(gl,glut,new Vector3D(0.0, 0.0, 0.0), 1);
 
-        setCamera(gl);
+        setCamera();
 
         Vamp player = game.getVamp(uid);
         gameworld.Room room = game.getRoomContainingPlayer(player);
@@ -194,7 +189,7 @@ public class Renderer implements GLEventListener{
 //        setCamera(gl);
     }
 
-    private void setCamera(GL2 gl) {
+    private void setCamera() {
         // change to projection matrix
 
         gl.glMatrixMode(GL2.GL_PROJECTION);
@@ -205,8 +200,18 @@ public class Renderer implements GLEventListener{
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
         glu.gluLookAt(cameraPos.x(), cameraPos.y(), cameraPos.z(), lookAt.x(), lookAt.y(), lookAt.z(), cameraTop.x(), cameraTop.y(), cameraTop.z());
-        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_POSITION,lightPos,0);
+
         gl.glRotated(angle, 0, 1, 0);
+    }
+
+    private void setLighting() {
+//        gl.glEnable(GL2.GL_LIGHTING);
+//        gl.glEnable(GL2.GL_LIGHT0);
+//        gl.glEnable(GL2.GL_LIGHT1);
+        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_DIFFUSE, lightStr,0);
+        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_POSITION,lightPos,0);
+//        gl.glLightfv(GL2.GL_LIGHT1,GL2.GL_AMBIENT, lightColor,0);
+//        gl.glLightfv(GL2.GL_LIGHT1,GL2.GL_POSITION,lightStr,0);
     }
 
     public void setMouseEvent(MouseEvent e){
