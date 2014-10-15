@@ -62,58 +62,39 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code=e.getKeyCode();
+		Vamp vamp=game.getVamp(this.uid);
 		
 		if(code==KeyEvent.VK_W){
-			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
+			vamp.enterRoom();
 		}else if(code==KeyEvent.VK_D){
-			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
-		}else if(code==KeyEvent.VK_S){
-			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
+			vamp.rotateToFace((vamp.getDirectionFacing()+1)%4);
 		}else if(code==KeyEvent.VK_A){
-			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
-		}else if(code==KeyEvent.VK_E){
-			game.getVamp(this.uid).enterRoom();
+			int toFace=(vamp.getDirectionFacing()-1)%4;
+			if(toFace<0){
+				toFace=Vamp.WEST;
+			}
+			vamp.rotateToFace(toFace);
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
-		System.out.println(action.toString());
-		//System.out.println(action);
-		if(action.equals("Left")){
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
-			//renderer.rotateL();
-			printMessage("You're facing "+ game.getVamp(uid).intDirToString() );
-		}				
-		//When turning right
-		else if(action.equals("Right")){
-			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
-			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
-			//renderer.rotateR();
-			printMessage("You're facing "+ game.getVamp(uid).intDirToString() );
-
+		Vamp vamp=game.getVamp(this.uid);
+		
+		if(action.equals("Change Room")){
+			vamp.enterRoom();
+		}else if(action.equals("Right")){
+			vamp.rotateToFace((vamp.getDirectionFacing()+1)%4);
+		}else if(action.equals("Left")){
+			int toFace=(vamp.getDirectionFacing()-1)%4;
+			if(toFace<0){
+				toFace=Vamp.WEST;
+			}
+			vamp.rotateToFace(toFace);
 		}
-		else if(action.equals("Change Room")){
-			//Use room
-			game.getVamp(uid).enterRoom();
-			printMessage("You've entered the " + game.getRoomContainingPlayer(game.getVamp(uid)));
 
 		
-		}	
 		
 		//HELP AND CHEATS BAR
 		if(action.equals("Show Instructions")){	
@@ -172,7 +153,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				
 				if(!victim.getInventory().isEmpty()){
 					Collectable x = victim.getInventory().get(0);
-					victim.remove(x);
+					victim.removeItem(x);
 					game.getVamp(uid).collectItem(x);
 					StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 					yourInventory.updateInventory();
@@ -208,7 +189,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				//Touching an orb hurts you!
 				printMessage("You tried eating the orb.");
 				printMessage("You damaged your teeth by accident...");
-				game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
+				game.getVamp(uid).deductHealth(1);	
 				//Updating the Statistics Information:
 				StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 				x.updateHealth();
@@ -217,9 +198,9 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			}			
 			if(buttons.get(e.getSource()).equals("HealthPack")){
 				this.printMessage("You Healed up to Max Health!");
-				game.getVamp(uid).setHealth(5);	
+				game.getVamp(uid).setHealth(Vamp.FULL_HEALTH);	
 				HealthPack temp = new HealthPack();
-				game.getVamp(uid).remove(temp);
+				game.getVamp(uid).removeItem(temp);
 				//Updating the Statistics Information:
 				StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 				x.updateHealth();
@@ -252,7 +233,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 							temp = new HealthPack();
 						}
 						//Add the selected item into the inventory
-						if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).inventoryfull()){
+						if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).isInventoryfull()){
 							 currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).collectItem((currentScreen.getContainer().remove(temp)));			
 						}
 						else{
@@ -282,7 +263,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 							temp = new HealthPack();
 						}
 						//Add the selected item into the inventory
-						currentScreen.getContainer().addItem(currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).remove(temp));		
+						currentScreen.getContainer().addItem(currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).removeItem(temp));		
 
 					}
 				}	
@@ -432,7 +413,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 						
 						if(!victim.getInventory().isEmpty()){
 							Collectable x = victim.getInventory().get(0);
-							victim.remove(x);
+							victim.removeItem(x);
 							game.getVamp(uid).collectItem(x);
 							StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 							yourInventory.updateInventory();
@@ -455,18 +436,17 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			
 				//What if the player died?
 				if(game.getVamp(uid).isDead()){
-	 				printMessage("You got killed");
 	 				//First, check if there's currently a popup menu
 	 				if(frame.getCurrentScreen() != null){
 	 				   //Second, remove that popup, no matter what (The game's over anyway!)
 	 					frame.showGame(frame.getCurrentScreen());
 	 				}			
-	 				//Third, show the gameover screen.
-	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
-	 				    frame.showPopUp(gameover);
-	 				    frame.setVisible(true);
-	 			        gameover.updateUI(); 				
-					    break;
+//	 				//Third, show the gameover screen.
+//	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
+//	 				    frame.showPopUp(gameover);
+//	 				    frame.setVisible(true);
+//	 			        gameover.updateUI(); 				
+//					    break;
 				}
 				
 				//What if the player got ambushed?
@@ -479,7 +459,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	 					frame.showGame(frame.getCurrentScreen());
 	 				}			
 	 				//Third, lower that player's health and update information
-	 				game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
+	 				game.getVamp(uid).deductHealth(1);	
 	 				game.getVamp(uid).setFighting(false);
 	 				game.getVamp(uid).setHiding(false);
 					//Updating the Statistics Information:
@@ -493,7 +473,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				}
 				
 				//Automatic Victory
-				if(!rooms[3][1].getVamps().isEmpty() && game.getVamp(uid).canWin()){
+				if(!rooms[3][1].getVamps().isEmpty() && game.getVamp(uid).hasAllOrbs()){
 	 				printMessage("You Won a Glorious Victory.");
 	 				//First, check if there's currently a popup menu
 	 				if(frame.getCurrentScreen() != null){

@@ -23,8 +23,6 @@ public class Room {
 	public static final int WEST=3;
 
 	private Wall[] walls;
-//	private Set<Furniture> furniture=new HashSet<Furniture>();
-	//private Set<Container> containers=new HashSet<Container>();
 	private Container container;
 	private Furniture furniture;
 	private Set<Vamp> players = new HashSet<Vamp>();
@@ -40,6 +38,7 @@ public class Room {
 	
 	
 
+	
 	public void playerLeaveRoom(Vamp c){
 		this.players.remove(c);
 	}
@@ -63,13 +62,7 @@ public class Room {
 		return werewolf;
 	}
 	
-//	public void addContainer(Container container){
-//		this.containers.add(container);
-//	}
-//	
-//	public Set<Container> getContainers(){
-//		return containers;
-//	}
+
 	
 	public void setContainer(Container container){
 		this.container = container;

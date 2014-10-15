@@ -117,17 +117,16 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code=e.getKeyCode();
-		
-		if(code==KeyEvent.VK_W){
-			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
-		}else if(code==KeyEvent.VK_D){
-			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
-		}else if(code==KeyEvent.VK_S){
-			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
-		}else if(code==KeyEvent.VK_A){
-			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
-		}else if(code==KeyEvent.VK_E){
-			game.getVamp(this.uid).enterRoom();
+		try{
+			if(code==KeyEvent.VK_W){
+
+			}else if(code==KeyEvent.VK_D){
+				output.writeInt(Master.ACTION.ROTATE_L.ordinal());
+			}else if(code==KeyEvent.VK_A){
+				output.writeInt(Master.ACTION.ROTATE_R.ordinal());
+			}
+		}catch(Exception exc){
+			
 		}
 		
 	}
@@ -150,7 +149,7 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 		try {
 			if(action.equals("Turn Left")){
 				output.writeInt(Master.ACTION.ROTATE_L.ordinal());
-			}				
+			}
 			else if(action.equals("Turn Right")){
 				output.writeInt(Master.ACTION.ROTATE_R.ordinal());
 

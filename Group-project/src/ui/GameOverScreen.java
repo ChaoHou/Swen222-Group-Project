@@ -57,10 +57,10 @@ public class GameOverScreen extends PopUpScreen {
 			info = "You escaped the mansion!";	
 		}
 		JLabel credits = new JLabel("<html> Credits: <br> "
-				+ " <br> Raul John Immanuel De Guzman: User Interface "
+				+ " <br> Raul John Immanuel De Guzman: User Interface+Game Logic"
 				+ " <br> Peide Ng: Game Logic"
-				+ " <br> Kyouhei: Rendering"
-				+ " <br> Chao: Networking"
+				+ " <br> Kyohei Kudo: Rendering"
+				+ " <br> Chao Hou: Networking+Game Logic+Rendering"
 				+ " <br> All images were obtained from the internet, with the exception of"
 				+ "the title drawing, map, and custom buttoms, made by Raul. "
 				+ " </html> ", JLabel.CENTER);

@@ -19,46 +19,53 @@ public class Werewolf extends GameCharacter{
 	 */
 	public void prowl(){
 		kill();
-		enterRandomRoom();
+		enterRoom();
 		kill();
 	}
 	
 	
 	/*
-	 * Randomly enters a room.
-	 */
-	public void enterRandomRoom(){
-		while(true){
-			int random=(int)(Math.random()*4);
-//			System.out.println("random:"+random);
-			rotateTo(random);
-			if(enterRoom()){
-				break;
-			}
-		}	
-	}
-	
-	
-	/*
-	 * Called by enterRandomRoom() to enter a room.
+	 * Enter a room, randomly.
 	 * Returns true if entered the room.
 	 */
 	@Override
 	public boolean enterRoom() {
+		while(true){
+			int randomDir=(int)(Math.random()*4);
+			rotateToFace(randomDir);
+			if(canEnterRoomAhead()){
+				break;
+			}
+		}
+		return true;
+	}
+
+	private boolean canEnterRoomAhead(){
 		Room roomFrom = game.getRoomContainingWerewolf();
 		Room roomToEnter=game.getRoomAhead(roomFrom, facing);
 		
 		if(roomToEnter==null){
-			System.out.println("no room ahead");
 			return false;
 		}else{
-			System.out.println("entering "+roomToEnter+" from "+roomFrom);
-			Werewolf temp = roomFrom.werewolfLeaveRoom(this);
-			roomToEnter.werewolfEnterRoom(temp);
-			//System.out.println("entered "+roomToEnter);
+			Werewolf leavingWolf = roomFrom.werewolfLeaveRoom(this);
+			roomToEnter.werewolfEnterRoom(leavingWolf);
 			return true;
 		}
+	}	
+	
+	
+	
+	@Override
+	public void rotateToFace(int dir) {
+		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
+				dir==Vamp.SOUTH || dir==Vamp.WEST){
+			facing=dir;
+			System.out.println("Werewolf now facing "+ intDirToString());
+		}else{
+			throw new IllegalArgumentException("invalid direction to face.");
+		}
 	}
+
 
 	
 	/*
@@ -72,19 +79,7 @@ public class Werewolf extends GameCharacter{
 		}
 		
 	}
-
 	
-	@Override
-	public void rotateTo(int dir) {
-		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
-				dir==Vamp.SOUTH || dir==Vamp.WEST){
-			facing=dir;
-			System.out.println("Werewolf now facing "+ intDirToString());
-		}else{
-			throw new IllegalArgumentException("invalid direction to face.");
-		}
-	}
-
 	
 	@Override
 	public void toOutputStream(DataOutputStream dout) throws IOException {

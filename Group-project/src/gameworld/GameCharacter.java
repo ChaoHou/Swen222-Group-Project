@@ -17,7 +17,7 @@ public abstract class GameCharacter {
 	//protected Room inRoom; //delete to reduce coupling
 	protected Board game;
 	
-	public abstract void rotateTo(int dir);
+	public abstract void rotateToFace(int dir);
 	
 	
 	public String intDirToString(){
