@@ -24,21 +24,46 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by Kyohei Kudo on 25/09/2014.
+ * Created by Kyohei Kudo
+ * ID: 300287923
+ *
  * modified by Chao
  */
 public class Renderer implements GLEventListener{
 
+    /**
+     * stores the game state.
+     */
     private final Board game;
+    /**
+     * stores the user id used by multiplayer
+     */
     private final int uid;
-    
+
+    /**
+     * texture files given in resource folder
+     */
     private String[] textureFiles = {"wall0.jpg","wall1.jpg","wall2.jpg","wall3.jpg","wall4.jpg"};
+    /**
+     * storage for textures used by Wall and Box.
+     */
     private Texture[] textures = new Texture[textureFiles.length];
-    
+
+    /**
+     * field for GL utility class.
+     */
     private GLU glu = new GLU();
-    private GLUT glut = new GLUT();
+    /**
+     * stores main GL class which controls rendering like Graphics in Java standard libraries
+     */
     private GL2 gl;
+    /**
+     * mouse event
+     */
     private MouseEvent mouse;
+    /**
+     * true when container or furniture is selected by user
+     */
     private boolean containerSelected = false;
     private boolean furnitureSelected = false;
 

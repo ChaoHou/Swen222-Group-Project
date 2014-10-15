@@ -8,7 +8,8 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
 /**
- * Created by innocence on 07/10/2014.
+ * By Kyohei Kudo
+ * ID: 300287923
  */
 public class Cone {
     private static GLU glu = new GLU();

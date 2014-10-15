@@ -9,6 +9,7 @@ import javax.media.opengl.glu.GLU;
 /**
  * Draw a sphere by given x y z and rad
  * Created by Kyohei Kudo.
+ * ID:300287923
  */
 public class Sphere {
     private static GLUT glut = new GLUT();

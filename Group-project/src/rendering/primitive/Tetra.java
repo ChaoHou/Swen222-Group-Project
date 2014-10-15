@@ -6,6 +6,7 @@ import javax.media.opengl.GL2;
 
 /**
  * Created by Kyohei Kudo
+ * ID: 300287923
  */
 public class Tetra {
     public static void render(GL2 gl, Vector3D pos, Vector3D size, int axis) {

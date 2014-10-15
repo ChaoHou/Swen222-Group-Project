@@ -12,7 +12,10 @@ import javax.media.opengl.glu.GLU;
 import com.jogamp.opengl.util.texture.Texture;
 
 /**
- * Created by Chao modified and commented by Kyohei
+ * By Kyohei Kudo
+ * ID: 300287923
+ *
+ * Base code of texture part is given by Chao.
  */
 public class Box {
 
