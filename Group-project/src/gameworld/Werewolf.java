@@ -7,6 +7,17 @@ import java.util.Set;
 
 import ui.Board;
 
+/**
+ * 
+ * 
+ * This class represents the enemy AI in the game.
+ * 
+ * By Peide Ng.
+ * ID:300280258
+ * 
+ * 
+ *
+ */
 public class Werewolf extends GameCharacter{	
 	
 	public Werewolf(Board game){
