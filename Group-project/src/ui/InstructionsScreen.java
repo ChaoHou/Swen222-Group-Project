@@ -30,7 +30,7 @@ public class InstructionsScreen extends PopUpScreen{
 		super(name, game);
 		 	
 		try {
-			img = ImageIO.read(new File("src/instructions.png"));
+			img = ImageIO.read(new File("resources/images/UI/instructions.png"));
 		} catch(IOException e) {		
 		}
 	    

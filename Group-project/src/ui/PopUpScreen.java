@@ -3,8 +3,6 @@ package ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -36,24 +34,19 @@ public abstract class PopUpScreen extends JPanel{
 	//You will always to use the GameFrame
 	private GameFrame game;
 	private String name;
-	//private PopUpScreen tmp = this;
-	//
+
 	protected BufferedImage img;	 
-
-
 	public PopUpScreen(String name, GameFrame game){	
 			this.name = name;
 			this.game = game;	
 			setBackToGame(new JButton("Go Back"));
 			getBackToGame().addActionListener(getGame().getPlayer());				
 			game.getScreenButtons().put(backToGame, "backToGame");
-
 			//For making the panel look nice..
 			try {
-				img = ImageIO.read(new File("src/blur.png"));
+				img = ImageIO.read(new File("resources/images/UI/blur.png"));
 			} catch(IOException e) {		
 			}
-			
 			
 			this.setPreferredSize(new Dimension(1000, 500));
 			this.setBackground(Color.white);

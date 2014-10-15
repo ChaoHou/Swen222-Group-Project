@@ -1,7 +1,6 @@
 package ui;
 
 import gameworld.Furniture;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -24,10 +23,12 @@ public class HidingScreen extends PopUpScreen {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Furniture furniture;
 	private JButton getOut;
 
-	public HidingScreen(String name, GameFrame game) {		
+	public HidingScreen(String name, GameFrame game, Furniture furniture) {		
 		super(name, game);
+		this.furniture = furniture;		
 
 		getOut = new JButton("Get out");
  		getOut.addActionListener(getGame().getPlayer());	
@@ -43,6 +44,13 @@ public class HidingScreen extends PopUpScreen {
 		this.repaint();
 
 	}
+	
+//	public void removePlayer(){
+//		furniture.removePlayer(getGame().getBoard().getVamp(getGame().getUid()));
+//		
+//		getGame().getBoard().getVamp(getGame().getUid()).setHiding(false);
+//		
+//	}
 	
 	
 

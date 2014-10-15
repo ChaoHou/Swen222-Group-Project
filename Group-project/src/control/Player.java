@@ -48,7 +48,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	private Map<JButton, String> screenButtons;
 	private Room[][] rooms;
 
-	//Furniture temp = new Furniture(1,0,0,0,1);
+	Room temp; // = new Furniture(1,0,0,0,1);
 
 	
 	public Player(int uid, Board game,Renderer renderer){	
@@ -158,20 +158,39 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		
 		else if(action.equals("Hide into Nothingness")){
-			//You hide into furniture that's not in the game.
-//			if(temp.getHidingPlayer() != null){
-//				printMessage("Sorry, but another player's hiding already!");
-//				//temp.getHidingPlayer();	
-//				return;
-//			}
-//			
-//			printMessage("You hid into the shadows");	
-//			frame.showHidingScreen(temp);
 				
-			frame.showHidingScreen();
-			printMessage("You hid into the shadows");	
-	
+			Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+			Furniture furniture = room.getFurniture();
 			
+			temp = room;
+			
+			if(furniture.getHidingPlayer() != null){
+				printMessage("You found another player!");
+				//TODO
+				Vamp victim = furniture.getHidingPlayer();
+				victim.setFighting(true);
+				
+				if(!victim.getInventory().isEmpty()){
+					Collectable x = victim.getInventory().get(0);
+					victim.remove(x);
+					game.getVamp(uid).collectItem(x);
+					StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+					yourInventory.updateInventory();
+					frame.getPanels().get("game").repaint();
+					frame.getPanels().get("game").updateUI(); 	
+					room.getOutFromFurniture(victim);
+					victim.setHiding(false);
+								
+				}
+									
+				return;
+			}else{
+				room.hideInFurniture(game.getVamp(uid));			
+				printMessage("You hid into the furniture");	
+				frame.showHidingScreen(furniture);
+				game.getVamp(uid).setHiding(true);
+			}
+			renderer.setFurnitureSelected(false);
 		}
 		
 		
@@ -277,6 +296,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			
 			else if(screenButtons.get(e.getSource()).equals("backMainMenu")){
 				//You're going to need to get rid of all the panels:
+				
 				frame.remove(frame.getPanels().get("game"));
 				frame.remove(frame.getPanels().get("gameover"));
 				
@@ -292,9 +312,12 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			else if(screenButtons.get(e.getSource()).equals("getOut")){
 				//TODO
 				//Remove the player from the furniture.
+				
 				HidingScreen x = (HidingScreen) frame.getCurrentScreen();
 		        Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+		        
 		        room.getOutFromFurniture(game.getVamp(uid));
+		        
 				frame.showGame(frame.getCurrentScreen());
 				frame.repaint();
 				frame.setVisible(true);	
@@ -395,13 +418,14 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 					}
 					renderer.setContainerSelected(false);
 				}else if(renderer.isFurnitureSelected()){
-					System.out.println("Furniture selected");
-					
+
 					Room room = game.getRoomContainingPlayer(game.getVamp(uid));
 					Furniture furniture = room.getFurniture();
 					
+					temp = room;
+					
 					if(furniture.getHidingPlayer() != null){
-						printMessage("Sorry, but another player's hiding already!");
+						printMessage("You found another player!");
 						//TODO
 						Vamp victim = furniture.getHidingPlayer();
 						victim.setFighting(true);
@@ -413,22 +437,23 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 							StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 							yourInventory.updateInventory();
 							frame.getPanels().get("game").repaint();
-							frame.getPanels().get("game").updateUI(); 					
+							frame.getPanels().get("game").updateUI(); 	
+							room.getOutFromFurniture(victim);
+							victim.setHiding(false);
+										
 						}
-						//temp.getHidingPlayer();	
+											
 						return;
 					}else{
-						room.hideInFurniture(game.getVamp(uid));
-						
-						printMessage("You hid into the shadows");	
-						frame.showHidingScreen();
+						room.hideInFurniture(game.getVamp(uid));			
+						printMessage("You hid into the furniture");	
+						frame.showHidingScreen(furniture);
+						game.getVamp(uid).setHiding(true);
 					}
-					
-					
-					
 					renderer.setFurnitureSelected(false);
 				}
-				
+			
+				//What if the player died?
 				if(game.getVamp(uid).isDead()){
 	 				printMessage("You got killed");
 	 				//First, check if there's currently a popup menu
@@ -461,7 +486,9 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 					StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 					x.updateHealth();
 					frame.getPanels().get("game").repaint();
-					frame.getPanels().get("game").updateUI(); 				
+					frame.getPanels().get("game").updateUI(); 	
+					
+					
 	 				
 				}
 				

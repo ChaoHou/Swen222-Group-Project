@@ -2,11 +2,9 @@ package ui;
 import gameworld.Collectable;
 import gameworld.Container;
 import gameworld.Furniture;
+import gameworld.Room;
 import gameworld.Vamp;
-import gameworld.Werewolf;
 import control.Player;
-import control.PlayerInterface;
-import control.WerewolfThread;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -150,6 +148,9 @@ public class GameFrame extends JFrame {
 		 */
 		
 		public void setGame(){
+			//Temp
+			this.board.getVamp(uid).setHealth(5);
+		
 			//Sets up the menu bar
 		    JMenuBar menubar = new JMenuBar();
 		    JMenu help = new JMenu("Help");	
@@ -177,7 +178,6 @@ public class GameFrame extends JFrame {
 			this.setLayout(new BorderLayout());
 		    //Rendering
 			GLProfile glprofile = GLProfile.get(GLProfile.GL2);
-			//System.out.println(glprofile.getDefaultDevice().toString());
 	        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 	        final GLCanvas glcanvas = new GLCanvas( glcapabilities );
 	        glcanvas.addGLEventListener(renderer);    
@@ -198,11 +198,7 @@ public class GameFrame extends JFrame {
 
 		    map = new MapScreen("map",this);
 		    //Specific ActionListeners and thread stuff will run now
-		    Werewolf werewolf=new Werewolf(board);
-			board.registerWerewolf(werewolf);
-			WerewolfThread werewolfThread = new WerewolfThread(werewolf);
-			werewolfThread.start();
- 			((PlayerInterface) getPlayer()).setFrame(this);
+ 			((Player) getPlayer()).setFrame(this);
 		    ((Thread) getPlayer()).start();
 
 		}
@@ -279,23 +275,15 @@ public class GameFrame extends JFrame {
 		 * (Which may even have another player too!)
 		 * 
 		 */
-		public void showHidingScreen(){		
-		    HidingScreen CM = new HidingScreen("furniture",this);
+		public void showHidingScreen(Furniture f){				
+			
+		    HidingScreen CM = new HidingScreen("furniture",this, f);
 		    currentScreen = CM;
 			this.getPanels().put("furniture", CM);						
-			this.getContentPane().add(CM);
-			//Check if the furniture has a player 
-			//If it does, get that player out, mug his stuff, show a surprise panel
-			//for both of you!.
-//			if(f.getHidingPlayer() != null){
-//								
-//			}
-//			
-//			
-//			f.hidePlayer(board.getVamp(uid));
-//			board.getVamp(uid).setHiding(true);
-			
-			
+			this.getContentPane().add(CM);		
+			f.hidePlayer(board.getVamp(uid));
+			board.getVamp(uid).setHiding(true);
+	
 			this.canvas.setVisible(false);			
 			((GameMenu) this.getPanels().get("game")).disableButtons();
 		    this.repaint();    
