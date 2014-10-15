@@ -31,13 +31,19 @@ import ui.Board;
 import ui.ContainerScreen;
 import ui.GameFrame;
 import ui.GameMenu;
+import ui.InstructionsScreen;
 import ui.GameMenu.StatsPanel;
 import ui.GameOverScreen;
 import ui.HidingScreen;
 import ui.MapScreen;
-import ui.TestUI;
 import ui.GameMenu.textPanel;
 
+/**
+ * Slave class: the player for the networking version
+ * 
+ * @author Chao
+ *
+ */
 public class Slave extends Thread implements MouseListener,KeyListener,ActionListener,PlayerInterface {
 	private final Socket socket;
 	private final DataOutputStream output;
@@ -67,23 +73,20 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 		//frame.repaint();
 	}
 	
+	/**
+	 * Main loop here
+	 * 		Update the board by the broadcast
+	 * 		check if anything is selected
+	 * 		check if the player is dead, display the game over screen
+	 */
 	public void run(){
 		try {
 			boolean exit = false;
 			while (!exit) 	 {
 				try {
-					//System.out.println("Running");
 					while (input.available() != 0) {
-						//System.out.println("read data");
 						
-//						int amount = input.readInt();
-//						byte[] data = new byte[amount];
-//						input.readFully(data);					
-//						game.fromByteArray(data);	
 						updateBoard(game);
-						
-//						System.out.println("Current dir:"+game.getVamp(uid).getDirectionFacing());
-//						System.out.println("Invetory size:"+game.getVamp(uid).getInventory().size());
 						
 					}
 					
@@ -116,7 +119,6 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 							victim.setFighting(true);
 							
 							if(!victim.getInventory().isEmpty()){
-								//TODO
 								//NOT WORKING
 								
 //								Collectable x = victim.getInventory().get(0);
@@ -130,7 +132,6 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 							//temp.getHidingPlayer();	
 							return;
 						}else{
-							//room.hideInFurniture(game.getVamp(uid));
 							
 							output.writeInt(Master.ACTION.HIDE_IN.ordinal());
 							
@@ -168,7 +169,6 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 			}
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -192,17 +192,6 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		int x = arg0.getX();
-		int y = arg0.getY();
-		System.out.println("x: "+x+", y: "+y);
-		
-//		try {
-//			output.writeInt(uid);
-//			output.writeInt(x);
-//			output.writeInt(y);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 
 	@Override
@@ -224,16 +213,15 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
+	/**
+	 * Perform the actions base on which button is clicked
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
@@ -249,7 +237,13 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 				printMessage("You've entered the " + game.getRoomContainingPlayer(game.getVamp(uid)));
 
 			}else if(action.equals("Show Instructions")){
-				
+				if(frame.getCurrentScreen() != null){
+					frame.showGame(frame.getCurrentScreen());
+				}
+				InstructionsScreen temp = new InstructionsScreen("instructions", frame);
+				frame.showPopUp(temp);
+				frame.setVisible(true);	
+				return;
 			}else if(action.equals("Commit Suicide")){
 				
 			}else if(action.equals("Give me all Items")){
@@ -269,8 +263,7 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 					//Touching an orb hurts you!
 					printMessage("You tried eating the orb.");
 					printMessage("You damaged your teeth by accident...");
-					//TODO
-					//request server to do this
+					//make the server do it
 					output.writeInt(Master.ACTION.HURT.ordinal());
 					game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
 					//Updating the Statistics Information:
@@ -280,14 +273,9 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 					frame.getPanels().get("game").updateUI();
 				}			
 				if(buttons.get(e.getSource()).equals("HealthPack")){
-					//TODO
 					this.printMessage("You Healed up to Max Health!");
 					output.writeInt(Master.ACTION.HEAL.ordinal());
 					
-//					game.getVamp(uid).setHealth(5);	
-//					HealthPack temp = new HealthPack();
-//					game.getVamp(uid).remove(temp);
-//					//Updating the Statistics Information:
 					StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 					x.updateHealth();
 					x.updateInventory();
@@ -335,14 +323,12 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 					}	
 					
 					
-					//TODO
 					//need to updated the ui
 					//updateCurrentBoard();
 					try {
 						//waiting for update the board
 						Thread.sleep(500);
 					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					
@@ -380,7 +366,6 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 						//waiting for update the board
 						Thread.sleep(500);
 					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					
@@ -407,14 +392,11 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 				}
 				//Remove the player from the furniture and set the player visible.
 				else if(screenButtons.get(e.getSource()).equals("getOut")){
-					//TODO check if current screen is hiding screen
 					//Remove the player from the furniture.
 					HidingScreen x = (HidingScreen) frame.getCurrentScreen();
-					//
+
 					output.writeInt(Master.ACTION.GET_OUT.ordinal());
 					
-			        //Room room = game.getRoomContainingPlayer(game.getVamp(uid));
-			        //room.getOutFromFurniture(game.getVamp(uid));
 					frame.showGame(frame.getCurrentScreen());
 					frame.repaint();
 					frame.setVisible(true);	
@@ -430,7 +412,6 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 			
 		
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
@@ -480,10 +461,8 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 			}
 				
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

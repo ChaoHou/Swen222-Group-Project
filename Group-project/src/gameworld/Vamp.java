@@ -53,6 +53,7 @@ public class Vamp extends GameCharacter{
 		this.uid=uid;
 		this.game=game;	
 		health=FULL_HEALTH;
+		collectItem(new HealthPack());
 	}
 	
 	

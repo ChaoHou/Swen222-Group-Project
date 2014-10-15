@@ -88,15 +88,33 @@ public class Container {
 		return null;
 	}
 	
+	/**
+	 * @author Chao
+	 * @param gl
+	 * @param glu
+	 * @param x
+	 * @param y
+	 * @param dir
+	 * @return
+	 */
 	public boolean containsPoint(GL2 gl,GLU glu, int x,int y,int dir){
 		return box.containsPoint(gl, glu, x, y);
 	}
 	
+	/**
+	 * @author Chao
+	 * @param gl
+	 * @param textures
+	 */
 	public void init(GL gl,Texture[] textures) {
 		box.init(textures);
 	}
 
-    //done by Chao
+    /**
+     * @author Chao
+     * @param gl
+     * @param facingDir
+     */
 	public void render(GL2 gl, int facingDir){
 		
 		switch(containerType){
@@ -112,6 +130,11 @@ public class Container {
 		box.render(gl);
 	}
 	
+	/**
+	 * @author Chao
+	 * @param dout
+	 * @throws IOException
+	 */
 	public void toOutputStream(DataOutputStream dout) throws IOException {	
 		dout.writeInt(items.size());
 		for(int i=0;i<items.size();i++){
@@ -125,6 +148,12 @@ public class Container {
 		}
 	}
 	
+	/**
+	 * @author Chao
+	 * @param din
+	 * @param game
+	 * @throws IOException
+	 */
 	public void fromInputStream(DataInputStream din,Board game) throws IOException {
 		items.clear();
 		int size = din.readInt();

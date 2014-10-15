@@ -112,12 +112,11 @@ public class Wall {
     }
 
     /**
-     * stores textures
+     * @author Chao
+     * @param gl
      * @param textures
-     *
-     * by Chao
      */
-    public void init(Texture[] textures) {
+    public void init(GL gl,Texture[] textures) {
         this.textures = textures;
         float top = textures[textureIndex].getImageTexCoords().top();
         float bottom = textures[textureIndex].getImageTexCoords().bottom();
@@ -136,7 +135,11 @@ public class Wall {
     }
 
     /**
+<<<<<<< HEAD
+     * @author Chao
+=======
      * render the walls by given information when they initialized.
+>>>>>>> branch 'master' of https://github.com/ChaoHou/Swen222-Group-Project
      * @param gl
      */
     public void render(GL2 gl) {

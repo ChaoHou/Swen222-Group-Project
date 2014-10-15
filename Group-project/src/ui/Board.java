@@ -26,7 +26,7 @@ import com.jogamp.opengl.util.texture.Texture;
  * By Peide Ng.
  * ID:300280258
  * 
- * 
+ * modified by Chao
  *
  */
 public class Board {
