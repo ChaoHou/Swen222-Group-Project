@@ -14,7 +14,6 @@ import javax.media.opengl.glu.GLU;
 
 import gameworld.Wall;
 import rendering.primitive.*;
-import rendering.primitive.Box;
 import ui.Board;
 
 import com.jogamp.opengl.util.texture.Texture;
@@ -132,8 +131,8 @@ public class Renderer implements GLEventListener{
         setLighting();
 
         //render a avator
-        Cone.render(gl,glu,glut, new Vector3D(0.0, 0.0, 0.0), 1, 7.5, 0);
-        Sphere.render(gl,glut,new Vector3D(0.0, 0.0, 0.0), 1);
+        Cone.render(gl, new Vector3D(0.0, 0.0, 0.0), 1, 7.5, 0);
+        Sphere.render(gl, new Vector3D(0.0, 0.0, 0.0), 1);
 
         setCamera();
 
@@ -141,7 +140,7 @@ public class Renderer implements GLEventListener{
         gameworld.Room room = game.getRoomContainingPlayer(player);
 
         angle = Wall.getDir(player.getDirectionFacing());
-        room.draw(gl,player.getDirectionFacing());
+        room.render(gl, player.getDirectionFacing());
         
         
         if(mouse != null){
@@ -207,11 +206,8 @@ public class Renderer implements GLEventListener{
     private void setLighting() {
         gl.glEnable(GL2.GL_LIGHTING);
         gl.glEnable(GL2.GL_LIGHT0);
-//        gl.glEnable(GL2.GL_LIGHT1);
-//        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_DIFFUSE, lightStr,0);
         gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_AMBIENT, lightStr,0);
         gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_POSITION,lightPos,0);
-//        gl.glLightfv(GL2.GL_LIGHT1,GL2.GL_POSITION,lightStr,0);
     }
 
     public void setMouseEvent(MouseEvent e){
@@ -219,19 +215,6 @@ public class Renderer implements GLEventListener{
     }
 
 
-
-    private void render() {
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-
-//        board.getRoomContainsPlayer(player).render(gl,texture);
-        Cylinder.render(gl, new Vector3D(0.0, 20.0, 0.0), 2.5, 20.0, 0);
-        //Box.render(gl,new Vector3D(-64,0,0), new Vector3D(20,5,20));
-        Tetra.render(gl, new Vector3D(-5, 10, 0), new Vector3D(20, 5, 20),0);
-        gl.glFlush();
-
-    }
-
-    
     public GL2 getGL(){
     	return gl;
     }
