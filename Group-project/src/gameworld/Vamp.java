@@ -89,11 +89,14 @@ public class Vamp extends GameCharacter{
 		return this.status==Vamp.RECOVERING;
 	}
 	
-	public void setStatus(int status){
+	public void setStatus(int status,boolean isSinglePlayer){
 		if(status==Vamp.DEAD){
 			health=0;
 			this.status=status;
-			respawn();
+			if(isSinglePlayer){
+				respawn();
+			}
+			
 		}else if(status==Vamp.ALIVE || status==Vamp.PARALYSED){
 			this.status=status;
 		}else if(status==Vamp.RECOVERING){
@@ -136,7 +139,7 @@ public class Vamp extends GameCharacter{
 	public void deductHealth(int dx){
 		this.health-=dx;
 		if(this.health<=0){
-			setStatus(Vamp.DEAD);
+			setStatus(Vamp.DEAD,true);
 		}
 	}
 		
@@ -163,9 +166,9 @@ public class Vamp extends GameCharacter{
 			public void run(){
 				try{
 					Thread.sleep(Vamp.RECOVERY_TIME/2);
-					setStatus(Vamp.RECOVERING);
+					setStatus(Vamp.RECOVERING,true);
 					Thread.sleep(Vamp.RECOVERY_TIME);
-					setStatus(Vamp.ALIVE);
+					setStatus(Vamp.ALIVE,true);
 					setHealth(FULL_HEALTH/2);
 					System.out.println("------------vamp"+getUid()+" has recovered---------------");
 				}catch(Exception e){
@@ -321,7 +324,7 @@ public class Vamp extends GameCharacter{
 		boolean isTrading = din.readBoolean();
 		Vamp temp = new Vamp(uid, game);
 		temp.setDirectionFacing(facing);
-		temp.setStatus(status);
+		temp.setStatus(status,false);
 		temp.setHealth(health);
 		temp.setFighting(isFighting);
 		temp.setTrading(isTrading);

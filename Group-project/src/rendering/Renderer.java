@@ -225,7 +225,7 @@ public class Renderer implements GLEventListener{
 
 //        board.getRoomContainsPlayer(player).render(gl,texture);
         Cylinder.render(gl, new Vector3D(0.0, 20.0, 0.0), 2.5, 20.0, 0);
-        Box.render(gl,new Vector3D(-64,0,0), new Vector3D(20,5,20));
+        //Box.render(gl,new Vector3D(-64,0,0), new Vector3D(20,5,20));
         Tetra.render(gl, new Vector3D(-5, 10, 0), new Vector3D(20, 5, 20),0);
         gl.glFlush();
 

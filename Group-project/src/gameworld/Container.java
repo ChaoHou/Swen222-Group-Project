@@ -11,7 +11,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import rendering.Box;
+import rendering.primitive.Box;
 import ui.Board;
 
 import com.jogamp.opengl.util.texture.Texture;

@@ -32,6 +32,7 @@ import ui.ContainerScreen;
 import ui.GameFrame;
 import ui.GameMenu;
 import ui.GameMenu.StatsPanel;
+import ui.GameOverScreen;
 import ui.HidingScreen;
 import ui.MapScreen;
 import ui.TestUI;
@@ -142,13 +143,20 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 						renderer.setFurnitureSelected(false);
 					}
 					
-
-//					if(frame.getCurrentScreen() instanceof ContainerScreen){
-//						System.out.println("Container Screen");
-//						ContainerScreen currentScreen = (ContainerScreen) frame.getCurrentScreen();
-//						currentScreen.updateInventory();
-//					    currentScreen.updateContainer();
-//					}
+					//What if the player died?
+					if(game.getVamp(uid).isDead()){
+		 				//First, check if there's currently a popup menu
+		 				if(frame.getCurrentScreen() != null){
+		 				   //Second, remove that popup, no matter what (The game's over anyway!)
+		 					frame.showGame(frame.getCurrentScreen());
+		 				}			
+//		 				//Third, show the gameover screen.
+		 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
+		 				    frame.showPopUp(gameover);
+		 				    frame.setVisible(true);
+		 			        gameover.updateUI(); 				
+//						    break;
+					}
 					
 					
 					Thread.sleep(100);
