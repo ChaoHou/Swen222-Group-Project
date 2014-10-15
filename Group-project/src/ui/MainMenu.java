@@ -1,4 +1,6 @@
 package ui;
+import gameworld.Vamp;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import control.Slave;
 import ui.GameMenu.NavigationPanel;
 
 /**
@@ -121,6 +124,20 @@ public class MainMenu extends JPanel {
 			if(event.getSource() == buttons.get("newGame")){
 				    setNewGame(true);
 				    //Starts a new game!
+				    //TODO
+				    //game.getPlayer();
+				    if(game.getPlayer() instanceof Slave){
+				    	System.out.println("Client ");
+				    	Slave client = (Slave)game.getPlayer();
+				    	try {
+							client.updateBoard(game.getBoard());
+							
+							Vamp vamp = game.getBoard().getVamp(game.getUid());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+				    }
+				    
 					game.setGame();
 					game.getBoard().startGame();
 				

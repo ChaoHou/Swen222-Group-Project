@@ -150,6 +150,20 @@ public class Room {
 		}else{
 			dout.writeBoolean(false);
 		}
+		if(container != null){
+			dout.writeBoolean(true);
+			container.toOutputStream(dout);
+		}else{
+			dout.writeBoolean(false);
+		}
+		if(furniture != null){
+			dout.writeBoolean(true);
+			furniture.toOutputStream(dout);
+		}else{
+			dout.writeBoolean(false);
+		}
+			
+		
 	}
 	
 	public void fromInputStream(DataInputStream din,Board game) throws IOException {
@@ -162,6 +176,16 @@ public class Room {
 		boolean hasNPC = din.readBoolean();
 		if(hasNPC){
 			werewolf = Werewolf.fromInputStream(din, game);
+		}else{
+			werewolf = null;
+		}
+		boolean hasContainer = din.readBoolean();
+		if(hasContainer){
+			container.fromInputStream(din, game);
+		}
+		boolean hasFurniture = din.readBoolean();
+		if(hasFurniture){
+			furniture.fromInputStream(din, game);
 		}
 	}
 

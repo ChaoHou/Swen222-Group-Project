@@ -1,6 +1,12 @@
 package control;
 
+import gameworld.Collectable;
+import gameworld.Container;
 import gameworld.GameCharacter;
+import gameworld.HealthPack;
+import gameworld.Orb;
+import gameworld.Room;
+import gameworld.Vamp;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -19,7 +25,12 @@ public class Master extends Thread {
 		GET_OUT,
 		PLACE_TO_CONTAINER,
 		PLACE_TO_INVENTORY,
+		HEAL,
+		HURT,
 	}
+	
+	public static final int TYPE_ORB = 0;
+	public static final int TYPE_HEALTH = 1;
 	
 	private final Socket socket;
 	private final DataOutputStream output;
@@ -60,8 +71,15 @@ public class Master extends Thread {
 						output.flush();
 					}
 
+					//broadcast
+					byte[] bytes = game.toByteArray();
+					//DataOutputStream output = master.getOutputStream();
+					output.writeInt(bytes.length);
+					output.write(bytes);
 					
-					Thread.sleep(50);
+					//System.out.println("Inventory size:"+game.getVamp(uid).getInventory().size());
+					
+					Thread.sleep(200);
 				} catch (InterruptedException e) {
 
 				}
@@ -75,7 +93,7 @@ public class Master extends Thread {
 		}
 	}
 
-	private void executeAction(ACTION action) {
+	private void executeAction(ACTION action) throws IOException {
 		if(action.equals(ACTION.ROTATE_L) || action.equals(ACTION.ROTATE_R)){
 			rotate(action);
 		}else if(action.equals(ACTION.CHANGE_ROOM)){
@@ -88,12 +106,21 @@ public class Master extends Thread {
 			placeToContainer();
 		}else if(action.equals(ACTION.PLACE_TO_INVENTORY)){
 			placeToInventory();
+		}else if(action.equals(ACTION.HEAL)){
+			healPlayer();
+		}else if(action.equals(ACTION.HURT)){
+			getHurt();
 		}
 	}
 
+	private void getHurt() {
+		game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
+	}
+
 	private void rotate(ACTION action){
+		//System.out.println("Actions");
 		if(action.equals(ACTION.ROTATE_L)){
-			
+			System.out.println("Rotate L");
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
 				game.getVamp(uid).rotateTo(GameCharacter.WEST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
@@ -102,6 +129,7 @@ public class Master extends Thread {
 				game.getVamp(uid).rotateTo(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
 				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+			System.out.println("Rotated to:"+game.getVamp(uid).getDirectionFacing());
 		}else if(action.equals(ACTION.ROTATE_R)){
 			
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
@@ -117,26 +145,71 @@ public class Master extends Thread {
 
 	private void changeRoom() {
 		// TODO Auto-generated method stub
-		
+		game.getVamp(uid).enterRoom();
 	}
 
 	private void hideIn() {
 		// TODO Auto-generated method stub
-		
+		Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+		room.hideInFurniture(game.getVamp(uid));
 	}
 
 	private void getOut() {
-		// TODO Auto-generated method stub
+		Room room = game.getRoomContainingPlayer(game.getVamp(uid));
+        room.getOutFromFurniture(game.getVamp(uid));
+	}
+
+	private void placeToContainer() throws IOException {
+		int type = input.readInt();
+		System.out.println("To container type:"+type);
+		Collectable obj = null;
+		if(type == TYPE_ORB){
+			int orb = input.readInt();
+			obj = new Orb(orb);
+		}else if(type == TYPE_HEALTH){
+			obj = new HealthPack();
+		}
+		Vamp vamp = game.getVamp(uid);
+		Container container = game.getRoomContainingPlayer(vamp).getContainer();
+		
+		container.addItem(vamp.remove(obj));
+	}
+
+	private void placeToInventory() throws IOException {
+		int type = input.readInt();
+		Collectable obj = null;
+		if(type == TYPE_ORB){
+			int orb = input.readInt();
+			obj = new Orb(orb);
+		}else if(type == TYPE_HEALTH){
+			obj = new HealthPack();
+		}
+		Vamp vamp = game.getVamp(uid);
+		Container container = game.getRoomContainingPlayer(vamp).getContainer();
+		
+		vamp.collectItem(container.remove(obj));
+		
+//		System.out.println("Player contains:"+vamp.getInventory().contains(obj));
+//		System.out.println("Container contains:"+container.getItems().contains(obj));
+//		System.out.println("Place to inventory finish");
 		
 	}
 
-	private void placeToContainer() {
-		// TODO Auto-generated method stub
-		
+	private void healPlayer() {
+		game.getVamp(uid).setHealth(5);	
+		HealthPack temp = new HealthPack();
+		game.getVamp(uid).remove(temp);
+		//Updating the Statistics Information:
+//		StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+		//x.updateHealth();
+		//x.updateInventory();
 	}
-
-	private void placeToInventory() {
-		// TODO Auto-generated method stub
-		
+	
+	public DataOutputStream getOutputStream(){
+		return output;
+	}
+	
+	public Socket getSocket(){
+		return socket;
 	}
 }

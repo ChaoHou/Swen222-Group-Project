@@ -1,8 +1,10 @@
+package main;
 import gameworld.Container;
 import gameworld.Furniture;
 import gameworld.Orb;
 import gameworld.Room;
 import gameworld.Wall;
+import gameworld.Werewolf;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -12,12 +14,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import control.Slave;
 import control.Player;
 import control.Master;
+import control.WerewolfThread;
 import rendering.Renderer;
 import ui.Board;
 import ui.GameFrame;
@@ -30,7 +34,7 @@ public class Main {
 	private static final int DEFAULT_CLK_PERIOD = 20;
 	private static final int DEFAULT_BROADCAST_CLK_PERIOD = 5;
 
-	private static String filename="resources/maps/map.txt";
+	public static String filename="resources/maps/map.txt";
 	
 	public static void main(String[] args) {
 
@@ -151,6 +155,7 @@ public class Main {
 			//need to set the uid to the renderer
 			Renderer renderer = new Renderer(game,uid);
 			Slave client = new Slave(s,game,renderer,uid);
+			
 			GameFrame gg = new GameFrame("single user mode", game, uid, client ,renderer);
 			gg.setVisible(true);
 			
@@ -174,10 +179,13 @@ public class Main {
 		//ClockThread clk = new ClockThread(gameClock);	
 		
 		// Listen for connections
-		System.out.println("SERVER LISTENING ON PORT " + port);
-		System.out.println("SERVER AWAITING " + nplayers + " PLAYERS");
+		
 		try {
 			Board game = createBoardFromFile(filename);
+			
+			System.out.println("SERVER LISTENING ON PORT " + port);
+			System.out.println("SERVER AWAITING " + nplayers + " PLAYERS");
+
 			Master[] connections = new Master[nplayers];
 			// Now, we await connections.
 			ServerSocket ss = new ServerSocket(port);	
@@ -195,6 +203,12 @@ public class Main {
 				
 				if(nplayers == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
+					
+					Werewolf werewolf=new Werewolf(game);
+					game.registerWerewolf(werewolf);
+					WerewolfThread werewolfThread = new WerewolfThread(werewolf);
+					werewolfThread.start();
+					
 					multiUserGame(game,connections);
 					System.out.println("ALL CLIENTS DISCONNECTED --- GAME OVER");
 					
@@ -208,12 +222,47 @@ public class Main {
 	}
 
 	private static void multiUserGame(Board game, Master[] connections) {
-		while(true){
+		while(atleastOneConnection(connections)){
+			
 			Thread.yield();
+			
+//			try {
+//				//broadcast
+//				System.out.println("Player:0 facing:"+game.getVamp(0).getDirectionFacing());
+//				
+//				byte[] bytes = game.toByteArray();
+//				
+//				for(Master master:connections){
+//					if(master.getSocket().isClosed()){
+//						break;
+//					}
+//					DataOutputStream output = master.getOutputStream();
+//					output.writeInt(bytes.length);
+//					output.write(bytes);
+//				}
+//				
+//				Thread.sleep(DEFAULT_BROADCAST_CLK_PERIOD);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				break;
+//			} 
 		}
 	}
+	
+	private static boolean atleastOneConnection(Master... connections) {
+		for (Master m : connections) {
+			if (m.isAlive()) {
+				return true;
+			}			
+		}
+		return false;
+	}
 
-	private static Board createBoardFromFile(String filename) throws IOException{
+	public static Board createBoardFromFile(String filename) throws IOException{
 		FileReader fr = new FileReader(filename);		
 		BufferedReader br = new BufferedReader(fr);
 		ArrayList<String[]> lines = new ArrayList<String[]>();
@@ -265,8 +314,8 @@ public class Main {
 	 */
 	private static Room createRoom(String name) throws IOException{
 		String dir = "resources/maps/"+name+".txt";
-//		System.out.println("file name:"+name);
-//		System.out.println("dir: "+dir);
+		System.out.println("file name:"+name);
+		System.out.println("dir: "+dir);
 		
 		try {
 			FileReader fr = new FileReader(dir);

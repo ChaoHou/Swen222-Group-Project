@@ -114,6 +114,7 @@ public class Container {
 	}
 	
 	public void fromInputStream(DataInputStream din,Board game) throws IOException {
+		items.clear();
 		int size = din.readInt();
 		for(int i=0;i<size;i++){
 			int type = din.readInt();

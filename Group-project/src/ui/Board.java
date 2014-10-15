@@ -22,7 +22,7 @@ import control.WerewolfThread;
 public class Board {
 	
 	
-	 private Set<Vamp> vamps=new HashSet<Vamp>();
+	 //private Set<Vamp> vamps=new HashSet<Vamp>();
 	 //private WerewolfThread werewolfThread;
 	 
 	 /* made the rooms contain characters to reduce coupling */
@@ -43,9 +43,15 @@ public class Board {
 	 * Start game by respawning all vamps in startroom and unleashing the werewolf.
 	 */
 	public void startGame(){
-		System.out.println("isEmpty vamps list: "+vamps.isEmpty());
-		for(Vamp vamp:vamps){
-			vamp.respawn(startRoom);
+		for(Room[] row:rooms){
+			for(Room r:row){
+				if(r == null){
+					continue;
+				}
+				for(Vamp v:r.getVamps()){
+					v.respawn(startRoom);
+				}
+			}
 		}
 		
 		
@@ -111,7 +117,7 @@ public class Board {
 		System.out.println("in registerVamp()");
 		Vamp newVamp=new Vamp(uid, this);
 		startRoom.playerEnterRoom(newVamp);
-		vamps.add(newVamp);
+		//vamps.add(newVamp);
 		return uid++;
 	}
 	
@@ -121,12 +127,18 @@ public class Board {
 	
 	public synchronized Vamp getVamp(int uid){
 		//loop through rooms to find the character
-		for(Vamp vamp:getVamps()){
-			if(vamp.getUid()==uid){
-				return vamp;
+		for(Room[] row:rooms){
+			for(Room r:row){
+				if(r == null){
+					continue;
+				}
+				for(Vamp v:r.getVamps()){
+					if(v.getUid() == uid){
+						return v;
+					}
+				}
 			}
 		}
-		
 		
 		throw new IllegalArgumentException("invalid uid passed in.");
 	}
@@ -197,10 +209,10 @@ public class Board {
 	public Room[][] getRooms() {
 		return rooms;
 	}
-
-	public Set<Vamp> getVamps(){
-		return this.vamps;
-	}
+//
+//	public Set<Vamp> getVamps(){
+//		return this.vamps;
+//	}
 
 	public void setRooms(Room[][] rooms) {
 		this.rooms = rooms;

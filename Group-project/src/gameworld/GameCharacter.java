@@ -36,11 +36,11 @@ public abstract class GameCharacter {
 			
 	}
 	
-	public void setDirectionFacing(int dir){
+	public synchronized void setDirectionFacing(int dir){
 		facing=dir;
 	}
 	
-	public int getDirectionFacing(){
+	public synchronized int getDirectionFacing(){
 		return facing;
 	}
 	

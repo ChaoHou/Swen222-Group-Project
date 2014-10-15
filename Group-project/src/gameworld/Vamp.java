@@ -48,13 +48,6 @@ public class Vamp extends GameCharacter{
 	public void setHiding(boolean isHiding) {
 		this.isHiding = isHiding;
 	}
-
-	
-	
-	public void collect(Collectable collectable){
-		
-		
-	}
 	
 
 	
@@ -121,7 +114,7 @@ public class Vamp extends GameCharacter{
 		}
 	}
 	
-	public void rotateTo(int dir){
+	public synchronized void rotateTo(int dir){
 		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
 				dir==Vamp.SOUTH || dir==Vamp.WEST){
 			facing=dir;
@@ -215,6 +208,15 @@ public class Vamp extends GameCharacter{
 		dout.writeInt(getHealth());
 		dout.writeBoolean(isFighting);
 		dout.writeBoolean(isTrading);
+		dout.writeInt(inventory.size());
+		for(Collectable c:inventory){
+			if(c instanceof Orb){
+				dout.writeInt(Container.ITEM_TYPE_ORB);
+				c.toOutputStream(dout);
+			}else if(c instanceof HealthPack){
+				dout.writeInt(Container.ITEM_TYPE_HEALTHPACK);
+			}
+		}
 	}
 	
 	public static Vamp fromInputStream(DataInputStream din,Board game) throws IOException {
@@ -230,7 +232,16 @@ public class Vamp extends GameCharacter{
 		temp.setHealth(health);
 		temp.setFighting(isFighting);
 		temp.setTrading(isTrading);
-		
+		temp.getInventory().clear();
+		int size = din.readInt();
+		for(int i=0;i<size;i++){
+			int type = din.readInt();
+			if(type == Container.ITEM_TYPE_ORB){
+				temp.collectItem(Orb.fromInputStream(din, game));
+			}else if(type == Container.ITEM_TYPE_HEALTHPACK){
+				temp.collectItem(new HealthPack());
+			}
+		}
 		return temp;
 	}
 

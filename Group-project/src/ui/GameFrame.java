@@ -198,10 +198,12 @@ public class GameFrame extends JFrame {
 
 		    map = new MapScreen("map",this);
 		    //Specific ActionListeners and thread stuff will run now
-		    Werewolf werewolf=new Werewolf(board);
-			board.registerWerewolf(werewolf);
-			WerewolfThread werewolfThread = new WerewolfThread(werewolf);
-			werewolfThread.start();
+		    if(player instanceof Player){
+		    	Werewolf werewolf=new Werewolf(board);
+				board.registerWerewolf(werewolf);
+				WerewolfThread werewolfThread = new WerewolfThread(werewolf);
+				werewolfThread.start();
+		    }
  			((PlayerInterface) getPlayer()).setFrame(this);
 		    ((Thread) getPlayer()).start();
 
