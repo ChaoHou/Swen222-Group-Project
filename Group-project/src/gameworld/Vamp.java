@@ -121,7 +121,7 @@ public class Vamp extends GameCharacter{
 		}
 	}
 	
-	public void rotateTo(int dir){
+	public void rotateToFace(int dir){
 		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
 				dir==Vamp.SOUTH || dir==Vamp.WEST){
 			facing=dir;

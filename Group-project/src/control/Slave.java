@@ -119,13 +119,13 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 		int code=e.getKeyCode();
 		
 		if(code==KeyEvent.VK_W){
-			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
+			game.getVamp(this.uid).rotateToFace(GameCharacter.NORTH);
 		}else if(code==KeyEvent.VK_D){
-			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
+			game.getVamp(this.uid).rotateToFace(GameCharacter.EAST);
 		}else if(code==KeyEvent.VK_S){
-			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
+			game.getVamp(this.uid).rotateToFace(GameCharacter.SOUTH);
 		}else if(code==KeyEvent.VK_A){
-			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
+			game.getVamp(this.uid).rotateToFace(GameCharacter.WEST);
 		}else if(code==KeyEvent.VK_E){
 			game.getVamp(this.uid).enterRoom();
 		}

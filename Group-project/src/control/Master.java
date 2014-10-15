@@ -95,23 +95,23 @@ public class Master extends Thread {
 		if(action.equals(ACTION.ROTATE_L)){
 			
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
+				game.getVamp(uid).rotateToFace(GameCharacter.WEST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
+				game.getVamp(uid).rotateToFace(GameCharacter.SOUTH);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
+				game.getVamp(uid).rotateToFace(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+				game.getVamp(uid).rotateToFace(GameCharacter.NORTH);
 		}else if(action.equals(ACTION.ROTATE_R)){
 			
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
+				game.getVamp(uid).rotateToFace(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
+				game.getVamp(uid).rotateToFace(GameCharacter.SOUTH);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
+				game.getVamp(uid).rotateToFace(GameCharacter.WEST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+				game.getVamp(uid).rotateToFace(GameCharacter.NORTH);
 		}
 	}
 
