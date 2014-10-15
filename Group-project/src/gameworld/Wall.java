@@ -92,6 +92,11 @@ public class Wall {
         normal.put(normalTemp).position(0);
     }
 
+    /**
+     * @author Chao
+     * @param gl
+     * @param textures
+     */
     public void init(GL gl,Texture[] textures) {
         this.textures = textures;
         float top = textures[textureIndex].getImageTexCoords().top();
@@ -110,6 +115,10 @@ public class Wall {
         textureV.put(tVertices).position(0);
     }
 
+    /**
+     * @author Chao
+     * @param gl
+     */
     public void render(GL2 gl) {
 
         textures[textureIndex].enable(gl);

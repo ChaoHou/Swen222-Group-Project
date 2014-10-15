@@ -62,10 +62,20 @@ public class Orb implements Collectable{
 		return true;
 	}
 	
+	/**
+	 * @author Chao
+	 */
 	public void toOutputStream(DataOutputStream dout) throws IOException {	
 		dout.writeInt(colour);
 	}
 	
+	/**
+	 * @author Chao
+	 * @param din
+	 * @param game
+	 * @return
+	 * @throws IOException
+	 */
 	public static Orb fromInputStream(DataInputStream din,Board game) throws IOException {
 		return new Orb(din.readInt());
 	}

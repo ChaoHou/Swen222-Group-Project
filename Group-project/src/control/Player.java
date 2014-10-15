@@ -442,11 +442,11 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	 					frame.showGame(frame.getCurrentScreen());
 	 				}			
 	 				//Third, show the gameover screen.
-	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
-	 				    frame.showPopUp(gameover);
-	 				    frame.setVisible(true);
-	 			        gameover.updateUI(); 				
-					    break;
+//	 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, false);
+//	 				    frame.showPopUp(gameover);
+//	 				    frame.setVisible(true);
+//	 			        gameover.updateUI(); 				
+//					    break;
 				}
 				
 

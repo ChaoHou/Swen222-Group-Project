@@ -118,7 +118,7 @@ public class Room {
 	}
 
     /**
-     *
+     *@author Chao
      * @param gl
      * @param dir
      * Done by Chao
@@ -135,6 +135,11 @@ public class Room {
 		}
 	}
 	
+	/**
+	 * @author Chao
+	 * @param gl
+	 * @param textures
+	 */
 	public void init(GL gl,Texture[] textures){
 		for(Wall w:walls){
 			w.init(gl,textures);
@@ -147,6 +152,11 @@ public class Room {
 		}
 	}
 	
+	/**
+	 * @author Chao
+	 * @param dout
+	 * @throws IOException
+	 */
 	public void toOutputStream(DataOutputStream dout) throws IOException {		
 		dout.writeInt(players.size());
 		for(Vamp p:players){
@@ -174,6 +184,12 @@ public class Room {
 		
 	}
 	
+	/**
+	 * @author Chao
+	 * @param din
+	 * @param game
+	 * @throws IOException
+	 */
 	public void fromInputStream(DataInputStream din,Board game) throws IOException {
 		int size = din.readInt();
 		players.clear();

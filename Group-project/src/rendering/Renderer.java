@@ -25,6 +25,7 @@ import java.io.IOException;
 
 /**
  * Created by Kyohei Kudo on 25/09/2014.
+ * modified by Chao
  */
 public class Renderer implements GLEventListener{
 
