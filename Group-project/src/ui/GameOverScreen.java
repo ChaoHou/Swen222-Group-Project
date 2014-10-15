@@ -56,11 +56,25 @@ public class GameOverScreen extends PopUpScreen {
 		if(playerWon){
 			info = "You escaped the mansion!";	
 		}
-		
+		JLabel credits = new JLabel("<html> Credits: <br> "
+				+ " <br> Raul John Immanuel De Guzman: User Interface "
+				+ " <br> Peide Ng: Game Logic"
+				+ " <br> Kyouhei: Rendering"
+				+ " <br> Chao: Networking"
+				+ " <br> All images were obtained from the internet, with the exception of"
+				+ "the title drawing, map, and custom buttoms, made by Raul. "
+				+ " </html> ", JLabel.CENTER);
+		credits.setForeground(Color.white);
+		credits.setPreferredSize(new Dimension(1000, 150));
 		JLabel title = new JLabel(info, JLabel.CENTER);
 		title.setPreferredSize(new Dimension(1000, 40));
 		title.setForeground(Color.white);
+		
+		
+		
 		this.add(title);
+		if(playerWon)
+		this.add(credits);
 		this.add(backMainMenu);
 		this.remove(getBackToGame());
 		this.repaint();
