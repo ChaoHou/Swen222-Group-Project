@@ -10,6 +10,7 @@ import javax.media.opengl.glu.GLUquadric;
 /**
  * render a cylinder below a point given.
  * Created by Kyohei Kudo.
+ * ID: 300287923
  * Unfortunately, not used at all...
  */
 public class Cylinder {
