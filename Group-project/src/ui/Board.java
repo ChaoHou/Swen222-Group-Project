@@ -1,9 +1,6 @@
 package ui;
 
-import gameworld.Container;
 import gameworld.GameCharacter;
-import gameworld.HealthPack;
-import gameworld.Orb;
 import gameworld.Room;
 import gameworld.Vamp;
 import gameworld.Werewolf;
@@ -13,16 +10,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 import com.jogamp.opengl.util.texture.Texture;
-
-import control.WerewolfThread;
 
 
 /**
@@ -277,11 +270,11 @@ public class Board {
 		return this.respawnRoom;
 	}
 	
-	public void initRooms(GL gl,Texture[] textures){
+	public void initRooms(GL2 gl,Texture[] textures){
 		for(Room[] row:rooms){
 			for(Room r:row){
 				if(r != null){
-					r.init(gl,textures);
+					r.init(gl, textures);
 				}
 			}
 		}
