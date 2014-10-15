@@ -19,33 +19,42 @@ public class Vamp extends GameCharacter{
 	public static final int PARALYSED=7;
 	public static final int RECOVERING=8;
 
-	public static final int FULL_HEALTH=4;
+	public static final int FULL_HEALTH=5;
+	public static final long RECOVERY_TIME=4000;
 	
-	public static final long recoveryTime=3000;
-
 
 	private int uid;
-
-	
-	
 	private int status=ALIVE;
 	private int health;
-	private boolean isFighting;
-	private boolean isTrading;
 	private List<Collectable> inventory=new ArrayList<Collectable>();
 	
 	//A boolean to check if the player's hidden or not
 	//- John
 	private boolean isHiding =false;
+	private boolean isFighting =false;
+	private boolean isTrading =false;
+	
+	
+	
+	
 	public Vamp(int uid, Board game){
 		this.uid=uid;
-		this.game=game;
-		
-		health = 3;
+		this.game=game;	
+		health=FULL_HEALTH;
 		inventory.add(new HealthPack());
 		inventory.add(new Orb(Orb.BLUE));
 	}
-
+	
+	
+	
+	
+	
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	//------------------State Info-------------------------//
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	
 	public boolean isHiding() {
 		return isHiding;
 	}
@@ -54,20 +63,6 @@ public class Vamp extends GameCharacter{
 		this.isHiding = isHiding;
 	}
 
-	
-	
-	public void collect(Collectable collectable){
-		
-		
-	}
-	
-
-	
-	public void fight(Vamp player){
-		
-	}
-	
-	
 	public boolean isFighting(){
 		return this.isFighting;
 	}
@@ -76,7 +71,7 @@ public class Vamp extends GameCharacter{
 		this.isFighting=bool;
 	}
 	
-	private boolean isTrading() {
+	public boolean isTrading() {
 		return isTrading;
 	}
 
@@ -85,32 +80,100 @@ public class Vamp extends GameCharacter{
 	}
 	
 	public boolean isDead(){
-		return getHealth()<=0 ;//|| status==Vamp.DEAD;
-	}	
+		return getHealth()<=0 || status==Vamp.DEAD;
+	}
+	
+	public boolean isRecovering(){
+		return this.status==Vamp.RECOVERING;
+	}
 	
 	public void setStatus(int status){
-		if(status==Vamp.DEAD || status==Vamp.ALIVE || status==Vamp.PARALYSED){
+		if(status==Vamp.DEAD){
+			System.out.println("----------Vamp"+getUid()+" is dead-------------");
+			health=0;
+			this.status=status;
+			respawn();
+		}else if(status==Vamp.ALIVE || status==Vamp.PARALYSED || status==Vamp.RECOVERING){
 			this.status=status;
 		}else{
 			throw new IllegalArgumentException("invalid status to set for Vamp.");
 		}
 	}
 	
-	public void setHealth(int health){
-		this.health = health;
-	}
-	
 	public int getUid(){
 		return this.uid;
 	}
 	
-	public void respawn(Room room){
-//		room.addGameCharacter(this);
-//		this.inRoom=room;
-//		System.out.println("you are respawned, in "+inRoom);
+	//-----------------------------------------------------//
+
+	
+	
+	
+	
+	
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	//---------------------Health--------------------------//
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public void setHealth(int health){
+		this.health = health;
+	}
+
+	public void deductHealth(int dx){
+		this.health-=dx;
+		if(this.health<=0){
+			setStatus(Vamp.DEAD);
+		}
+	}
+		
+	//-----------------------------------------------------//
+	
+	
+	
+	
+	
+	
+
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	//-------------------Behaviour-------------------------//
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	
+	public void respawn(){
+		Room currentRoom=game.getRoomContainingPlayer(this);
+		currentRoom.playerLeaveRoom(this);
+		Room respawnRoom=game.getRespawnRoom();
+		respawnRoom.playerEnterRoom(this);
+		Thread thread=new Thread(){
+			public void run(){
+				try{
+					Thread.sleep(Vamp.RECOVERY_TIME/2);
+					setStatus(Vamp.RECOVERING);
+					Thread.sleep(Vamp.RECOVERY_TIME);
+					setStatus(Vamp.ALIVE);
+					setHealth(FULL_HEALTH/2);
+					System.out.println("------------vamp"+getUid()+" has recovered---------------");
+				}catch(Exception e){
+					
+				}
+			}
+		};
+		thread.start();
 	}
 	
 	public boolean enterRoom(){
+		if(isRecovering()){
+			System.out.println("cant move----------you'are recovering!!!");
+			return false;
+		}	
+		
 		Room roomFrom = game.getRoomContainingPlayer(this);
 		Room roomToEnter=game.getRoomAhead(roomFrom, facing);
 		
@@ -118,55 +181,64 @@ public class Vamp extends GameCharacter{
 			System.out.println("no room ahead");
 			return false;
 		}else{
-			System.out.println("entering "+roomToEnter+" from "+roomFrom);
 			roomFrom.playerLeaveRoom(this);
 			roomToEnter.playerEnterRoom(this);
-			System.out.println("entered "+roomToEnter);
 			return true;
 		}
 	}
 	
 	public void rotateToFace(int dir){
+		if(isRecovering()){
+			System.out.println("cant move----------you'are recovering!!!");
+			return;
+		}
+		
 		if(dir==Vamp.NORTH || dir==Vamp.EAST ||
 				dir==Vamp.SOUTH || dir==Vamp.WEST){
 			facing=dir;
-			System.out.println("Player:"+uid+" now facing "+ intDirToString());
 		}else{
 			throw new IllegalArgumentException("invalid direction to face.");
 		}
 	}
 	
+	public void fight(Vamp player){
+	}
+	//-----------------------------------------------------//
+	
+	
+	
+	
+	
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	//---------------------Inventory-----------------------//
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
 	
 	public List<Collectable> getInventory(){
 		return this.inventory;
 	}
 	
-	
-	
+
 	public void collectItem(Collectable item){
-		if(!inventoryfull())
-		this.getInventory().add(item);	
+		if(!isInventoryfull()){
+			this.getInventory().add(item);
+		}
 	}
 	
 	/**
 	 * Is the inventory full?
 	 * @author - Raul John De Guzman
 	 */
-	public boolean inventoryfull(){
+	public boolean isInventoryfull(){
 		return this.getInventory().size() == 5;
-	}
-	
-	
-	public void removeItem(Collectable item){
-		this.getInventory().remove(item);
 	}
 	
 	/**
 	 * This is to remove and return a specific item type 
 	 * @author - Raul John De Guzman
-	 */
-	
-	public Collectable remove(Collectable c){
+	 */	
+	public Collectable removeItem(Collectable c){
 		Collectable temp = null;
 		//We'll need to iterate through the whole container for this...
 		for(Collectable l : this.getInventory()){
@@ -187,12 +259,12 @@ public class Vamp extends GameCharacter{
 		return null;
 	}
 	
+	
 	/**
 	 * If the player has all 3 of each orb, he may win the game!
-	 * 
+	 * @author - Raul John De Guzman
 	 */
-	
-	public boolean canWin(){
+	public boolean hasAllOrbs(){
 		Orb tempBlue = new Orb(0);
 		Orb tempGreen = new Orb(1);
 		Orb tempRed = new Orb(2);
@@ -213,6 +285,18 @@ public class Vamp extends GameCharacter{
 		return b && g && r;
 	}
 	
+	
+	//-----------------------------------------------------//
+	
+	
+	
+	
+	
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
+	//--------------------Networking-----------------------//
+	//-----------------------------------------------------//
+	//-----------------------------------------------------//
 	public void toOutputStream(DataOutputStream dout) throws IOException {		
 		dout.writeInt(uid);
 		dout.writeInt(facing);
@@ -239,8 +323,11 @@ public class Vamp extends GameCharacter{
 		return temp;
 	}
 
-	public int getHealth() {
-		return health;
-	}
+	//-----------------------------------------------------//
+
+	
+	
+	
+	
 	
 }

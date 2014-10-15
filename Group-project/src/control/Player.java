@@ -172,7 +172,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				
 				if(!victim.getInventory().isEmpty()){
 					Collectable x = victim.getInventory().get(0);
-					victim.remove(x);
+					victim.removeItem(x);
 					game.getVamp(uid).collectItem(x);
 					StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 					yourInventory.updateInventory();
@@ -208,7 +208,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				//Touching an orb hurts you!
 				printMessage("You tried eating the orb.");
 				printMessage("You damaged your teeth by accident...");
-				game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
+				game.getVamp(uid).deductHealth(1);	
 				//Updating the Statistics Information:
 				StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 				x.updateHealth();
@@ -217,9 +217,9 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			}			
 			if(buttons.get(e.getSource()).equals("HealthPack")){
 				this.printMessage("You Healed up to Max Health!");
-				game.getVamp(uid).setHealth(5);	
+				game.getVamp(uid).setHealth(Vamp.FULL_HEALTH);	
 				HealthPack temp = new HealthPack();
-				game.getVamp(uid).remove(temp);
+				game.getVamp(uid).removeItem(temp);
 				//Updating the Statistics Information:
 				StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 				x.updateHealth();
@@ -252,7 +252,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 							temp = new HealthPack();
 						}
 						//Add the selected item into the inventory
-						if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).inventoryfull()){
+						if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).isInventoryfull()){
 							 currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).collectItem((currentScreen.getContainer().remove(temp)));			
 						}
 						else{
@@ -282,7 +282,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 							temp = new HealthPack();
 						}
 						//Add the selected item into the inventory
-						currentScreen.getContainer().addItem(currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).remove(temp));		
+						currentScreen.getContainer().addItem(currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).removeItem(temp));		
 
 					}
 				}	
@@ -432,7 +432,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 						
 						if(!victim.getInventory().isEmpty()){
 							Collectable x = victim.getInventory().get(0);
-							victim.remove(x);
+							victim.removeItem(x);
 							game.getVamp(uid).collectItem(x);
 							StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 							yourInventory.updateInventory();
@@ -479,7 +479,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 	 					frame.showGame(frame.getCurrentScreen());
 	 				}			
 	 				//Third, lower that player's health and update information
-	 				game.getVamp(uid).setHealth(game.getVamp(uid).getHealth()-1);	
+	 				game.getVamp(uid).deductHealth(1);	
 	 				game.getVamp(uid).setFighting(false);
 	 				game.getVamp(uid).setHiding(false);
 					//Updating the Statistics Information:
@@ -493,7 +493,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 				}
 				
 				//Automatic Victory
-				if(!rooms[3][1].getVamps().isEmpty() && game.getVamp(uid).canWin()){
+				if(!rooms[3][1].getVamps().isEmpty() && game.getVamp(uid).hasAllOrbs()){
 	 				printMessage("You Won a Glorious Victory.");
 	 				//First, check if there's currently a popup menu
 	 				if(frame.getCurrentScreen() != null){
