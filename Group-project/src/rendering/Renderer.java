@@ -50,8 +50,8 @@ public class Renderer implements GLEventListener{
     private Vector3D lookAt = new Vector3D(0.0,1.0,0.0);
     private Vector3D cameraTop = new Vector3D(0.0,1.0,0.0);
 
-    private float[] lightPos = new float[]{0.0f,100.0f,0.0f,1.0f};
-    private float[] lightStr = new float[]{0.5f,0.5f,0.5f,1.0f};
+    private float[] lightPos = new float[]{0.0f,1.0f,1.0f,0.0f};
+    private float[] lightStr = new float[]{1.0f,1.0f,1.0f,1.0f};
     private float[] lightColor = new float[]{0.1f,0.1f,0.1f,1.0f}; // color of light
 
     private double angle = 0;
@@ -73,7 +73,7 @@ public class Renderer implements GLEventListener{
         gl.glLoadIdentity();
 
         gl.glShadeModel(GL2.GL_SMOOTH);              // Enable Smooth Shading
-        gl.glClearColor(0.2f, 0.2f, 0.5f, 0.5f);    // Black Background
+        gl.glClearColor(0.2f, 0.2f, 0.2f, 0.5f);    // Black Background
         gl.glColor4d(1.0,1.0,1.0,1.0);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 
@@ -205,12 +205,12 @@ public class Renderer implements GLEventListener{
     }
 
     private void setLighting() {
-//        gl.glEnable(GL2.GL_LIGHTING);
-//        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
 //        gl.glEnable(GL2.GL_LIGHT1);
-        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_DIFFUSE, lightStr,0);
+//        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_DIFFUSE, lightStr,0);
+        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_AMBIENT, lightStr,0);
         gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_POSITION,lightPos,0);
-//        gl.glLightfv(GL2.GL_LIGHT1,GL2.GL_AMBIENT, lightColor,0);
 //        gl.glLightfv(GL2.GL_LIGHT1,GL2.GL_POSITION,lightStr,0);
     }
 
