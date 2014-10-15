@@ -22,7 +22,6 @@ import control.WerewolfThread;
 public class Board {
 	
 	
-	 private Set<Vamp> vamps=new HashSet<Vamp>();
 	 private WerewolfThread werewolfThread;
 	 
 	 /* made the rooms contain characters to reduce coupling */
@@ -286,7 +285,6 @@ public class Board {
 		System.out.println("in registerVamp()");
 		Vamp newVamp=new Vamp(uid, this);
 		startRoom.playerEnterRoom(newVamp);
-		vamps.add(newVamp);
 		return uid++;
 	}
 	
@@ -296,9 +294,17 @@ public class Board {
 	
 	public synchronized Vamp getVamp(int uid){
 		//loop through rooms to find the character
-		for(Vamp vamp:getVamps()){
-			if(vamp.getUid()==uid){
-				return vamp;
+		for(int i=0;i<rooms.length;i++){
+			for(int j=0;j<rooms[0].length;j++){
+				Room room=rooms[i][j];
+				if(room!=null){
+					Set<Vamp> vamps=room.getVamps();
+					for(Vamp vamp:vamps){
+						if(vamp.getUid()==uid){
+							return vamp;
+						}
+					}
+				}
 			}
 		}
 		
@@ -307,9 +313,6 @@ public class Board {
 	}
 
 	
-	public Set<Vamp> getVamps(){
-		return this.vamps;
-	}
 
 	//-------------------------------------------------------------//
 	

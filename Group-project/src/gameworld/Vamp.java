@@ -17,7 +17,12 @@ public class Vamp extends GameCharacter{
 	public static final int DEAD=5;
 	public static final int ALIVE=6;
 	public static final int PARALYSED=7;
+	public static final int RECOVERING=8;
+
+	public static final int FULL_HEALTH=4;
 	
+	public static final long recoveryTime=3000;
+
 
 	private int uid;
 
