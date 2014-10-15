@@ -15,10 +15,15 @@ public class Orb implements Collectable{
 	private int colour;
 	
 	public Orb(int colour){
-		this.colour=colour;
+		if(colour==Orb.BLUE || colour==Orb.GREEN || colour==Orb.RED){
+			this.colour=colour;
+		}else{
+			throw new IllegalArgumentException("invalid orb colour");
+		}
+		
 	}
 	
-	public int getColor(){
+	public int getColour(){
 		return this.colour;
 	}
 

@@ -213,7 +213,7 @@ public class Main {
 		}
 	}
 
-	private static Board createBoardFromFile(String filename) throws IOException{
+	public static Board createBoardFromFile(String filename) throws IOException{
 		FileReader fr = new FileReader(filename);		
 		BufferedReader br = new BufferedReader(fr);
 		ArrayList<String[]> lines = new ArrayList<String[]>();

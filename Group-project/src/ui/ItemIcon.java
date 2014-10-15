@@ -31,7 +31,7 @@ public class ItemIcon extends ImageIcon {
 		BufferedImage img = null;
 		try {
 			if (c instanceof Orb){
-				if(((Orb) c).getColor()==((Orb) c).BLUE){
+				if(((Orb) c).getColour()==((Orb) c).BLUE){
 					if(isChecked){
 					    img = ImageIO.read(new File("resources/images/UI/blueOrbChecked.png"));
 					}
@@ -39,7 +39,7 @@ public class ItemIcon extends ImageIcon {
 						img = ImageIO.read(new File("resources/images/UI/blueOrb.png"));
 					}
 				}
-				else if(((Orb) c).getColor()==((Orb) c).GREEN){
+				else if(((Orb) c).getColour()==((Orb) c).GREEN){
 					if(isChecked){
 						img = ImageIO.read(new File("resources/images/UI/greenOrbChecked.png"));
 					}
@@ -47,7 +47,7 @@ public class ItemIcon extends ImageIcon {
 						img = ImageIO.read(new File("resources/images/UI/greenOrb.png"));
 					}
 				}
-				else if(((Orb) c).getColor()==((Orb) c).RED){
+				else if(((Orb) c).getColour()==((Orb) c).RED){
 					if(isChecked){
 						img = ImageIO.read(new File("resources/images/UI/redOrbChecked.png"));
 					}

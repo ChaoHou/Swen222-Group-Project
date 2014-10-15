@@ -41,8 +41,6 @@ public class Vamp extends GameCharacter{
 		this.uid=uid;
 		this.game=game;	
 		health=FULL_HEALTH;
-		inventory.add(new HealthPack());
-		inventory.add(new Orb(Orb.BLUE));
 	}
 	
 	
@@ -82,6 +80,10 @@ public class Vamp extends GameCharacter{
 	public boolean isDead(){
 		return getHealth()<=0 || status==Vamp.DEAD;
 	}
+
+	public boolean isAlive(){
+		return this.status==Vamp.ALIVE;
+	}
 	
 	public boolean isRecovering(){
 		return this.status==Vamp.RECOVERING;
@@ -98,6 +100,10 @@ public class Vamp extends GameCharacter{
 		}else{
 			throw new IllegalArgumentException("invalid status to set for Vamp.");
 		}
+	}
+	
+	public int getStatus(){
+		return this.status;
 	}
 	
 	public int getUid(){
@@ -234,55 +240,41 @@ public class Vamp extends GameCharacter{
 		return this.getInventory().size() == 5;
 	}
 	
-	/**
-	 * This is to remove and return a specific item type 
-	 * @author - Raul John De Guzman
-	 */	
+	
 	public Collectable removeItem(Collectable c){
-		Collectable temp = null;
-		//We'll need to iterate through the whole container for this...
-		for(Collectable l : this.getInventory()){
-			//Is it an Orb? Are they the same kind of Orb?	
-			if((c instanceof Orb && l instanceof Orb) && 
-					((Orb) c).getColor() == ((Orb) l).getColor()){
-				temp = (Orb) l;
-				this.getInventory().remove(l);
-				return temp;
-			}
-			//Is it a HealthPack?
-			else if(c instanceof HealthPack && l instanceof HealthPack){
-				temp = (HealthPack) l;
-				this.getInventory().remove(l);
-				return temp;
+		for(Collectable item:this.getInventory()){
+			if(c==item){
+				this.inventory.remove(item);
+				return c; 
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("item does not exist in the game.");
+		
 	}
 	
 	
 	/**
 	 * If the player has all 3 of each orb, he may win the game!
+	 * 
 	 * @author - Raul John De Guzman
 	 */
 	public boolean hasAllOrbs(){
-		Orb tempBlue = new Orb(0);
-		Orb tempGreen = new Orb(1);
-		Orb tempRed = new Orb(2);
-		Boolean b = false,g = false,r = false;
-		for(Collectable l : this.getInventory()){
-			//Do you have a blue orb?	
-			if((l instanceof Orb) && ((Orb) tempBlue).getColor() == ((Orb) l).getColor()){
-				b = true;
-			}
-			if((l instanceof Orb) && ((Orb) tempGreen).getColor() == ((Orb) l).getColor()){
-				g = true;
-			}
-			if((l instanceof Orb) && ((Orb) tempRed).getColor() == ((Orb) l).getColor()){
-				r = true;
+		boolean hasBlue = false, hasGreen = false, hasRed = false;
+		
+		for(Collectable item : this.getInventory()){
+			if(item instanceof Orb){
+				int colour=((Orb)item).getColour();
+				if(colour==Orb.BLUE){
+					hasBlue = true;
+				}else if(colour==Orb.GREEN){
+					hasGreen = true;
+				}else if(colour==Orb.RED){
+					hasRed = true;
+				}
 			}
 		}
-		
-		return b && g && r;
+		System.out.println("size of inventory:"+this.inventory.size());
+		return hasBlue && hasGreen && hasRed;
 	}
 	
 	
