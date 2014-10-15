@@ -31,11 +31,11 @@ import ui.Board;
 import ui.ContainerScreen;
 import ui.GameFrame;
 import ui.GameMenu;
+import ui.InstructionsScreen;
 import ui.GameMenu.StatsPanel;
 import ui.GameOverScreen;
 import ui.HidingScreen;
 import ui.MapScreen;
-import ui.TestUI;
 import ui.GameMenu.textPanel;
 
 public class Slave extends Thread implements MouseListener,KeyListener,ActionListener,PlayerInterface {
@@ -249,7 +249,13 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 				printMessage("You've entered the " + game.getRoomContainingPlayer(game.getVamp(uid)));
 
 			}else if(action.equals("Show Instructions")){
-				
+				if(frame.getCurrentScreen() != null){
+					frame.showGame(frame.getCurrentScreen());
+				}
+				InstructionsScreen temp = new InstructionsScreen("instructions", frame);
+				frame.showPopUp(temp);
+				frame.setVisible(true);	
+				return;
 			}else if(action.equals("Commit Suicide")){
 				
 			}else if(action.equals("Give me all Items")){
