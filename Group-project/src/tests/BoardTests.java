@@ -1,4 +1,4 @@
-package main;
+package tests;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gameworld.Room;
 import gameworld.Vamp;
+import main.Main;
 
 import org.junit.Test;
 
