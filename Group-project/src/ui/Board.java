@@ -59,6 +59,14 @@ public class Board {
 	 * Determines if there is a room ahead of this room (facing this particular direction). 
 	 */
 	public synchronized Room getRoomAhead(Room currentRoom, int dir){
+		if(!checkValidDirection(dir) || currentRoom==null){
+			throw new IllegalArgumentException();
+		}
+		
+		Room room=checkForSecretPathway(currentRoom, dir);
+		if(room!=null){
+			return room;
+		}
 		
 		int dx=0;
 		int dy=0;
@@ -109,6 +117,68 @@ public class Board {
 		}
 	}
 	
+	private Room checkForSecretPathway(Room room, int dir){
+		String roomName=room.toString();
+		String roomToEnter=null;
+		
+		if(roomName.equals("bathroom")){
+			if(dir==Room.SOUTH){
+				roomToEnter="exit";
+			}
+		}else if(roomName.equals("exit")){
+			if(dir==Room.WEST){
+				roomToEnter="bathroom";
+			}
+		}else if(roomName.equals("dungeon")){
+			if(dir==Room.SOUTH){
+				roomToEnter="diningarea";
+			}
+		}else if(roomName.equals("diningarea")){
+			if(dir==Room.EAST){
+				roomToEnter="dungeon";
+			}
+		}else{
+			return null;
+		}
+		
+		
+		if(roomToEnter==null){
+			return null;
+		}else{
+			return getRoom(roomToEnter);
+		}
+		
+		
+		
+	}
+	
+	
+	public Room getRoom(String room){
+		if(room==null){
+			throw new IllegalArgumentException();
+		}
+		
+		for(int i=0;i<rooms.length;i++){
+			for(int j=0;j<rooms[0].length;j++){
+				Room currentRoom=rooms[i][j];
+				if(currentRoom!=null && currentRoom.toString().equals(room)){
+					return currentRoom;
+				}
+			}
+		}
+		
+		
+		throw new IllegalArgumentException();
+	}
+	
+	
+	private boolean checkValidDirection(int dir){
+		if(dir!=Room.NORTH && dir!=Room.EAST && 
+				dir!=Room.SOUTH && dir!=Room.WEST){
+			return false;
+		}
+		return true;
+	}
 	
 	public synchronized int registerVamp(){
 		System.out.println("in registerVamp()");
