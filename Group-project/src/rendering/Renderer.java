@@ -13,6 +13,7 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
+import gameworld.Wall;
 import rendering.primitive.*;
 import rendering.primitive.Box;
 import ui.Board;
@@ -49,8 +50,9 @@ public class Renderer implements GLEventListener, KeyListener {
     /**
      * position of camera
      */
-    private Vector3D cameraPos = new Vector3D(0.0,48.0,150.0);
-    private Vector3D lookAt = new Vector3D(0.0,42.0,0.0);
+    private float fovy = 45.0f;
+    private Vector3D cameraPos = new Vector3D(0.0,2.0,9.0);
+    private Vector3D lookAt = new Vector3D(0.0,1.0,0.0);
     private Vector3D cameraTop = new Vector3D(0.0,1.0,0.0);
 
     private float[] lightPos = new float[]{10.0f,100.0f,30.0f,1.0f};
@@ -136,9 +138,11 @@ public class Renderer implements GLEventListener, KeyListener {
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
+        setCamera(gl);
         Vamp player = game.getVamp(uid);
         gameworld.Room room = game.getRoomContainingPlayer(player);
-        
+
+        angle = Wall.getDir(player.getDirectionFacing());
         room.draw(gl,player.getDirectionFacing());
         
         
@@ -168,8 +172,11 @@ public class Renderer implements GLEventListener, KeyListener {
         	
         	mouse = null;
         }
-        
-        
+
+
+        Sphere.render(gl, new Vector3D(0.0, 0.0, 0.0), 1);
+        Cone.render(gl, new Vector3D(0.0, 0.0, 0.0), 1, 7.5, 0);
+
         gl.glFlush();
 //        render();
     }
@@ -187,18 +194,13 @@ public class Renderer implements GLEventListener, KeyListener {
         setCamera(gl);
     }
 
-    private void update() {
-        setCamera(gl);
-        gl.glLightfv(GL2.GL_LIGHT0,GL2.GL_POSITION, lightPos,0);
-    }
-
     private void setCamera(GL2 gl) {
         // change to projection matrix
 
         gl.glMatrixMode(GL2.GL_PROJECTION);
 
         gl.glLoadIdentity();
-        glu.gluPerspective(100.0f, (float) width / (float) height, 1.0, 300.0);
+        glu.gluPerspective(fovy, (float) width / (float) height, 1.0, 300.0);
 
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
@@ -217,8 +219,6 @@ public class Renderer implements GLEventListener, KeyListener {
 
 //        board.getRoomContainsPlayer(player).render(gl,texture);
         Cylinder.render(gl, new Vector3D(0.0, 20.0, 0.0), 2.5, 20.0, 0);
-        Sphere.render(gl, new Vector3D(0.0, 20.0, 0.0), 5);
-        Cone.render(gl, new Vector3D(0.0, 30.0, 0.0), 5, 30.0, 5);
         Box.render(gl,new Vector3D(-64,0,0), new Vector3D(20,5,20));
         Tetra.render(gl, new Vector3D(-5, 10, 0), new Vector3D(20, 5, 20),0);
         gl.glFlush();

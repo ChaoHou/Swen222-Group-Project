@@ -23,34 +23,35 @@ public class Wall {
 	private static final int BYTES_PER_FLOAT = 4;
 	
 	private static final float WIDTH = 10.0f;
+    private static final float HEIGHT = 7.5f;
 	private static final float[][] WALLS = {
 		//[0]north wall
 		{
-			-WIDTH,WIDTH,WIDTH,  //top left
-			-WIDTH,-WIDTH,WIDTH, //bottom left
-			WIDTH,-WIDTH,WIDTH,  //bottom right
-			WIDTH,WIDTH,WIDTH ,  //top right
+			-WIDTH,HEIGHT,WIDTH,  //top left
+			-WIDTH,-HEIGHT,WIDTH, //bottom left
+			WIDTH,-HEIGHT,WIDTH,  //bottom right
+			WIDTH,HEIGHT,WIDTH ,  //top right
 		},
 		//[1]west wall
 		{
-			-WIDTH,WIDTH,-WIDTH,  //top left
-			-WIDTH,-WIDTH,-WIDTH, //bottom left
-			-WIDTH,-WIDTH,WIDTH,  //bottom right
-			-WIDTH,WIDTH,WIDTH ,  //top right
+			-WIDTH,HEIGHT,-WIDTH,  //top left
+			-WIDTH,-HEIGHT,-WIDTH, //bottom left
+			-WIDTH,-HEIGHT,WIDTH,  //bottom right
+			-WIDTH,HEIGHT,WIDTH ,  //top right
 		},
 		//[2]south wall
 		{
-			WIDTH,WIDTH,-WIDTH,  //top left
-			WIDTH,-WIDTH,-WIDTH, //bottom left
-			-WIDTH,-WIDTH,-WIDTH,  //bottom right
-			-WIDTH,WIDTH,-WIDTH ,  //top right
+			WIDTH,HEIGHT,-WIDTH,  //top left
+			WIDTH,-HEIGHT,-WIDTH, //bottom left
+			-WIDTH,-HEIGHT,-WIDTH,  //bottom right
+			-WIDTH,HEIGHT,-WIDTH ,  //top right
 		},
 		//[3]east wall
 		{
-			WIDTH,WIDTH,WIDTH,  //top left
-			WIDTH,-WIDTH,WIDTH, //bottom left
-			WIDTH,-WIDTH,-WIDTH,  //bottom right
-			WIDTH,WIDTH,-WIDTH ,  //top right
+			WIDTH,HEIGHT,WIDTH,  //top left
+			WIDTH,-HEIGHT,WIDTH, //bottom left
+			WIDTH,-HEIGHT,-WIDTH,  //bottom right
+			WIDTH,HEIGHT,-WIDTH ,  //top right
 		},
 	};
 	
@@ -91,8 +92,9 @@ public class Wall {
 
 	public void draw(GL2 gl,int facingDir) {
 		
-		gl.glLoadIdentity();
-		gl.glRotatef(getDir(facingDir), 0.0f, 1.0f, 0.0f);
+//		gl.glLoadIdentity();
+        gl.glPushMatrix();
+//		gl.glRotatef(getDir(facingDir), 0.0f, 1.0f, 0.0f);
 		
 		textures[textureIndex].enable(gl);
 		textures[textureIndex].bind(gl);
@@ -107,6 +109,7 @@ public class Wall {
 		
 		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glPopMatrix();
 
 	}
 

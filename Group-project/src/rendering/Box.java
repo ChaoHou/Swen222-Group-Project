@@ -104,9 +104,10 @@ public class Box {
 	}
 	
 	public void draw(GL2 gl,int dir) {
-		gl.glLoadIdentity();
+//		gl.glLoadIdentity();
+        gl.glPushMatrix();
 		float rquad = Wall.getDir(dir);
-		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+//		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
 		gl.glTranslatef(x, y, z);
 		
 		textures[textureIndex].enable(gl);
@@ -122,14 +123,16 @@ public class Box {
 		
 		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glPopMatrix();
 	}
 	
 	public boolean containsPoint(GL2 gl,GLU glu, int mouseX,int mouseY,int dir){
-		gl.glLoadIdentity();
-		
-		float rquad = Wall.getDir(dir);
-		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
-		gl.glTranslatef(x, y, z);
+
+        gl.glPushMatrix();
+//		gl.glLoadIdentity();
+//		float rquad = Wall.getDir(dir);
+//		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+//		gl.glTranslatef(x, y, z);
 		
 		int[] viewport = new int[4];
     	double[] modelView = new double[16];
@@ -145,13 +148,14 @@ public class Box {
     	double[] start = new double[4];
     	double[] end = new double[4];
     	
-    	glu.gluUnProject(winX, winY, 0, 
+    	glu.gluUnProject(winX, winY, 0,
     			modelView, 0,
-    			projection, 0, 
-    			viewport, 0, 
+    			projection, 0,
+    			viewport, 0,
     			start, 0);
-    	
-    	glu.gluUnProject(winX, winY, 1, 
+
+
+    	glu.gluUnProject(winX, winY, 1,
     			modelView, 0,
     			projection, 0, 
     			viewport, 0, 
@@ -160,15 +164,18 @@ public class Box {
     	double[] x1 = {start[0],start[1],start[2]};
     	double[] x2 = {end[0],end[1],end[2]};
     	double[] x0 = {x,y,z};
-    	
+
     	double[] x2Tox1 = {x2[0]-x1[0],x2[1]-x1[1],x2[2]-x1[2]};
     	double[] x1Tox0 = {x1[0]-x0[0],x1[1]-x0[1],x1[2]-x0[2]};
-    	
+
     	double[] m = cross(x2Tox1,x1Tox0);
-    	
+
+
     	double length = length(m)/length(x2Tox1);
+        gl.glPopMatrix();
     	
     	//compare with the radius
+//        System.out.printf("%.3f,%.3f,%.3f : %.3f,%.3f,%.3f length=%.3f\n",(float)start[0],(float)start[1],(float)start[2],(float)end[0],(float)end[1],(float)end[2],(float)length);
     	if(length < size[0]) return true;
 		return false;
 	}
