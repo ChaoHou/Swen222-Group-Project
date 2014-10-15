@@ -7,8 +7,6 @@ import gameworld.Orb;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +92,7 @@ public class ContainerScreen extends PopUpScreen {
 		for(Collectable c : getContainer().getItems()){
 			//If Orb:
 			if(c instanceof Orb){
-				obj = new JCheckBox(Integer.toString(((Orb) c).getColor()));
+				obj = new JCheckBox(Integer.toString(((Orb) c).getColour()));
 				obj.setIcon(new ItemIcon(c, false));		
 				obj.setSelectedIcon(new ItemIcon(c, true));						
 				obj.setBorder(null);	
@@ -129,7 +127,7 @@ public class ContainerScreen extends PopUpScreen {
 		for(Collectable c : getGame().getBoard().getVamp(getGame().getUid()).getInventory()){
 			//If Orb:
 			if(c instanceof Orb){
-				obj = new JCheckBox(Integer.toString(((Orb) c).getColor()));
+				obj = new JCheckBox(Integer.toString(((Orb) c).getColour()));
 				obj.setIcon(new ItemIcon(c, false));		
 				obj.setSelectedIcon(new ItemIcon(c, true));						
 				obj.setBorder(null);	

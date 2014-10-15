@@ -7,8 +7,6 @@ import gameworld.Orb;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -103,7 +101,7 @@ public class GameMenu extends JPanel {
 		public MapPanel(){
 			BufferedImage img = null;
 			try {
-				img = ImageIO.read(new File("src/mapSmall.png"));
+				img = ImageIO.read(new File("resources/images/UI/mapSmall.png"));
 			} catch (IOException e) {
 			}
 			//Button
@@ -268,7 +266,7 @@ public class GameMenu extends JPanel {
 		public StatsPanel(){
 			//Hearth image
 			try {
-				img = ImageIO.read(new File("src/heart.png"));
+				img = ImageIO.read(new File("resources/images/UI/heart.png"));
 			} catch (IOException e) {
 			}		
 			//Draw the player's health

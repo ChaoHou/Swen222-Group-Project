@@ -38,10 +38,10 @@ public class GameOverScreen extends PopUpScreen {
 		getGame().getScreenButtons().put(backMainMenu, "backMainMenu");
 		try {
 			if(playerWon == true){
-				img = ImageIO.read(new File("src/victory.jpg"));
+				img = ImageIO.read(new File("resources/images/UI/victory.jpg"));
 			}
 			else{
-				img = ImageIO.read(new File("src/gameover.jpg"));
+				img = ImageIO.read(new File("resources/images/UI/gameover.jpg"));
 			}	
 		} 
 		catch(IOException e) {		
@@ -56,11 +56,25 @@ public class GameOverScreen extends PopUpScreen {
 		if(playerWon){
 			info = "You escaped the mansion!";	
 		}
-		
+		JLabel credits = new JLabel("<html> Credits: <br> "
+				+ " <br> Raul John Immanuel De Guzman: User Interface+Game Logic"
+				+ " <br> Peide Ng: Game Logic"
+				+ " <br> Kyohei Kudo: Rendering"
+				+ " <br> Chao Hou: Networking+Game Logic+Rendering"
+				+ " <br> All images were obtained from the internet, with the exception of"
+				+ "the title drawing, map, and custom buttoms, made by Raul. "
+				+ " </html> ", JLabel.CENTER);
+		credits.setForeground(Color.white);
+		credits.setPreferredSize(new Dimension(1000, 150));
 		JLabel title = new JLabel(info, JLabel.CENTER);
 		title.setPreferredSize(new Dimension(1000, 40));
 		title.setForeground(Color.white);
+		
+		
+		
 		this.add(title);
+		if(playerWon)
+		this.add(credits);
 		this.add(backMainMenu);
 		this.remove(getBackToGame());
 		this.repaint();

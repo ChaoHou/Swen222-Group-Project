@@ -62,7 +62,7 @@ public class Container {
 		for(Collectable l : this.getItems()){
 			//Is it an Orb? Are they the same kind of Orb?	
 			if((c instanceof Orb && l instanceof Orb) && 
-				((Orb) c).getColor() == ((Orb) l).getColor()){
+				((Orb) c).getColour() == ((Orb) l).getColour()){
 				temp = (Orb) l;
 				this.getItems().remove(l);
 				return temp;
@@ -96,7 +96,7 @@ public class Container {
 			break;
 		}
 		
-		
+
 		box.draw(gl,facingDir);
 	}
 	

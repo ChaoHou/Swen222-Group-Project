@@ -115,13 +115,16 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 							victim.setFighting(true);
 							
 							if(!victim.getInventory().isEmpty()){
-								Collectable x = victim.getInventory().get(0);
-								victim.remove(x);
-								game.getVamp(uid).collectItem(x);
-								StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
-								yourInventory.updateInventory();
-								frame.getPanels().get("game").repaint();
-								frame.getPanels().get("game").updateUI(); 					
+								//TODO
+								//NOT WORKING
+								
+//								Collectable x = victim.getInventory().get(0);
+//								victim.remove(x);
+//								game.getVamp(uid).collectItem(x);
+//								StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+//								yourInventory.updateInventory();
+//								frame.getPanels().get("game").repaint();
+//								frame.getPanels().get("game").updateUI(); 					
 							}
 							//temp.getHidingPlayer();	
 							return;
@@ -197,17 +200,16 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code=e.getKeyCode();
-		
-		if(code==KeyEvent.VK_W){
-			game.getVamp(this.uid).rotateTo(GameCharacter.NORTH);
-		}else if(code==KeyEvent.VK_D){
-			game.getVamp(this.uid).rotateTo(GameCharacter.EAST);
-		}else if(code==KeyEvent.VK_S){
-			game.getVamp(this.uid).rotateTo(GameCharacter.SOUTH);
-		}else if(code==KeyEvent.VK_A){
-			game.getVamp(this.uid).rotateTo(GameCharacter.WEST);
-		}else if(code==KeyEvent.VK_E){
-			game.getVamp(this.uid).enterRoom();
+		try{
+			if(code==KeyEvent.VK_W){
+
+			}else if(code==KeyEvent.VK_D){
+				output.writeInt(Master.ACTION.ROTATE_L.ordinal());
+			}else if(code==KeyEvent.VK_A){
+				output.writeInt(Master.ACTION.ROTATE_R.ordinal());
+			}
+		}catch(Exception exc){
+			
 		}
 		
 	}
@@ -304,7 +306,7 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 							
 							if(!checkBox.getLabel().equals("")){
 								int orbType = Integer.parseInt(checkBox.getLabel());
-								if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).inventoryfull()){
+								if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).isInventoryfull()){
 									output.writeInt(Master.ACTION.PLACE_TO_INVENTORY.ordinal());
 									output.writeInt(Master.TYPE_ORB); 
 									output.writeInt(orbType);
@@ -313,7 +315,7 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 									System.out.println("Full!");
 								}
 							} else{
-								if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).inventoryfull()){
+								if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).isInventoryfull()){
 									output.writeInt(Master.ACTION.PLACE_TO_INVENTORY.ordinal());
 									output.writeInt(Master.TYPE_HEALTH); //1 means healthpack
 								}else{

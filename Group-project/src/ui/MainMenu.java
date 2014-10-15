@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import control.Slave;
@@ -58,11 +57,11 @@ public class MainMenu extends JPanel {
 		BufferedImage img4 = null;
 		BufferedImage img5 = null;
 		try {
-			img = ImageIO.read(new File("src/newgame1.png"));
-			img2 = ImageIO.read(new File("src/newgame2.png"));
-			img3 = ImageIO.read(new File("src/Instructions1.png"));	
-			img4 = ImageIO.read(new File("src/Instructions2.png"));
-			img5 = ImageIO.read(new File("src/title.png"));
+			img = ImageIO.read(new File("resources/images/UI/newgame1.png"));
+			img2 = ImageIO.read(new File("resources/images/UI/newgame2.png"));
+			img3 = ImageIO.read(new File("resources/images/UI/Instructions1.png"));	
+			img4 = ImageIO.read(new File("resources/images/UI/Instructions2.png"));
+			img5 = ImageIO.read(new File("resources/images/UI/title.png"));
 		} catch (IOException e) {
 		}
 		

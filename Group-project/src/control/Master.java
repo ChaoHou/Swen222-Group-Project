@@ -122,24 +122,23 @@ public class Master extends Thread {
 		if(action.equals(ACTION.ROTATE_L)){
 			System.out.println("Rotate L");
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
+				game.getVamp(uid).rotateToFace(GameCharacter.WEST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
+				game.getVamp(uid).rotateToFace(GameCharacter.SOUTH);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
+				game.getVamp(uid).rotateToFace(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
-			System.out.println("Rotated to:"+game.getVamp(uid).getDirectionFacing());
+				game.getVamp(uid).rotateToFace(GameCharacter.NORTH);
 		}else if(action.equals(ACTION.ROTATE_R)){
 			
 			if(game.getVamp(uid).getDirectionFacing() == GameCharacter.NORTH)
-				game.getVamp(uid).rotateTo(GameCharacter.EAST);
+				game.getVamp(uid).rotateToFace(GameCharacter.EAST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.EAST)
-				game.getVamp(uid).rotateTo(GameCharacter.SOUTH);
+				game.getVamp(uid).rotateToFace(GameCharacter.SOUTH);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.SOUTH)
-				game.getVamp(uid).rotateTo(GameCharacter.WEST);
+				game.getVamp(uid).rotateToFace(GameCharacter.WEST);
 			else if(game.getVamp(uid).getDirectionFacing() == GameCharacter.WEST)
-				game.getVamp(uid).rotateTo(GameCharacter.NORTH);
+				game.getVamp(uid).rotateToFace(GameCharacter.NORTH);
 		}
 	}
 
@@ -172,7 +171,7 @@ public class Master extends Thread {
 		Vamp vamp = game.getVamp(uid);
 		Container container = game.getRoomContainingPlayer(vamp).getContainer();
 		
-		container.addItem(vamp.remove(obj));
+		container.addItem(vamp.removeItem(obj));
 	}
 
 	private void placeToInventory() throws IOException {
@@ -198,7 +197,7 @@ public class Master extends Thread {
 	private void healPlayer() {
 		game.getVamp(uid).setHealth(5);	
 		HealthPack temp = new HealthPack();
-		game.getVamp(uid).remove(temp);
+		game.getVamp(uid).removeItem(temp);
 		//Updating the Statistics Information:
 //		StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
 		//x.updateHealth();

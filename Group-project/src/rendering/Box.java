@@ -23,11 +23,28 @@ public class Box {
 	float[] size;
 	
 	private FloatBuffer vertices;
+    private FloatBuffer normal;
 	private ByteBuffer indices;
 	private FloatBuffer textureV;
 	private int indexCount;
 	private Texture[] textures;
 	private int textureIndex;
+
+
+    private static final float[] NORMALS = {
+            //top nomarl
+            0.0f,1.0f,0.0f,
+            //bottom nomarl
+            0.0f,-1.0f,0.0f,
+            //north[0] nomarl
+            0.0f,0.0f,-1.0f,
+            //west[1] nomarl
+            -1.0f,0.0f,0.0f,
+            //south[2] nomarl
+            0.0f,0.0f,1.0f,
+            //east[3] nomarl
+            1.0f,0.0f,0.0f,
+    };
 	
 	
 	
@@ -43,33 +60,46 @@ public class Box {
 		float yC = size[1]/2;
 		float zC = size[2]/2;
 		
-		float[] verFloat = {	
-				-xC,-yC,zC,
-				xC,-yC,zC,
-				xC,yC,zC,
-				-xC,yC,zC,
-				-xC,yC,-zC,
-				xC,yC,-zC,
-				xC,-yC,-zC,
-				-xC,-yC,-zC,
-				xC,-yC,zC,
-				xC,-yC,-zC,
-				xC,yC,-zC,
-				xC,yC,zC,
-				-xC,-yC,-zC,
-				-xC,-yC,zC,
-				-xC,yC,zC,
-				-xC,yC,-zC,
+		float[] verFloat = {
+                xC,yC,-zC, // top starts
+                -xC,yC,-zC,
+                -xC,yC,zC,
+                xC,yC,zC, // top ends
+                xC,yC,-zC, // bottom starts
+                xC,yC,zC,
+                -xC,yC,zC,
+                -xC,yC,-zC, // bottom ends
+                xC,yC,-zC, // north starts
+                xC,-yC,-zC,
+                -xC,-yC,-zC,
+                -xC,yC,-zC, // north ends
+                -xC,yC,zC, // west starts
+                -xC,yC,-zC,
+                -xC,-yC,-zC,
+                -xC,-yC,zC, // west ends
+                xC,yC,zC, // south starts
+                -xC,yC,zC,
+                -xC,-yC,zC,
+                xC,-yC,zC, // south ends
+                xC,yC,-zC, // east starts
+                xC,yC,zC,
+                xC,-yC,zC,
+                xC,-yC,-zC, // east ends
 		};
+
+
 		vertices = ByteBuffer.allocateDirect(verFloat.length*BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
 		vertices.put(verFloat).position(0);
-		
-		byte[] indByte = {
-				15,14,13,12, 11,10,9,8, 0,1,6,7, 4,5,2,3, 7,6,5,4, 3,2,1,0
-		};
-		indexCount = indByte.length;
-		this.indices = ByteBuffer.allocateDirect(indByte.length);
-		this.indices.put(indByte).position(0);
+
+        normal = ByteBuffer.allocateDirect(NORMALS.length*BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        normal.put(NORMALS).position(0);
+
+//		byte[] indByte = {
+//				15,14,13,12, 11,10,9,8, 0,1,6,7, 4,5,2,3, 7,6,5,4, 3,2,1,0
+//		};
+//		indexCount = indByte.length;
+//		this.indices = ByteBuffer.allocateDirect(indByte.length);
+//		this.indices.put(indByte).position(0);
 	}
 	
 	
@@ -104,32 +134,40 @@ public class Box {
 	}
 	
 	public void draw(GL2 gl,int dir) {
-		gl.glLoadIdentity();
-		float rquad = Wall.getDir(dir);
-		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
-		gl.glTranslatef(x, y, z);
-		
-		textures[textureIndex].enable(gl);
-		textures[textureIndex].bind(gl);
+//		gl.glLoadIdentity();
+            gl.glPushMatrix();
+            float rquad = Wall.getDir(dir);
+//		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+            gl.glTranslatef(x, y, z);
 
-		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
-		
-		gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertices);
-		gl.glTexCoordPointer(2, GL2.GL_FLOAT, 0, textureV);
-		
-		gl.glDrawElements(GL2.GL_QUADS, indexCount, GL.GL_UNSIGNED_BYTE, indices);
-		
-		gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+            textures[textureIndex].enable(gl);
+            textures[textureIndex].bind(gl);
+
+            gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+            gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+
+            gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertices);
+        gl.glNormalPointer(GL2.GL_FLOAT,0, normal);
+            gl.glTexCoordPointer(2, GL2.GL_FLOAT, 0, textureV);
+
+//            gl.glDrawElements(GL2.GL_QUADS, indexCount, GL.GL_UNSIGNED_BYTE, indices);
+        gl.glDrawArrays(GL2.GL_QUADS,0,4*6);
+
+            gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+        gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+            gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+            gl.glPopMatrix();
 	}
-	
+
+    //Chao's work
 	public boolean containsPoint(GL2 gl,GLU glu, int mouseX,int mouseY,int dir){
-		gl.glLoadIdentity();
-		
-		float rquad = Wall.getDir(dir);
-		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
-		gl.glTranslatef(x, y, z);
+
+        gl.glPushMatrix();
+//		gl.glLoadIdentity();
+//		float rquad = Wall.getDir(dir);
+//		gl.glRotatef(rquad, 0.0f, 1.0f, 0.0f);
+//		gl.glTranslatef(x, y, z);
 		
 		int[] viewport = new int[4];
     	double[] modelView = new double[16];
@@ -145,13 +183,14 @@ public class Box {
     	double[] start = new double[4];
     	double[] end = new double[4];
     	
-    	glu.gluUnProject(winX, winY, 0, 
+    	glu.gluUnProject(winX, winY, 0,
     			modelView, 0,
-    			projection, 0, 
-    			viewport, 0, 
+    			projection, 0,
+    			viewport, 0,
     			start, 0);
-    	
-    	glu.gluUnProject(winX, winY, 1, 
+
+
+    	glu.gluUnProject(winX, winY, 1,
     			modelView, 0,
     			projection, 0, 
     			viewport, 0, 
@@ -160,15 +199,18 @@ public class Box {
     	double[] x1 = {start[0],start[1],start[2]};
     	double[] x2 = {end[0],end[1],end[2]};
     	double[] x0 = {x,y,z};
-    	
+
     	double[] x2Tox1 = {x2[0]-x1[0],x2[1]-x1[1],x2[2]-x1[2]};
     	double[] x1Tox0 = {x1[0]-x0[0],x1[1]-x0[1],x1[2]-x0[2]};
-    	
+
     	double[] m = cross(x2Tox1,x1Tox0);
-    	
+
+
     	double length = length(m)/length(x2Tox1);
+        gl.glPopMatrix();
     	
     	//compare with the radius
+//        System.out.printf("%.3f,%.3f,%.3f : %.3f,%.3f,%.3f length=%.3f\n",(float)start[0],(float)start[1],(float)start[2],(float)end[0],(float)end[1],(float)end[2],(float)length);
     	if(length < size[0]) return true;
 		return false;
 	}

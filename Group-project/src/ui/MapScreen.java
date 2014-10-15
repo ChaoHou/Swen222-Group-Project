@@ -98,7 +98,7 @@ public class MapScreen extends PopUpScreen {
 			super();		
 			BufferedImage img = null;
 			try {
-				img = ImageIO.read(new File("src/map.png"));	
+				img = ImageIO.read(new File("resources/images/UI/map.png"));	
 			} catch (IOException e) {
 			}	
 			this.setIcon(new ImageIcon(img));
