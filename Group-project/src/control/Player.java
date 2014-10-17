@@ -84,14 +84,31 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		if(action.equals("Change Room")){
 			vamp.enterRoom();
+			String r = game.getRoomContainingPlayer(vamp).toString();
+			printMessage("You entered: " + r );
+			
 		}else if(action.equals("Right")){
 			vamp.rotateToFace((vamp.getDirectionFacing()+1)%4);
+			String dir = game.getVamp(uid).intDirToString();
+			printMessage("You are facing: " + dir);
+			
+			
+			
+			
 		}else if(action.equals("Left")){
 			int toFace=(vamp.getDirectionFacing()-1)%4;
+			
 			if(toFace<0){
 				toFace=Vamp.WEST;
 			}
 			vamp.rotateToFace(toFace);
+			
+			
+			String dir = game.getVamp(uid).intDirToString();
+			printMessage("You are facing: " + dir);
+			
+			
+			
 		}
 
 		
@@ -139,39 +156,16 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 		
 		
 		else if(action.equals("Hide into Nothingness")){
-				
-			Room room = game.getRoomContainingPlayer(game.getVamp(uid));
-			Furniture furniture = room.getFurniture();
 			
-			temp = room;
-			
-			if(furniture.getHidingPlayer() != null){
-				printMessage("You found another player!");
-				//TODO
-				Vamp victim = furniture.getHidingPlayer();
-				victim.setFighting(true);
-				
-				if(!victim.getInventory().isEmpty()){
-					Collectable x = victim.getInventory().get(0);
-					victim.removeItem(x);
-					game.getVamp(uid).collectItem(x);
-					StatsPanel yourInventory = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
-					yourInventory.updateInventory();
-					frame.getPanels().get("game").repaint();
-					frame.getPanels().get("game").updateUI(); 	
-					room.getOutFromFurniture(victim);
-					victim.setHiding(false);
-								
-				}
-									
-				return;
-			}else{
-				room.hideInFurniture(game.getVamp(uid));			
-				printMessage("You hid into the furniture");	
-				frame.showHidingScreen();
+			if(!game.getVamp(uid).isHiding()){
+				printMessage("You hid in the shadows");
 				game.getVamp(uid).setHiding(true);
 			}
-			renderer.setFurnitureSelected(false);
+			else{			
+				printMessage("You reappeared");
+				game.getVamp(uid).setHiding(false);
+			}
+			
 		}
 		
 		
@@ -234,7 +228,8 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 						}
 						//Add the selected item into the inventory
 						if(!currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).isInventoryfull()){
-							 currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).collectItem((currentScreen.getContainer().remove(temp)));			
+							 currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).collectItem((currentScreen.getContainer().remove(temp)));	
+							 
 						}
 						else{
 							System.out.println("Full!");
@@ -251,6 +246,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 			
 			else if(screenButtons.get(e.getSource()).equals("placeToContainer")){
 				//You'll need the containerScreen
+				
 				Collectable temp = null;
 				ContainerScreen currentScreen = (ContainerScreen) frame.getCurrentScreen();
 				for (JCheckBox checkBox : currentScreen.getCheckInventory()) {
@@ -263,7 +259,10 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 							temp = new HealthPack();
 						}
 						//Add the selected item into the inventory
-						currentScreen.getContainer().addItem(currentScreen.getGame().getBoard().getVamp(currentScreen.getGame().getUid()).removeItem(temp));		
+						
+						Vamp vv = currentScreen.getGame().getBoard().getVamp(uid);
+				
+						currentScreen.getContainer().addItem(vv.removeItem(temp));		
 
 					}
 				}	
@@ -452,7 +451,7 @@ public class Player extends Thread implements KeyListener,ActionListener,MouseLi
 
 				//What if the player died?
 				if(game.getVamp(uid).isDead()){
-	 				//First, check if there's currently a popup menu
+	 				//First, check if there's currently a popup menu				
 	 				if(frame.getCurrentScreen() != null){
 	 				   //Second, remove that popup, no matter what (The game's over anyway!)
 	 					frame.showGame(frame.getCurrentScreen());

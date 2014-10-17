@@ -75,7 +75,7 @@ public class GameOverScreen extends PopUpScreen {
 		this.add(title);
 		if(playerWon)
 		this.add(credits);
-		this.add(backMainMenu);
+		//this.add(backMainMenu);
 		this.remove(getBackToGame());
 		this.repaint();
 		

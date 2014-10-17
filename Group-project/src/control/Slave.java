@@ -228,6 +228,7 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 		try {
 			if(action.equals("Left")){
 				output.writeInt(Master.ACTION.ROTATE_L.ordinal());
+				printMessage("You moved left");
 			}				
 			else if(action.equals("Right")){
 				output.writeInt(Master.ACTION.ROTATE_R.ordinal());
@@ -448,6 +449,8 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 		input.readFully(bytes);
 		game.fromByteArray(bytes);
 	}
+	
+	
 	
 	public void updateCurrentBoard(){
 		try {

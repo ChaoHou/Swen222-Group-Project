@@ -261,16 +261,27 @@ public class Vamp extends GameCharacter{
 		return this.getInventory().size() == 5;
 	}
 	
+
 	
 	public Collectable removeItem(Collectable c){
-		for(Collectable item:this.getInventory()){
-			if(c==item){
-				this.inventory.remove(item);
-				return c; 
+		Collectable temp = null;
+		//We'll need to iterate through the whole container for this...
+		for(Collectable l : this.getInventory()){
+			//Is it an Orb? Are they the same kind of Orb?	
+			if((c instanceof Orb && l instanceof Orb) && 
+					((Orb) c).getColour() == ((Orb) l).getColour()){
+				temp = (Orb) l;
+				this.getInventory().remove(l);
+				return temp;
+			}
+			//Is it a HealthPack?
+			else if(c instanceof HealthPack && l instanceof HealthPack){
+				temp = (HealthPack) l;
+				this.getInventory().remove(l);
+				return temp;
 			}
 		}
-		throw new IllegalArgumentException("item does not exist in the game.");
-		
+		return null;
 	}
 	
 	

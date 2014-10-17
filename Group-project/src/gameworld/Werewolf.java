@@ -86,6 +86,7 @@ public class Werewolf extends GameCharacter{
 		Room room=game.getRoomContainingWerewolf();
 		Set<Vamp> vamps=room.getVamps();
 		for(Vamp vamp:vamps){
+			if(!vamp.isHiding())
 			vamp.setStatus(Vamp.DEAD,true);
 		}
 		

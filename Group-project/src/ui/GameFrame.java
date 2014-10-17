@@ -122,7 +122,7 @@ public class GameFrame extends JFrame {
 			this.getContentPane().add(MainMenu, BorderLayout.LINE_START);
 			this.setTitle("Vampire Mansion");
 			this.setSize(1000,740);
-			this.setResizable(false);
+			this.setResizable(true);
 			setLocationRelativeTo(null);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);			
 		}
