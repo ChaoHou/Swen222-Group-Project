@@ -1,5 +1,6 @@
 package ui;
 
+import gameworld.Furniture;
 import gameworld.GameCharacter;
 import gameworld.Room;
 import gameworld.Vamp;
@@ -245,6 +246,14 @@ public class Board {
 				if(r.getVamps().contains(player)){
 					return r;
 				}
+				Furniture furniture = r.getFurniture();
+				if(furniture != null){
+					if(furniture.getHidingPlayer() != null){
+						if(furniture.getHidingPlayer().getUid() == player.getUid()){
+							return r;
+						}
+					}
+				}
 			}
 		}
 		throw new IllegalArgumentException("invalid uid passed in.");
@@ -319,6 +328,16 @@ public class Board {
 							return vamp;
 						}
 					}
+					Furniture furniture = room.getFurniture();
+					if(furniture != null){
+						Vamp vamp = furniture.getHidingPlayer();
+						if(vamp != null){
+							if(vamp.getUid() == uid){
+								return vamp;
+							}
+						}
+					}
+						
 				}
 			}
 		}

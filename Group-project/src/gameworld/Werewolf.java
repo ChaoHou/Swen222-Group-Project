@@ -54,8 +54,8 @@ public class Werewolf extends GameCharacter{
 	private boolean canEnterRoomAhead(){
 		Room roomFrom = game.getRoomContainingWerewolf();
 		Room roomToEnter=game.getRoomAhead(roomFrom, facing);
-		
-		if(roomToEnter==null){
+		Room startRoom=game.getRoom("startroom");
+		if(roomToEnter==null || startRoom.equals(roomToEnter)){
 			return false;
 		}else{
 			Werewolf leavingWolf = roomFrom.werewolfLeaveRoom(this);

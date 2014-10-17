@@ -129,6 +129,8 @@ public class Furniture {
 		boolean hasPlayer = din.readBoolean();
 		if(hasPlayer){
 			hidingPlayer = Vamp.fromInputStream(din, game);
+		}else{
+			hidingPlayer = null;
 		}
 	}
 	

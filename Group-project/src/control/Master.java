@@ -182,6 +182,7 @@ public class Master extends Thread {
 	private void hideIn() {
 		Room room = game.getRoomContainingPlayer(game.getVamp(uid));
 		room.hideInFurniture(game.getVamp(uid));
+		game.getVamp(uid).setHiding(true);
 	}
 
 	/**
@@ -190,6 +191,7 @@ public class Master extends Thread {
 	private void getOut() {
 		Room room = game.getRoomContainingPlayer(game.getVamp(uid));
         room.getOutFromFurniture(game.getVamp(uid));
+        game.getVamp(uid).setHiding(false);
 	}
 
 	private void placeToContainer() throws IOException {

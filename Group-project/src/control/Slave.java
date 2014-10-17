@@ -120,7 +120,12 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 							
 							if(!victim.getInventory().isEmpty()){
 								//NOT WORKING
-								
+								System.out.println("Another player inside, you get hurt");
+								printMessage("Another player inside, you get hurt");
+								output.writeInt(Master.ACTION.HURT.ordinal());
+								updateBoard(game);
+								StatsPanel x = (StatsPanel) ((GameMenu) frame.getPanels().get("game")).getPanels().get("stats");
+								x.updateHealth();
 //								Collectable x = victim.getInventory().get(0);
 //								victim.remove(x);
 //								game.getVamp(uid).collectItem(x);
@@ -130,10 +135,12 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 //								frame.getPanels().get("game").updateUI(); 					
 							}
 							//temp.getHidingPlayer();	
-							return;
+							//return;
 						}else{
 							
 							output.writeInt(Master.ACTION.HIDE_IN.ordinal());
+							
+							updateBoard(game);
 							
 							printMessage("You hid into the shadows");	
 							frame.showHidingScreen();
@@ -159,6 +166,20 @@ public class Slave extends Thread implements MouseListener,KeyListener,ActionLis
 //						    break;
 					}
 					
+					if(!game.getRooms()[3][1].getVamps().isEmpty() && game.getVamp(uid).hasAllOrbs()){
+		 				printMessage("You Won a Glorious Victory.");
+		 				//First, check if there's currently a popup menu
+		 				if(frame.getCurrentScreen() != null){
+		 				   //Second, remove that popup, no matter what (The game's over anyway!)
+		 					frame.showGame(frame.getCurrentScreen());
+		 				}			
+		 				//Third, show the gameover screen.
+		 				    GameOverScreen gameover = new GameOverScreen("gameover", frame, true);
+		 				    frame.showPopUp(gameover);
+		 				    frame.setVisible(true);
+		 			        gameover.updateUI(); 		 			        
+						    break;
+					}
 					
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
